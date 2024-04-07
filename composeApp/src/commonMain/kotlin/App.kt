@@ -1,40 +1,37 @@
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimation
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.arkivanov.essenty.backhandler.BackHandler
+import navigation.Child
+import navigation.RootComponent
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import twilight.composeapp.generated.resources.Res
-import twilight.composeapp.generated.resources.compose_multiplatform
+import ui.dashboard.DashboardScreen
+import ui.form.FormSelectionScreen
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
-fun App() {
+fun App(componentContext: RootComponent) {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
+        val childStack by componentContext.childStack.subscribeAsState()
+        Children(
+            stack = childStack,
+            animation = backAnimation(
+                backHandler = componentContext.backHandler,
+                onBack = componentContext::onBackClicked
+            )
+        ) { child ->
+            when (val instance = child.instance) {
+                is Child.Dashboard -> DashboardScreen(instance.viewModel)
+                is Child.FormSelection -> FormSelectionScreen(instance.viewModel)
             }
         }
     }
 }
+
+expect fun <C : Any, T : Any> backAnimation(
+    backHandler: BackHandler,
+    onBack: () -> Unit,
+): StackAnimation<C, T>
