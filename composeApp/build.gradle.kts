@@ -70,6 +70,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
 //        desktopMain.dependencies {
 //            implementation(compose.desktop.currentOs)
 //        }
