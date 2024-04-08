@@ -56,6 +56,7 @@ kotlin {
         commonMain.dependencies {
             // Common
             implementation(libs.kotlinx.serialization.json)
+            api(libs.kotlinx.datetime)
 
             // Navigation
             api(libs.decompose.decompose)
