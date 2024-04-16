@@ -1,22 +1,25 @@
 package data.timezone
 
 import data.model.Region
-import data.model.Timezone
+import data.model.TimeRegion
 import data.timezone.mapper.AsiaZoneIdToTimezoneMapper
 import data.timezone.mapper.EuropeZoneIdToTimezoneMapper
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  */
-object TimezoneRepository {
-    val timezones: List<Timezone>
+object TimeRegionRepository {
+    val timeRegions: List<TimeRegion>
     private val asiaZoneIdToTimezoneMapper by lazy { AsiaZoneIdToTimezoneMapper() }
     private val europeZoneIdToTimezoneMapper by lazy { EuropeZoneIdToTimezoneMapper() }
 
     init {
         val availableZones: Set<String> = TimeZone.availableZoneIds
-        timezones = Region.entries.toTypedArray().flatMap { zone ->
+        timeRegions = Region.entries.toTypedArray().flatMap { zone ->
             availableZones.filter { it.contains("$zone/") }
                 .transformZoneIds(zone)
         }
@@ -24,7 +27,7 @@ object TimezoneRepository {
 
     private fun List<String>.transformZoneIds(
         region: Region
-    ): List<Timezone> = when (region) {
+    ): List<TimeRegion> = when (region) {
         Region.Africa -> genericZoneIdToTimezoneMapper(region)
         Region.America -> genericZoneIdToTimezoneMapper(region)
         Region.Antarctica -> genericZoneIdToTimezoneMapper(region)
@@ -44,7 +47,20 @@ object TimezoneRepository {
 
     private fun List<String>.genericZoneIdToTimezoneMapper(
         region: Region
-    ): List<Timezone> = map {
-        Timezone(it, region)
+    ): List<TimeRegion> = map {
+        TimeRegion(it, region)
+    }
+
+    fun filterTimeRegion(query: String): List<TimeRegion> {
+        return timeRegions.filter { timeRegion -> timeRegion.keywords.any { it == query } }
+    }
+
+    fun convert(
+        fromLocalDateTime: LocalDateTime,
+        from: TimeRegion,
+        to: TimeRegion
+    ): LocalDateTime {
+        return fromLocalDateTime.toInstant(from.timeZone)
+            .toLocalDateTime(to.timeZone)
     }
 }

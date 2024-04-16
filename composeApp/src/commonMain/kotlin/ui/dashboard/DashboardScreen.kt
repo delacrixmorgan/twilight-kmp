@@ -39,7 +39,7 @@ fun DashboardScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             state = state
         ) {
-            items(count = list.size, key = { list[it].kotlinTimeZone.id }) { index ->
+            items(count = list.size, key = { list[it].timeZone.id }) { index ->
                 val timezone = list[index]
                 Row {
                     Column(Modifier.padding(vertical = 16.dp)) {
