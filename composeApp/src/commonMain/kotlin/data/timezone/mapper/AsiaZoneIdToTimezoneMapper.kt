@@ -82,6 +82,87 @@ class AsiaZoneIdToTimezoneMapper : Mapper<List<String>, List<TimeRegion>> {
                 states = listOf("Ho Chi Minh City", "Hanoi", "Hai Phong", "Can Tho", "Da Nang", "Bien Hoa", "Vung Tau", "Nha Trang", "Hue", "Buon Ma Thuot", "Pleiku", "My Tho"),
                 cities = listOf("Ho Chi Minh City", "Hanoi", "Hai Phong", "Can Tho", "Da Nang", "Bien Hoa", "Vung Tau", "Nha Trang", "Hue", "Buon Ma Thuot", "Pleiku", "My Tho")
             )
+            // East Asia
+            "$region/Shanghai",
+            "$region/Urumqi" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("China", "CN", "\uD83C\uDDE8\uD83C\uDDF3"),
+                states = listOf("Shanghai", "Beijing", "Guangdong", "Zhejiang"),
+                cities = listOf("Shanghai", "Beijing", "Guangzhou", "Shenzhen")
+            )
+            "$region/Tokyo" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Japan", "JP", "\uD83C\uDDEF\uD83C\uDDF5"),
+                states = listOf("Tokyo", "Osaka", "Kyoto", "Kanagawa"),
+                cities = listOf("Tokyo", "Osaka", "Kyoto", "Yokohama")
+            )
+            "$region/Seoul" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("South Korea", "KR", "\uD83C\uDDF0\uD83C\uDDF7"),
+                states = listOf("Seoul", "Busan", "Gyeonggi", "Incheon"),
+                cities = listOf("Seoul", "Busan", "Incheon", "Daegu")
+            )
+            "$region/Pyongyang" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("North Korea", "KP", "\uD83C\uDDF0\uD83C\uDDF5"),
+                states = listOf("Pyongyang", "South Pyongan", "North Hwanghae", "South Hamgyong"),
+                cities = listOf("Pyongyang", "Hamhung", "Nampo", "Wonsan")
+            )
+            "$region/Ulaanbaatar" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Mongolia", "MN", "\uD83C\uDDF2\uD83C\uDDF3"),
+                states = listOf("Ulaanbaatar", "Darkhan-Uul", "Orkhon", "Selenge"),
+                cities = listOf("Ulaanbaatar", "Erdenet", "Darkhan", "Choibalsan")
+            )
+            "$region/Taipei" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Taiwan", "TW", "\uD83C\uDDF9\uD83C\uDDFC"),
+                states = listOf("Taipei", "New Taipei", "Kaohsiung", "Taichung"),
+                cities = listOf("Taipei", "New Taipei", "Kaohsiung", "Taichung")
+            )
+            // South Asia
+            "$region/Kabul" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Afghanistan", "AF", "\uD83C\uDDE6\uD83C\uDDEB"),
+                states = emptyList(),
+                cities = listOf("Kabul", "Kandahar", "Herat", "Mazar-i-Sharif", "Jalalabad", "Kunduz", "Lashkar Gah", "Taloqan", "Puli Khumri", "Ghazni"),
+            )
+            "$region/Dhaka" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Bangladesh", "BD", "\uD83C\uDDE7\uD83C\uDDE9"),
+                states = emptyList(),
+                cities = listOf("Dhaka", "Chittagong", "Khulna", "Rajshahi", "Sylhet", "Barisal", "Rangpur", "Comilla", "Narayanganj", "Gazipur"),
+            )
+            "$region/Thimphu" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Bhutan", "BT", "\uD83C\uDDE7\uD83C\uDDF9"),
+                states = emptyList(),
+                cities = listOf("Thimphu", "Phuntsholing", "Paro", "Punakha", "Wangdue Phodrang", "Trashigang", "Mongar", "Trongsa", "Gelephu", "Samdrup Jongkhar"),
+            )
+            "$region/Kolkata" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("India", "IN", "\uD83C\uDDEE\uD83C\uDDF3"),
+                states = emptyList(),
+                cities = listOf("Mumbai", "Delhi", "Bengaluru", "Kolkata", "Chennai", "Hyderabad", "Pune", "Ahmedabad", "Surat", "Jaipur"),
+            )
+            "$region/Kathmandu" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Nepal", "NP", "\uD83C\uDDF3\uD83C\uDDF5"),
+                states = emptyList(),
+                cities = listOf("Kathmandu", "Pokhara", "Lalitpur", "Biratnagar", "Birgunj", "Dharan", "Bharatpur", "Bhaktapur", "Butwal", "Dhangadhi"),
+            )
+            "$region/Karachi" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Pakistan", "PK", "\uD83C\uDDF5\uD83C\uDDF0"),
+                states = emptyList(),
+                cities = listOf("Karachi", "Lahore", "Faisalabad", "Rawalpindi", "Gujranwala", "Peshawar", "Multan", "Hyderabad", "Islamabad", "Quetta"),
+            )
+            "$region/Colombo" -> TimeRegion(
+                zoneIdString, region,
+                country = listOf("Sri Lanka", "LK", "\uD83C\uDDF1\uD83C\uDDF0"),
+                states = emptyList(),
+                cities = listOf("Colombo", "Dehiwala-Mount Lavinia", "Moratuwa", "Jaffna", "Negombo", "Pita Kotte", "Kotte", "Kandy", "Trincomalee", "Kalmunai")
+            )
             else -> TimeRegion(zoneIdString, region)
         }
     }
