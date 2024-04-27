@@ -51,8 +51,8 @@ object TimeRegionRepository {
         TimeRegion(it, region)
     }
 
-    fun filterTimeRegion(query: String): List<TimeRegion> {
-        return timeRegions.filter { timeRegion -> timeRegion.keywords.any { it == query } }
+    fun search(query: String): List<TimeRegion> {
+        return timeRegions.filter { timeRegion -> timeRegion.doesMatchSearchQuery(query) }
     }
 
     fun convert(
@@ -60,7 +60,15 @@ object TimeRegionRepository {
         from: TimeRegion,
         to: TimeRegion
     ): LocalDateTime {
-        return fromLocalDateTime.toInstant(from.timeZone)
-            .toLocalDateTime(to.timeZone)
+        return convert(fromLocalDateTime, from.timeZone, to.timeZone)
+    }
+
+    fun convert(
+        fromLocalDateTime: LocalDateTime,
+        from: TimeZone,
+        to: TimeZone
+    ): LocalDateTime {
+        return fromLocalDateTime.toInstant(from)
+            .toLocalDateTime(to)
     }
 }

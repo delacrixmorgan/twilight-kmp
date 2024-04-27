@@ -4,8 +4,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TimeRegionRepositoryTest {
-    private val netherlandsTimeRegion by lazy { TimeRegionRepository.filterTimeRegion("Amsterdam").first() }
-    private val malaysiaTimeRegion by lazy { TimeRegionRepository.filterTimeRegion("Kuala Lumpur").first() }
+    private val netherlandsTimeRegion by lazy { TimeRegionRepository.search("Amsterdam").first() }
+    private val malaysiaTimeRegion by lazy { TimeRegionRepository.search("Kuala Lumpur").first() }
 
     /**
      * Initialisation

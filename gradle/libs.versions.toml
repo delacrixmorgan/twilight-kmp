@@ -3,13 +3,14 @@ agp = "8.2.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.8.2"
-compose = "1.6.5"
+androidx-activityCompose = "1.9.0"
+compose = "1.6.6"
 compose-plugin = "1.6.1"
 kotlin = "1.9.22"
 kotlinx-serialization-json = "1.6.3"
 kotlinx-datetime = "0.6.0-RC.2"
 decompose = "3.0.0-beta01"
+decompose-lifecycle-coroutines = "2.0.0"
 #androidx-appcompat = "1.6.1"
 #androidx-constraintlayout = "2.1.4"
 #androidx-core-ktx = "1.12.0"
@@ -23,6 +24,7 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 decompose-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+decompose-lifecycle-coroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "decompose-lifecycle-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
