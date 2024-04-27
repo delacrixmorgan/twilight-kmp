@@ -2,7 +2,9 @@ package data.timezone
 
 import data.model.Region
 import data.model.TimeRegion
+import data.timezone.mapper.AmericaZoneIdToTimezoneMapper
 import data.timezone.mapper.AsiaZoneIdToTimezoneMapper
+import data.timezone.mapper.AustraliaZoneIdToTimezoneMapper
 import data.timezone.mapper.EuropeZoneIdToTimezoneMapper
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -14,9 +16,11 @@ import kotlinx.datetime.toLocalDateTime
  */
 object TimeRegionRepository {
     val timeRegions: List<TimeRegion>
+    private val americaZoneIdToTimezoneMapper by lazy { AmericaZoneIdToTimezoneMapper() }
     private val asiaZoneIdToTimezoneMapper by lazy { AsiaZoneIdToTimezoneMapper() }
+    private val australiaZoneIdToTimezoneMapper by lazy { AustraliaZoneIdToTimezoneMapper() }
     private val europeZoneIdToTimezoneMapper by lazy { EuropeZoneIdToTimezoneMapper() }
-
+    
     init {
         val availableZones: Set<String> = TimeZone.availableZoneIds
         timeRegions = Region.entries.toTypedArray().flatMap { zone ->
@@ -29,12 +33,12 @@ object TimeRegionRepository {
         region: Region
     ): List<TimeRegion> = when (region) {
         Region.Africa -> genericZoneIdToTimezoneMapper(region)
-        Region.America -> genericZoneIdToTimezoneMapper(region)
+        Region.America -> americaZoneIdToTimezoneMapper(this)
         Region.Antarctica -> genericZoneIdToTimezoneMapper(region)
         Region.Arctic -> genericZoneIdToTimezoneMapper(region)
         Region.Asia -> asiaZoneIdToTimezoneMapper(this)
         Region.Atlantic -> genericZoneIdToTimezoneMapper(region)
-        Region.Australia -> genericZoneIdToTimezoneMapper(region)
+        Region.Australia -> australiaZoneIdToTimezoneMapper(this)
         Region.Brazil -> genericZoneIdToTimezoneMapper(region)
         Region.Canada -> genericZoneIdToTimezoneMapper(region)
         Region.Chile -> genericZoneIdToTimezoneMapper(region)
