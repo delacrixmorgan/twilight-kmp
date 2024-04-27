@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class AsiaZoneIdToTimezoneMapperTest {
-    private val asiaZoneIds by lazy {
+    private val zoneIds by lazy {
         TimeRegionRepository.timeRegions
             .filter { it.region == Region.Asia }
             .map { it.timeZone.toString() }
@@ -31,7 +31,7 @@ class AsiaZoneIdToTimezoneMapperTest {
             "Asia/Ho_Chi_Minh",
             "Asia/Saigon",
         )
-        assertTrue(asiaZoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(asiaZoneIds.toSet())}")
+        assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }
 
     @Test
@@ -45,7 +45,7 @@ class AsiaZoneIdToTimezoneMapperTest {
             "Asia/Ulaanbaatar",
             "Asia/Taipei"
         )
-        assertTrue(asiaZoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(asiaZoneIds.toSet())}")
+        assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }
 
     @Test
@@ -59,6 +59,6 @@ class AsiaZoneIdToTimezoneMapperTest {
             "Asia/Karachi",
             "Asia/Colombo"
         )
-        assertTrue(asiaZoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(asiaZoneIds.toSet())}")
+        assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }
 }
