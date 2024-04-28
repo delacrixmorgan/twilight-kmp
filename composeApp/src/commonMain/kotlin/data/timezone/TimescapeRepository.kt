@@ -14,18 +14,18 @@ import kotlinx.datetime.toLocalDateTime
 /**
  * https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  */
-object TimeRegionRepository {
+object TimescapeRepository {
     val timeRegions: List<TimeRegion>
     private val americaZoneIdToTimezoneMapper by lazy { AmericaZoneIdToTimezoneMapper() }
     private val asiaZoneIdToTimezoneMapper by lazy { AsiaZoneIdToTimezoneMapper() }
     private val australiaZoneIdToTimezoneMapper by lazy { AustraliaZoneIdToTimezoneMapper() }
     private val europeZoneIdToTimezoneMapper by lazy { EuropeZoneIdToTimezoneMapper() }
-    
+
     init {
         val availableZones: Set<String> = TimeZone.availableZoneIds
-        timeRegions = Region.entries.toTypedArray().flatMap { zone ->
-            availableZones.filter { it.contains("$zone/") }
-                .transformZoneIds(zone)
+        timeRegions = Region.entries.toTypedArray().flatMap { region ->
+            availableZones.filter { it.contains("$region/") }
+                .transformZoneIds(region)
         }
     }
 
@@ -58,21 +58,12 @@ object TimeRegionRepository {
     fun search(query: String): List<TimeRegion> {
         return timeRegions.filter { timeRegion -> timeRegion.doesMatchSearchQuery(query) }
     }
+}
 
-    fun convert(
-        fromLocalDateTime: LocalDateTime,
-        from: TimeRegion,
-        to: TimeRegion
-    ): LocalDateTime {
-        return convert(fromLocalDateTime, from.timeZone, to.timeZone)
-    }
-
-    fun convert(
-        fromLocalDateTime: LocalDateTime,
-        from: TimeZone,
-        to: TimeZone
-    ): LocalDateTime {
-        return fromLocalDateTime.toInstant(from)
-            .toLocalDateTime(to)
-    }
+fun LocalDateTime.convert(
+    from: TimeRegion,
+    to: TimeRegion
+): LocalDateTime {
+    return this.toInstant(from.timeZone)
+        .toLocalDateTime(to.timeZone)
 }

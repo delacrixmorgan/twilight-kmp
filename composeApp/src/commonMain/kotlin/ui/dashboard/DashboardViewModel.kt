@@ -1,7 +1,9 @@
 package ui.dashboard
 
 import com.arkivanov.decompose.ComponentContext
-import data.timezone.TimeRegionRepository
+import com.arkivanov.essenty.lifecycle.subscribe
+import data.model.TimeRegion
+import data.timezone.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,13 +27,23 @@ class DashboardViewModel(
         private const val TIMEOUT_IN_MILLISECONDS = 5_000L
     }
 
+    init {
+        lifecycle.subscribe(
+            onCreate = {
+                if (_timeRegions.value.isEmpty()) {
+                    _timeRegions.value = TimescapeRepository.timeRegions
+                }
+            },
+        )
+    }
+
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
 
     private val _searching = MutableStateFlow(false)
     val searching = _searching.asStateFlow()
 
-    private val _timeRegions = MutableStateFlow(TimeRegionRepository.timeRegions)
+    private val _timeRegions = MutableStateFlow(emptyList<TimeRegion>())
     val timeRegions = _query
         .debounce(DEBOUNCE_IN_MILLISECONDS)
         .onEach { _searching.update { true } }

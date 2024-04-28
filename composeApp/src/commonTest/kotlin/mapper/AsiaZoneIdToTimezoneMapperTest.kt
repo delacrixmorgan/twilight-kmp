@@ -1,13 +1,13 @@
 package mapper
 
 import data.model.Region
-import data.timezone.TimeRegionRepository
+import data.timezone.TimescapeRepository
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class AsiaZoneIdToTimezoneMapperTest {
     private val zoneIds by lazy {
-        TimeRegionRepository.timeRegions
+        TimescapeRepository.timeRegions
             .filter { it.region == Region.Asia }
             .map { it.timeZone.toString() }
     }

@@ -90,9 +90,7 @@ fun DashboardScreen(
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
                 value = query,
                 onValueChange = viewModel::onSearchQueryChange,
-                placeholder = {
-                    Text(text = "Kuala Lumpur, Malaysia")
-                },
+                placeholder = { Text(text = "Search") },
                 leadingIcon = {
                     Icon(
                         Icons.Rounded.Search,

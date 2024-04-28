@@ -1,11 +1,12 @@
-import data.timezone.TimeRegionRepository
+import data.timezone.TimescapeRepository
+import data.timezone.convert
 import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TimeRegionRepositoryTest {
-    private val netherlandsTimeRegion by lazy { TimeRegionRepository.search("Amsterdam").first() }
-    private val malaysiaTimeRegion by lazy { TimeRegionRepository.search("Kuala Lumpur").first() }
+class TimescapeRepositoryTest {
+    private val netherlandsTimeRegion by lazy { TimescapeRepository.search("Amsterdam").first() }
+    private val malaysiaTimeRegion by lazy { TimescapeRepository.search("Kuala Lumpur").first() }
 
     /**
      * Initialisation
@@ -14,8 +15,7 @@ class TimeRegionRepositoryTest {
     fun `Given time with DST When set to Malaysia Time Then return time`() {
         val expected = "2024-01-01T00:00"
         val localDateTime: LocalDateTime = LocalDateTime.parse(expected)
-        val actualLocalDateTime: LocalDateTime = TimeRegionRepository.convert(
-            fromLocalDateTime = localDateTime,
+        val actualLocalDateTime: LocalDateTime = localDateTime.convert(
             from = malaysiaTimeRegion,
             to = malaysiaTimeRegion
         )
@@ -34,8 +34,7 @@ class TimeRegionRepositoryTest {
         val netherlandsDST = "2024-01-01T00:00"
         val expected = "2024-01-01T07:00"
         val netherlandsDSTLocalDateTime: LocalDateTime = LocalDateTime.parse(netherlandsDST)
-        val actualLocalDateTime: LocalDateTime = TimeRegionRepository.convert(
-            fromLocalDateTime = netherlandsDSTLocalDateTime,
+        val actualLocalDateTime: LocalDateTime = netherlandsDSTLocalDateTime.convert(
             from = netherlandsTimeRegion,
             to = malaysiaTimeRegion
         )
@@ -51,8 +50,7 @@ class TimeRegionRepositoryTest {
         val netherlandsDST = "2024-06-01T00:00"
         val expected = "2024-06-01T06:00"
         val netherlandsDSTLocalDateTime: LocalDateTime = LocalDateTime.parse(netherlandsDST)
-        val actualLocalDateTime: LocalDateTime = TimeRegionRepository.convert(
-            fromLocalDateTime = netherlandsDSTLocalDateTime,
+        val actualLocalDateTime: LocalDateTime = netherlandsDSTLocalDateTime.convert(
             from = netherlandsTimeRegion,
             to = malaysiaTimeRegion,
         )
@@ -71,8 +69,7 @@ class TimeRegionRepositoryTest {
         val malaysiaTime = "2024-01-01T07:00"
         val expected = "2024-01-01T00:00"
         val malaysiaLocalDateTime: LocalDateTime = LocalDateTime.parse(malaysiaTime)
-        val actualLocalDateTime: LocalDateTime = TimeRegionRepository.convert(
-            fromLocalDateTime = malaysiaLocalDateTime,
+        val actualLocalDateTime: LocalDateTime = malaysiaLocalDateTime.convert(
             from = malaysiaTimeRegion,
             to = netherlandsTimeRegion
         )
@@ -88,8 +85,7 @@ class TimeRegionRepositoryTest {
         val malaysiaTime = "2024-06-01T06:00"
         val expected = "2024-06-01T00:00"
         val malaysiaLocalDateTime: LocalDateTime = LocalDateTime.parse(malaysiaTime)
-        val actualLocalDateTime: LocalDateTime = TimeRegionRepository.convert(
-            fromLocalDateTime = malaysiaLocalDateTime,
+        val actualLocalDateTime: LocalDateTime = malaysiaLocalDateTime.convert(
             from = malaysiaTimeRegion,
             to = netherlandsTimeRegion
         )
