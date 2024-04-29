@@ -3,6 +3,7 @@ package ui.dashboard
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.timezone.TimescapeRepository
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
+@OptIn(FlowPreview::class)
 class DashboardViewModel : ViewModel() {
     companion object {
         private const val DEBOUNCE_IN_MILLISECONDS = 500L

@@ -29,10 +29,10 @@ import ui.form.FormSelectionScreen
 fun TwilightApp(
     navController: NavHostController = rememberNavController()
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = BottomNavItem.entries.firstOrNull {
-        it.route == backStackEntry?.destination?.route
-    } ?: BottomNavItem.Dashboard
+//    val backStackEntry by navController.currentBackStackEntryAsState()
+//    val currentScreen = BottomNavItem.entries.firstOrNull {
+//        it.route == backStackEntry?.destination?.route
+//    } ?: BottomNavItem.Dashboard
 
     Scaffold(bottomBar = { NavigationBar(navController) }) { innerPadding ->
         NavHost(

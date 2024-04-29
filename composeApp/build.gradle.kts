@@ -24,8 +24,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-
-            export(libs.decompose.decompose)
         }
     }
 
@@ -40,10 +38,6 @@ kotlin {
             // Common
             implementation(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
-
-            // Navigation
-            api(libs.decompose.decompose)
-            api(libs.decompose.extensions.compose)
 
             // Compose
             implementation(compose.runtime)
