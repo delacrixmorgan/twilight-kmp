@@ -11,6 +11,8 @@ kotlinx-serialization-json = "1.6.3"
 kotlinx-datetime = "0.6.0-RC.2"
 decompose = "3.0.0-beta01"
 decompose-lifecycle-coroutines = "2.0.0"
+androidxNavigationCompose = "2.8.0-alpha02"
+androidxLifecycle = "2.8.0-beta01"
 #androidx-appcompat = "1.6.1"
 #androidx-constraintlayout = "2.1.4"
 #androidx-core-ktx = "1.12.0"
@@ -27,6 +29,9 @@ decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-co
 decompose-lifecycle-coroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "decompose-lifecycle-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidxNavigationCompose" }
+androidx-lifecycle-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidxLifecycle" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 #junit = { group = "junit", name = "junit", version.ref = "junit" }
 #androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }

@@ -7,20 +7,23 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.retainedComponent
-import navigation.RootComponent
+import androidx.compose.ui.tooling.preview.Preview
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalDecomposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val componentContext = retainedComponent { RootComponent(it) }
         setContent {
-            Box(Modifier.safeDrawingPadding()) { App(componentContext) }
+            Box(Modifier.safeDrawingPadding()) { App() }
         }
     }
+}
+
+@Preview
+@Composable
+fun AppAndroidPreview() {
+    App()
 }

@@ -6,23 +6,6 @@ plugins {
 }
 
 kotlin {
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        moduleName = "composeApp"
-//        browser {
-//            commonWebpackConfig {
-//                outputFileName = "composeApp.js"
-//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-//                    static = (static ?: mutableListOf()).apply {
-//                        // Serve sources to debug inside browser
-//                        add(project.projectDir.path)
-//                    }
-//                }
-//            }
-//        }
-//        binaries.executable()
-//    }
-
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -69,13 +52,12 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.navigation.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-//        desktopMain.dependencies {
-//            implementation(compose.desktop.currentOs)
-//        }
     }
 }
 
@@ -112,19 +94,3 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
-
-//compose.desktop {
-//    application {
-//        mainClass = "MainKt"
-//
-//        nativeDistributions {
-//            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-//            packageName = "com.delacrixmorgan.twilight"
-//            packageVersion = "1.0.0"
-//        }
-//    }
-//}
-//
-//compose.experimental {
-//    web.application {}
-//}

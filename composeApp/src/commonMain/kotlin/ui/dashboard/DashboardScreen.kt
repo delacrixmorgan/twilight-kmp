@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import data.model.TimeRegion
 import data.model.localTime
 import ui.extensions.keyboardShownState
@@ -43,7 +44,7 @@ import ui.theme.Typography
 
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel
+    viewModel: DashboardViewModel = viewModel { DashboardViewModel() }
 ) {
     Column {
         val query by viewModel.query.collectAsState()

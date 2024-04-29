@@ -1,10 +1,7 @@
 package ui.form
 
-import com.arkivanov.decompose.ComponentContext
+import androidx.lifecycle.ViewModel
 
-class FormSelectionViewModel(
-    componentContext: ComponentContext,
-) : ComponentContext by componentContext {
-
+class FormSelectionViewModel : ViewModel() {
 
 }
