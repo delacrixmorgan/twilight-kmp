@@ -1,4 +1,4 @@
-package ui.extensions
+package ui
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime

@@ -1,4 +1,4 @@
-package ui.dashboard
+package ui.create.timeregion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 @OptIn(FlowPreview::class)
-class DashboardViewModel : ViewModel() {
+class SelectTimeRegionViewModel : ViewModel() {
     companion object {
         private const val DEBOUNCE_IN_MILLISECONDS = 500L
         private const val TIMEOUT_IN_MILLISECONDS = 5_000L
