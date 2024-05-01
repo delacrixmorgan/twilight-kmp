@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import nav.Screens
 import ui.component.TimeRegionListRow
 import ui.keyboardShownState
 
@@ -75,36 +79,47 @@ fun SelectTimeRegionScreen(
             val localFocusManager = LocalFocusManager.current
             if (!keyboardShownState().value) localFocusManager.clearFocus()
 
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                shape = CircleShape,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent
-                ),
-                maxLines = 1,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
-                value = query,
-                onValueChange = viewModel::onSearchQueryChange,
-                placeholder = { Text(text = "Search") },
-                leadingIcon = {
-                    Icon(
-                        Icons.Rounded.Search,
-                        contentDescription = null
-                    )
-                },
-                trailingIcon = {
-                    if (query.isNotEmpty()) {
+            Column {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent
+                    ),
+                    maxLines = 1,
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
+                    value = query,
+                    onValueChange = viewModel::onSearchQueryChange,
+                    placeholder = { Text(text = "Search") },
+                    leadingIcon = {
                         Icon(
-                            modifier = Modifier.clickable { viewModel.onSearchQueryChange("") },
-                            imageVector = Icons.Rounded.Clear,
+                            Icons.Rounded.Search,
                             contentDescription = null
                         )
-                    }
-                },
-            )
+                    },
+                    trailingIcon = {
+                        if (query.isNotEmpty()) {
+                            Icon(
+                                modifier = Modifier.clickable { viewModel.onSearchQueryChange("") },
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { navHostController.navigate(Screens.FormSummary.route) }
+                ) {
+                    Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
+                }
+            }
         }
     }
 }

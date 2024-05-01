@@ -32,7 +32,7 @@ fun DashboardScreen(
             ExtendedFloatingActionButton(
                 text = { Text("Add") },
                 icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add") },
-                onClick = { navHostController.navigate(Screens.FormSetupName.route) }
+                onClick = { navHostController.navigate(Screens.FormSelectLocationType.route) }
             )
         }
     ) { innerPadding ->

@@ -3,13 +3,13 @@ agp = "8.2.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-compose = "1.6.6"
+compose = "1.6.7"
 compose-plugin = "1.6.2"
 kotlin = "2.0.0-RC1"
 kotlinx-serialization-json = "1.6.3"
 kotlinx-datetime = "0.6.0-RC.2"
 androidx-navigation-compose = "2.8.0-alpha02"
-androidx-lifecycle = "2.8.0-beta01"
+androidx-lifecycle = "2.8.0-rc01"
 
 [libraries]
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }

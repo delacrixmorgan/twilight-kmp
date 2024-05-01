@@ -1,4 +1,6 @@
 package ui.form.type
 
-class SelectLocationTypeViewModel {
+import androidx.lifecycle.ViewModel
+
+class SelectLocationTypeViewModel : ViewModel() {
 }
