@@ -1,4 +1,4 @@
-package ui.create.timeregion
+package ui.form.timeregion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

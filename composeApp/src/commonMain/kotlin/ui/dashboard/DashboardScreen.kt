@@ -11,39 +11,38 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import nav.DashboardBottomNavHost
-import nav.DashboardBottomNavItem
 import nav.Screens
+import nav.dashboard.DashboardBottomNavHost
+import nav.dashboard.DashboardBottomNavItem
 
 @Composable
 fun DashboardScreen(
-    navController: NavHostController,
-    bottomNavController: NavHostController = rememberNavController()
+    navHostController: NavHostController,
+    bottomNavHostController: NavHostController = rememberNavController()
 ) {
     Scaffold(
-        bottomBar = { BottomNavigationBar(bottomNavController) },
+        bottomBar = { BottomNavigationBar(bottomNavHostController) },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text("Add") },
                 icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add") },
-                onClick = { navController.navigate(Screens.Create.route) }
+                onClick = { navHostController.navigate(Screens.FormSetupName.route) }
             )
         }
     ) { innerPadding ->
-        DashboardBottomNavHost(bottomNavController, innerPadding)
+        DashboardBottomNavHost(bottomNavHostController, innerPadding)
     }
 }
 
 @Composable
-private fun BottomNavigationBar(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
+private fun BottomNavigationBar(navHostController: NavHostController) {
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar {
@@ -52,8 +51,8 @@ private fun BottomNavigationBar(navController: NavController) {
                 icon = { Icon(screen.icon, contentDescription = screen.title) },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
-                    navController.navigate(screen.route) {
-                        popUpTo(navController.graph.findStartDestination().navigatorName) { saveState = true }
+                    navHostController.navigate(screen.route) {
+                        popUpTo(navHostController.graph.findStartDestination().navigatorName) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
                     }
