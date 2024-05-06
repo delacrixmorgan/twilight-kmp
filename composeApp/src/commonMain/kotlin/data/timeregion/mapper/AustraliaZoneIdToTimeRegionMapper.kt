@@ -1,10 +1,10 @@
-package data.timezone.mapper
+package data.timeregion.mapper
 
 import data.model.Region
 import data.model.TimeRegion
 import data.utils.Mapper
 
-class AustraliaZoneIdToTimezoneMapper : Mapper<List<String>, List<TimeRegion>> {
+class AustraliaZoneIdToTimeRegionMapper : Mapper<List<String>, List<TimeRegion>> {
     companion object {
         private val region = Region.Australia
     }

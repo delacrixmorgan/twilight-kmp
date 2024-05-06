@@ -1,5 +1,5 @@
-import data.timezone.TimescapeRepository
-import data.timezone.convert
+import data.timeregion.TimescapeRepository
+import data.timeregion.convert
 import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals

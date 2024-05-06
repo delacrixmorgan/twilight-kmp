@@ -1,11 +1,11 @@
-package data.timezone
+package data.timeregion
 
 import data.model.Region
 import data.model.TimeRegion
-import data.timezone.mapper.AmericaZoneIdToTimezoneMapper
-import data.timezone.mapper.AsiaZoneIdToTimezoneMapper
-import data.timezone.mapper.AustraliaZoneIdToTimezoneMapper
-import data.timezone.mapper.EuropeZoneIdToTimezoneMapper
+import data.timeregion.mapper.AmericaZoneIdToTimeRegionMapper
+import data.timeregion.mapper.AsiaZoneIdToTimeRegionMapper
+import data.timeregion.mapper.AustraliaZoneIdToTimeRegionMapper
+import data.timeregion.mapper.EuropeZoneIdToTimeRegionMapper
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -16,10 +16,10 @@ import kotlinx.datetime.toLocalDateTime
  */
 object TimescapeRepository {
     val timeRegions: List<TimeRegion>
-    private val americaZoneIdToTimezoneMapper by lazy { AmericaZoneIdToTimezoneMapper() }
-    private val asiaZoneIdToTimezoneMapper by lazy { AsiaZoneIdToTimezoneMapper() }
-    private val australiaZoneIdToTimezoneMapper by lazy { AustraliaZoneIdToTimezoneMapper() }
-    private val europeZoneIdToTimezoneMapper by lazy { EuropeZoneIdToTimezoneMapper() }
+    private val americaZoneIdToTimeRegionMapper by lazy { AmericaZoneIdToTimeRegionMapper() }
+    private val asiaZoneIdToTimeRegionMapper by lazy { AsiaZoneIdToTimeRegionMapper() }
+    private val australiaZoneIdToTimeRegionMapper by lazy { AustraliaZoneIdToTimeRegionMapper() }
+    private val europeZoneIdToTimeRegionMapper by lazy { EuropeZoneIdToTimeRegionMapper() }
 
     init {
         val availableZones: Set<String> = TimeZone.availableZoneIds
@@ -33,16 +33,16 @@ object TimescapeRepository {
         region: Region
     ): List<TimeRegion> = when (region) {
         Region.Africa -> genericZoneIdToTimezoneMapper(region)
-        Region.America -> americaZoneIdToTimezoneMapper(this)
+        Region.America -> americaZoneIdToTimeRegionMapper(this)
         Region.Antarctica -> genericZoneIdToTimezoneMapper(region)
         Region.Arctic -> genericZoneIdToTimezoneMapper(region)
-        Region.Asia -> asiaZoneIdToTimezoneMapper(this)
+        Region.Asia -> asiaZoneIdToTimeRegionMapper(this)
         Region.Atlantic -> genericZoneIdToTimezoneMapper(region)
-        Region.Australia -> australiaZoneIdToTimezoneMapper(this)
+        Region.Australia -> australiaZoneIdToTimeRegionMapper(this)
         Region.Brazil -> genericZoneIdToTimezoneMapper(region)
         Region.Canada -> genericZoneIdToTimezoneMapper(region)
         Region.Chile -> genericZoneIdToTimezoneMapper(region)
-        Region.Europe -> europeZoneIdToTimezoneMapper(this)
+        Region.Europe -> europeZoneIdToTimeRegionMapper(this)
         Region.Indian -> genericZoneIdToTimezoneMapper(region)
         Region.Mexico -> genericZoneIdToTimezoneMapper(region)
         Region.Pacific -> genericZoneIdToTimezoneMapper(region)

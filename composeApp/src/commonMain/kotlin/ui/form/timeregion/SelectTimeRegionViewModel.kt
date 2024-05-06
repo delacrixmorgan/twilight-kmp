@@ -2,7 +2,7 @@ package ui.form.timeregion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.timezone.TimescapeRepository
+import data.timeregion.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
