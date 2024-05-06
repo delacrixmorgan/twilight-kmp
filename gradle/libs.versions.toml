@@ -10,6 +10,7 @@ kotlinx-serialization-json = "1.6.3"
 kotlinx-datetime = "0.6.0-RC.2"
 androidx-navigation-compose = "2.8.0-alpha02"
 androidx-lifecycle = "2.8.0-rc01"
+androidx-datastore-preference = "1.1.1"
 
 [libraries]
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
@@ -18,6 +19,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation-compose" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-datastore-preference = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastore-preference" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 
 [plugins]

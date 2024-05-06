@@ -50,6 +50,7 @@ kotlin {
             // AndroidX
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.datastore.preference)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
