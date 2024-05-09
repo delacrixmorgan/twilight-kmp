@@ -1,9 +1,9 @@
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import ui.theme.AppTheme
 
 @Composable
 fun App() {
-    MaterialTheme {
+    AppTheme {
         TwilightApp()
     }
 }

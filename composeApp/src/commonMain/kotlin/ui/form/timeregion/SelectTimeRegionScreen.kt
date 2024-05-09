@@ -74,7 +74,7 @@ fun SelectTimeRegionScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceContainer, shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
-                .padding(16.dp),
+                .padding(16.dp)
         ) {
             val localFocusManager = LocalFocusManager.current
             if (!keyboardShownState().value) localFocusManager.clearFocus()

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,26 +17,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import data.model.TimeRegion
 import data.model.localTime
-import ui.theme.Typography
 
 @Composable
 internal fun TimeRegionListRow(timeRegion: TimeRegion) {
     Box(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
             .padding(16.dp),
     ) {
         Row(Modifier.fillMaxWidth()) {
             Column(Modifier.align(alignment = Alignment.CenterVertically), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
                     text = timeRegion.city,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = Typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
                 Text(
                     text = timeRegion.zone,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = Typography.bodyMedium
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             Spacer(modifier = Modifier.weight(1F))
@@ -46,8 +44,8 @@ internal fun TimeRegionListRow(timeRegion: TimeRegion) {
                 modifier = Modifier
                     .padding(vertical = 16.dp)
                     .align(alignment = Alignment.CenterVertically),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = Typography.labelLarge
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }
