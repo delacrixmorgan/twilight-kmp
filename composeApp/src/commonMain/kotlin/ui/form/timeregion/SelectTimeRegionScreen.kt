@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -65,7 +62,10 @@ fun SelectTimeRegionScreen(
             ) {
                 items(count = list.size, key = { list[it].timeZone.id }) { index ->
                     val timeRegion = list[index]
-                    TimeRegionListRow(timeRegion)
+                    TimeRegionListRow(timeRegion) {
+                        viewModel.onTimeRegionSelected(it)
+                        navHostController.navigate(Screens.FormSummary.route)
+                    }
                 }
             }
         }
@@ -82,13 +82,13 @@ fun SelectTimeRegionScreen(
             Column {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = CircleShape,
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                         errorIndicatorColor = Color.Transparent
                     ),
+                    shape = CircleShape,
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
                     value = query,
@@ -110,15 +110,6 @@ fun SelectTimeRegionScreen(
                         }
                     },
                 )
-
-                Spacer(Modifier.height(16.dp))
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { navHostController.navigate(Screens.FormSummary.route) }
-                ) {
-                    Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
-                }
             }
         }
     }

@@ -1,4 +1,10 @@
 package ui.form.summary
 
-class SummaryViewModel {
+import androidx.lifecycle.ViewModel
+
+class SummaryViewModel : ViewModel() {
+
+    fun onCreateClicked() {
+
+    }
 }

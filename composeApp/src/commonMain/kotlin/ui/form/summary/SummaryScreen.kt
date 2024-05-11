@@ -13,12 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
 
 @Composable
 fun SummaryScreen(
     navHostController: NavHostController,
+    viewModel: SummaryViewModel = viewModel { SummaryViewModel() }
 ) {
     Column(
         Modifier.fillMaxSize().padding(16.dp),
@@ -32,7 +34,10 @@ fun SummaryScreen(
         Spacer(modifier = Modifier.weight(1F))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { navHostController.popBackStack(Screens.Dashboard.route, inclusive = false) }
+            onClick = {
+                viewModel.onCreateClicked()
+                navHostController.popBackStack(Screens.Dashboard.route, inclusive = false)
+            }
         ) {
             Text("Create", modifier = Modifier.padding(vertical = 8.dp))
         }

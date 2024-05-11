@@ -2,6 +2,7 @@ package ui.form.timeregion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import data.model.TimeRegion
 import data.timeregion.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -49,6 +50,10 @@ class SelectTimeRegionViewModel : ViewModel() {
 
     fun onSearchQueryChange(query: String) {
         _query.value = query
+    }
+
+    fun onTimeRegionSelected(timeRegion: TimeRegion) {
+
     }
 
     fun onAddTimeRegionClicked() {

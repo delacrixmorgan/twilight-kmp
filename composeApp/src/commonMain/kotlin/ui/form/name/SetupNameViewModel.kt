@@ -1,4 +1,9 @@
 package ui.form.name
 
-class SetupNameViewModel {
+import androidx.lifecycle.ViewModel
+
+class SetupNameViewModel : ViewModel() {
+    fun onContinueClicked() {
+
+    }
 }
