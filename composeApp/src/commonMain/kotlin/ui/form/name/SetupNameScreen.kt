@@ -15,24 +15,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
+import ui.common.observeEvent
 
 @Composable
 fun SetupNameScreen(
     navHostController: NavHostController,
-    viewModel: SetupNameViewModel = viewModel { SetupNameViewModel() }
+    viewModel: SetupNameViewModel = viewModel { SetupNameViewModel() },
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     Column(
         Modifier.fillMaxSize().padding(16.dp),
@@ -45,8 +46,6 @@ fun SetupNameScreen(
         )
         Spacer(modifier = Modifier.weight(1F))
 
-        var value by remember { mutableStateOf("") }
-
         TextField(
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -58,8 +57,8 @@ fun SetupNameScreen(
             shape = CircleShape,
             maxLines = 1,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
-            value = value,
-            onValueChange = { value = it },
+            value = viewModel.locationName.value,
+            onValueChange = { viewModel.onLocationNameUpdated(it) },
             placeholder = { Text("") },
         )
 
@@ -67,12 +66,16 @@ fun SetupNameScreen(
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                viewModel.onContinueClicked()
-                navHostController.navigate(Screens.FormSelectTimeRegion.route)
-            }
+            onClick = { viewModel.onContinueClicked() },
+            enabled = viewModel.continueButtonEnabled.value
         ) {
             Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
+        }
+
+        LaunchedEffect(viewModel, lifecycleOwner) {
+            viewModel.openSelectTimeRegionEvent.observeEvent(lifecycleOwner) {
+                navHostController.navigate(Screens.FormSelectTimeRegion.route)
+            }
         }
     }
 }

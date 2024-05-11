@@ -24,25 +24,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
 import ui.component.TimeRegionListRow
 import ui.keyboardShownState
+import ui.common.observeEvent
 
 @Composable
 fun SelectTimeRegionScreen(
     navHostController: NavHostController,
-    viewModel: SelectTimeRegionViewModel = viewModel { SelectTimeRegionViewModel() }
+    viewModel: SelectTimeRegionViewModel = viewModel { SelectTimeRegionViewModel() },
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     Column {
         val query by viewModel.query.collectAsState()
@@ -62,10 +67,7 @@ fun SelectTimeRegionScreen(
             ) {
                 items(count = list.size, key = { list[it].timeZone.id }) { index ->
                     val timeRegion = list[index]
-                    TimeRegionListRow(timeRegion) {
-                        viewModel.onTimeRegionSelected(it)
-                        navHostController.navigate(Screens.FormSummary.route)
-                    }
+                    TimeRegionListRow(timeRegion) { viewModel.onTimeRegionSelected(it) }
                 }
             }
         }
@@ -111,6 +113,12 @@ fun SelectTimeRegionScreen(
                     },
                 )
             }
+        }
+    }
+
+    LaunchedEffect(viewModel, lifecycleOwner) {
+        viewModel.openSummaryEvent.observeEvent(lifecycleOwner) {
+            navHostController.navigate(Screens.FormSummary.route)
         }
     }
 }

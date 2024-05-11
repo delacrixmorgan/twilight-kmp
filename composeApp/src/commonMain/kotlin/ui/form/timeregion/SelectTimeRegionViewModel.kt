@@ -6,6 +6,7 @@ import data.model.TimeRegion
 import data.timeregion.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,9 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import ui.common.Event
+import ui.common.triggerEvent
 
 @OptIn(FlowPreview::class)
 class SelectTimeRegionViewModel : ViewModel() {
@@ -21,6 +25,8 @@ class SelectTimeRegionViewModel : ViewModel() {
         private const val DEBOUNCE_IN_MILLISECONDS = 500L
         private const val TIMEOUT_IN_MILLISECONDS = 5_000L
     }
+
+    val openSummaryEvent = MutableSharedFlow<Event<Unit>>()
 
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
@@ -53,7 +59,9 @@ class SelectTimeRegionViewModel : ViewModel() {
     }
 
     fun onTimeRegionSelected(timeRegion: TimeRegion) {
-
+        viewModelScope.launch {
+            openSummaryEvent.triggerEvent()
+        }
     }
 
     fun onAddTimeRegionClicked() {
