@@ -33,11 +33,14 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             // Common
             implementation(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
 
             // Compose
             implementation(compose.runtime)

@@ -1,26 +1,20 @@
-package data
-
-import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
+import data.utils.LocalDataStore
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.coroutines.CoroutineScope
+import org.koin.dsl.module
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
 
+actual fun platformModule() = module {
+    single { dataStore() }
+}
+
 @OptIn(ExperimentalForeignApi::class)
-actual fun dataStorePreferences(
-    corruptionHandler: ReplaceFileCorruptionHandler<Preferences>?,
-    coroutineScope: CoroutineScope,
-    migrations: List<DataMigration<Preferences>>,
-): DataStore<Preferences> = createDataStoreWithDefaults(
-    corruptionHandler = corruptionHandler,
-    migrations = migrations,
-    coroutineScope = coroutineScope,
-    path = {
+fun dataStore(): DataStore<Preferences> = createDataStore(
+    producePath = {
         val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
             directory = NSDocumentDirectory,
             inDomain = NSUserDomainMask,
@@ -28,6 +22,6 @@ actual fun dataStorePreferences(
             create = false,
             error = null,
         )
-        (requireNotNull(documentDirectory).path + DATA_STORE_CREATE_NEW_LOCATION)
+        requireNotNull(documentDirectory).path + "/${LocalDataStore.CreateNewLocation.path()}"
     }
 )
