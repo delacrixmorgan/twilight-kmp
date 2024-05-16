@@ -2,6 +2,7 @@ package ui.form.timeregion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import data.createnewlocation.CreateNewLocationRepository
 import data.model.TimeRegion
 import data.timeregion.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
@@ -16,16 +17,19 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import ui.common.Event
 import ui.common.triggerEvent
 
 @OptIn(FlowPreview::class)
-class SelectTimeRegionViewModel : ViewModel() {
+class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     companion object {
         private const val DEBOUNCE_IN_MILLISECONDS = 500L
         private const val TIMEOUT_IN_MILLISECONDS = 5_000L
     }
 
+    private val repository: CreateNewLocationRepository by inject()
     val openSummaryEvent = MutableSharedFlow<Event<Unit>>()
 
     private val _query = MutableStateFlow("")
@@ -60,11 +64,8 @@ class SelectTimeRegionViewModel : ViewModel() {
 
     fun onTimeRegionSelected(timeRegion: TimeRegion) {
         viewModelScope.launch {
+            repository.saveZoneId(timeRegion.zoneIdString)
             openSummaryEvent.triggerEvent()
         }
-    }
-
-    fun onAddTimeRegionClicked() {
-
     }
 }

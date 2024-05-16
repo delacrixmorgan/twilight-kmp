@@ -6,7 +6,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 
 data class TimeRegion(
-    private val zoneIdString: String,
+    val zoneIdString: String,
     val region: Region,
     private val country: List<String> = listOf(),
     private val states: List<String> = listOf(),

@@ -14,7 +14,6 @@ import ui.common.Event
 import ui.common.triggerEvent
 
 class SelectLocationTypeViewModel : ViewModel(), KoinComponent {
-
     private val repository: CreateNewLocationRepository by inject()
 
     val continueButtonEnabled = mutableStateOf(false)
@@ -23,7 +22,10 @@ class SelectLocationTypeViewModel : ViewModel(), KoinComponent {
 
     init {
         viewModelScope.launch {
-            selectedLocationType.value = repository.getLocationType().first()
+            repository.getLocationType().first()?.let {
+                selectedLocationType.value = it
+                continueButtonEnabled.value = true
+            }
         }
     }
 

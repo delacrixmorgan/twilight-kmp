@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Create
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -59,7 +62,13 @@ fun SetupNameScreen(
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
             value = viewModel.locationName.value,
             onValueChange = { viewModel.onLocationNameUpdated(it) },
-            placeholder = { Text("") },
+            placeholder = { Text("Name") },
+            leadingIcon = {
+                Icon(
+                    Icons.Rounded.Create,
+                    contentDescription = null
+                )
+            },
         )
 
         Spacer(Modifier.height(16.dp))
