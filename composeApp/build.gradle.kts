@@ -6,6 +6,20 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.sqlDelight)
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.delacrixmorgan.twilight")
+        }
+    }
 }
 
 kotlin {
@@ -34,6 +48,10 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.koin.android)
+            implementation(libs.sqldelight.android)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native)
         }
         commonMain.dependencies {
             // Common
