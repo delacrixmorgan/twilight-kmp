@@ -11,10 +11,7 @@ class SummaryViewModel : ViewModel(), KoinComponent {
     private val repository: CreateNewLocationRepository by inject()
 
     fun onCreateClicked() {
-        repository.getLocationType()
-        repository.getName()
-        repository.getZoneId()
-
+        repository.observeLocation()
         viewModelScope.launch {
             repository.clear()
         }

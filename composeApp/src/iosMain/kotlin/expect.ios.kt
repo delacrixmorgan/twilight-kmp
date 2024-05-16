@@ -1,7 +1,7 @@
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
-import com.delacrixmorgan.twilight.Database
+import com.delacrixmorgan.twilight.TwilightDatabase
 import data.utils.LocalDataStore
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.dsl.module
@@ -12,7 +12,7 @@ import platform.Foundation.NSUserDomainMask
 
 actual fun platformModule() = module {
     single { dataStore() }
-    single { NativeSqliteDriver(Database.Schema, "twilight.db") }
+    single { NativeSqliteDriver(TwilightDatabase.Schema, "twilight.db") }
 }
 
 @OptIn(ExperimentalForeignApi::class)

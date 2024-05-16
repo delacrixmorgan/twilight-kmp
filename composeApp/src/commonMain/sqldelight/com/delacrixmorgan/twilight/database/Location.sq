@@ -1,6 +1,0 @@
-CREATE TABLE Location (
-    name TEXT NOT NULL,
-    type TEXT NOT NULL,
-    timeRegion TEXT NOT NULL,
-    PRIMARY KEY(name)
-);

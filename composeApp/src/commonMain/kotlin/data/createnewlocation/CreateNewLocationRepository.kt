@@ -4,6 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.delacrixmorgan.twilight.TwilightDatabase
+import data.model.Location
 import data.model.LocationType
 import data.model.NewLocationData
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +24,7 @@ interface CreateNewLocationRepository {
     fun getZoneId(): Flow<String?>
 
     fun observeLocation(): Flow<NewLocationData>
+
     suspend fun clear()
 }
 

@@ -1,9 +1,10 @@
 package data.model
 
 data class Location(
+    val id: String,
     val name: String,
     val type: LocationType,
-    val timeRegion: TimeRegion,
+    val zoneIdString: String,
 )
 
 enum class LocationType {

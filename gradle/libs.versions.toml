@@ -28,6 +28,7 @@ koin-android = { module = "io.insert-koin:koin-android" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

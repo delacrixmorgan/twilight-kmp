@@ -1,0 +1,16 @@
+CREATE TABLE LocationEntity (
+    id TEXT NOT NULL ,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL,
+    zoneIdString TEXT NOT NULL,
+    PRIMARY KEY(id)
+);
+
+insertItem:
+INSERT OR REPLACE INTO LocationEntity(id, name, type, zoneIdString) VALUES(?,?,?,?);
+
+selectAll:
+SELECT * FROM LocationEntity;
+
+deleteAll:
+DELETE FROM LocationEntity;

@@ -16,7 +16,7 @@ repositories {
 
 sqldelight {
     databases {
-        create("Database") {
+        create("TwilightDatabase") {
             packageName.set("com.delacrixmorgan.twilight")
         }
     }
@@ -59,6 +59,7 @@ kotlin {
             api(libs.kotlinx.datetime)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
+            implementation(libs.sqldelight.coroutines.extensions)
 
             // Compose
             implementation(compose.runtime)

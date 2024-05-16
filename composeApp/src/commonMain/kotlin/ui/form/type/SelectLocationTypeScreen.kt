@@ -21,9 +21,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import data.model.LocationType
 import nav.Screens
+import ui.common.observeEvent
 import ui.component.RadioGroup
 import ui.component.RadioRowData
-import ui.common.observeEvent
 
 @Composable
 fun SelectLocationTypeScreen(
