@@ -1,6 +1,5 @@
 package ui.form.name
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,26 +10,26 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Create
+import androidx.compose.material.icons.rounded.TravelExplore
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
 import ui.common.observeEvent
+import ui.theme.DefaultColors
 
 @Composable
 fun SetupNameScreen(
@@ -38,25 +37,25 @@ fun SetupNameScreen(
     viewModel: SetupNameViewModel = viewModel { SetupNameViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Column(
-        Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
         Text(
             "Setup Name",
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.weight(1F))
 
+        Text(
+            "Name",
+            style = MaterialTheme.typography.labelLarge
+        )
+
+        Spacer(Modifier.height(8.dp))
+
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent
-            ),
+            colors = DefaultColors.textFieldDefaultColors(),
             shape = CircleShape,
             maxLines = 1,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
@@ -73,6 +72,32 @@ fun SetupNameScreen(
 
         Spacer(Modifier.height(16.dp))
 
+        Text(
+            "Customise the region name (optional)",
+            style = MaterialTheme.typography.labelLarge
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            colors = DefaultColors.textFieldDefaultColors(),
+            shape = CircleShape,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
+            value = viewModel.customRegionName.value,
+            onValueChange = { viewModel.onCustomRegionNameUpdated(it) },
+            placeholder = { Text("Region Name") },
+            leadingIcon = {
+                Icon(
+                    Icons.Rounded.TravelExplore,
+                    contentDescription = null
+                )
+            },
+        )
+
+        Spacer(Modifier.height(16.dp))
+
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = { viewModel.onContinueClicked() },
@@ -82,8 +107,8 @@ fun SetupNameScreen(
         }
 
         LaunchedEffect(viewModel, lifecycleOwner) {
-            viewModel.openSelectTimeRegionEvent.observeEvent(lifecycleOwner) {
-                navHostController.navigate(Screens.FormSelectTimeRegion.route)
+            viewModel.openSummaryEvent.observeEvent(lifecycleOwner) {
+                navHostController.navigate(Screens.FormSummary.route)
             }
         }
     }

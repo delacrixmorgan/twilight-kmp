@@ -32,7 +32,7 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
-    val openSummaryEvent = MutableSharedFlow<Event<Unit>>()
+    val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
 
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
@@ -74,7 +74,7 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     fun onTimeRegionSelected(timeRegion: TimeRegion) {
         viewModelScope.launch {
             store.saveZoneId(timeRegion.zoneIdString)
-            openSummaryEvent.triggerEvent()
+            openSetupNameEvent.triggerEvent()
         }
     }
 

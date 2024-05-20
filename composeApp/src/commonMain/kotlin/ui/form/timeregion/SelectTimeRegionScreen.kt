@@ -126,8 +126,8 @@ fun SelectTimeRegionScreen(
     }
 
     LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openSummaryEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Screens.FormSummary.route)
+        viewModel.openSetupNameEvent.observeEvent(lifecycleOwner) {
+            navHostController.navigate(Screens.FormSetupName.route)
         }
     }
 }

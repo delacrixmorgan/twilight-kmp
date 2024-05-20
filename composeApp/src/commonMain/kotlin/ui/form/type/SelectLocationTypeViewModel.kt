@@ -17,7 +17,7 @@ class SelectLocationTypeViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
 
     val continueButtonEnabled = mutableStateOf(false)
-    val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
+    val openSelectTimeRegionEvent = MutableSharedFlow<Event<Unit>>()
     var selectedLocationType = mutableStateOf<LocationType?>(null)
 
     init {
@@ -39,7 +39,7 @@ class SelectLocationTypeViewModel : ViewModel(), KoinComponent {
 
     fun onContinueClicked() {
         viewModelScope.launch {
-            openSetupNameEvent.triggerEvent()
+            openSelectTimeRegionEvent.triggerEvent()
         }
     }
 }
