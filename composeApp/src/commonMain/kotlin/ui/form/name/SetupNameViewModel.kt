@@ -14,7 +14,7 @@ import ui.common.triggerEvent
 
 class SetupNameViewModel : ViewModel(), KoinComponent {
 
-    private val repository: CreateNewLocationRepository by inject()
+    private val store: CreateNewLocationRepository by inject()
 
     val continueButtonEnabled = mutableStateOf(false)
     val openSelectTimeRegionEvent = MutableSharedFlow<Event<Unit>>()
@@ -23,8 +23,8 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
 
     init {
         viewModelScope.launch {
-            if (!repository.getName().first().isNullOrBlank()) {
-                locationName.value = repository.getName().first() ?: ""
+            if (!store.getName().first().isNullOrBlank()) {
+                locationName.value = store.getName().first() ?: ""
                 continueButtonEnabled.value = true
             }
         }
@@ -37,7 +37,7 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
 
     fun onContinueClicked() {
         viewModelScope.launch {
-            repository.saveName(locationName.value)
+            store.saveName(locationName.value)
             openSelectTimeRegionEvent.triggerEvent()
         }
     }

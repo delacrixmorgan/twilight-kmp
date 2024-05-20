@@ -10,11 +10,12 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.koin.core.component.KoinComponent
 
 /**
  * https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  */
-object TimescapeRepository {
+class TimescapeRepository : KoinComponent {
     val timeRegions: List<TimeRegion>
     private val americaZoneIdToTimeRegionMapper by lazy { AmericaZoneIdToTimeRegionMapper() }
     private val asiaZoneIdToTimeRegionMapper by lazy { AsiaZoneIdToTimeRegionMapper() }
@@ -55,8 +56,8 @@ object TimescapeRepository {
         TimeRegion(it, region)
     }
 
-    fun search(query: String): List<TimeRegion> {
-        return timeRegions.filter { timeRegion -> timeRegion.doesMatchSearchQuery(query) }
+    fun search(zoneId: String?): TimeRegion? {
+        return timeRegions.firstOrNull { it.zoneIdString == zoneId }
     }
 }
 

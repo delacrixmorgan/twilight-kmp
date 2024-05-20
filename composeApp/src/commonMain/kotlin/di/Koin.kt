@@ -3,6 +3,7 @@ package di
 import data.createnewlocation.CreateNewLocationRepository
 import data.createnewlocation.CreateNewLocationRepositoryImpl
 import data.location.mapper.LocationTypeEntityToModelMapper
+import data.timeregion.TimescapeRepository
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -23,6 +24,7 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
 
 fun repositoryModule(enableNetworkLogs: Boolean) = module {
     single<CreateNewLocationRepository> { CreateNewLocationRepositoryImpl() }
+    single<TimescapeRepository> { TimescapeRepository() }
 }
 
 fun mapperModule() = module {

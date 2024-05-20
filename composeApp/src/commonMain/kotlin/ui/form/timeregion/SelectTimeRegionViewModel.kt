@@ -29,7 +29,9 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
         private const val TIMEOUT_IN_MILLISECONDS = 5_000L
     }
 
-    private val repository: CreateNewLocationRepository by inject()
+    private val store: CreateNewLocationRepository by inject()
+    private val timescapeRepository: TimescapeRepository by inject()
+
     val openSummaryEvent = MutableSharedFlow<Event<Unit>>()
 
     private val _query = MutableStateFlow("")
@@ -38,13 +40,20 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     private val _searching = MutableStateFlow(false)
     val searching = _searching.asStateFlow()
 
-    private val _timeRegions = MutableStateFlow(TimescapeRepository.timeRegions)
+    private val favouriteTimeRegion = listOf(
+        "Asia/Kuala_Lumpur",
+        "Europe/Amsterdam",
+        "Australia/Melbourne",
+        "America/New_York",
+    )
+
+    private val _timeRegions = MutableStateFlow(timescapeRepository.timeRegions.sorted())
     val timeRegions = _query
         .debounce(DEBOUNCE_IN_MILLISECONDS)
         .onEach { _searching.update { true } }
         .combine(_timeRegions) { query, timeRegions ->
             if (query.isBlank()) {
-                timeRegions
+                timeRegions.sorted()
             } else {
                 delay(DEBOUNCE_IN_MILLISECONDS)
                 val trimmedQuery = query.replace("\\s+".toRegex(), "")
@@ -64,8 +73,11 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
 
     fun onTimeRegionSelected(timeRegion: TimeRegion) {
         viewModelScope.launch {
-            repository.saveZoneId(timeRegion.zoneIdString)
+            store.saveZoneId(timeRegion.zoneIdString)
             openSummaryEvent.triggerEvent()
         }
     }
+
+    private fun List<TimeRegion>.sorted(): List<TimeRegion> =
+        sortedWith(compareBy { it.zoneIdString !in favouriteTimeRegion })
 }
