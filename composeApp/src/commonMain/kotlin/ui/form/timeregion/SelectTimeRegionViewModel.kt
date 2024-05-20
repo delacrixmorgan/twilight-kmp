@@ -1,5 +1,6 @@
 package ui.form.timeregion
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -31,8 +33,6 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
 
     private val store: CreateNewLocationRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
-
-    val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
 
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
@@ -67,13 +67,31 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
             _timeRegions.value
         )
 
+    val selectedTimeRegion = mutableStateOf<TimeRegion?>(null)
+    val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
+    val continueButtonEnabled = mutableStateOf(false)
+
+    init {
+        viewModelScope.launch {
+            store.getZoneId().first()?.let {
+                selectedTimeRegion.value = timescapeRepository.search(it)
+                continueButtonEnabled.value = true
+            }
+        }
+    }
+
     fun onSearchQueryChange(query: String) {
         _query.value = query
     }
 
     fun onTimeRegionSelected(timeRegion: TimeRegion) {
+        this.selectedTimeRegion.value = timeRegion
+        continueButtonEnabled.value = true
+    }
+
+    fun onContinueClicked() {
         viewModelScope.launch {
-            store.saveZoneId(timeRegion.zoneIdString)
+            store.saveZoneId(requireNotNull(selectedTimeRegion.value?.zoneIdString))
             openSetupNameEvent.triggerEvent()
         }
     }

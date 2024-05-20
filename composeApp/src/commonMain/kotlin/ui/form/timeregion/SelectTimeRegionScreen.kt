@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -76,7 +79,10 @@ fun SelectTimeRegionScreen(
             ) {
                 items(count = list.size, key = { list[it].timeZone.id }) { index ->
                     val timeRegion = list[index]
-                    TimeRegionListRow(timeRegion) { viewModel.onTimeRegionSelected(it) }
+                    TimeRegionListRow(
+                        timeRegion = timeRegion,
+                        selected = viewModel.selectedTimeRegion.value?.zoneIdString == timeRegion.zoneIdString
+                    ) { viewModel.onTimeRegionSelected(it) }
                 }
             }
         }
@@ -121,6 +127,16 @@ fun SelectTimeRegionScreen(
                         }
                     },
                 )
+
+                Spacer(Modifier.height(16.dp))
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { viewModel.onContinueClicked() },
+                    enabled = viewModel.continueButtonEnabled.value
+                ) {
+                    Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
+                }
             }
         }
     }

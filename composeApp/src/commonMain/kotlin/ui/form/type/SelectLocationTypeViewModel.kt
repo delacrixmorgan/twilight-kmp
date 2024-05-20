@@ -16,9 +16,9 @@ import ui.common.triggerEvent
 class SelectLocationTypeViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
 
-    val continueButtonEnabled = mutableStateOf(false)
-    val openSelectTimeRegionEvent = MutableSharedFlow<Event<Unit>>()
     var selectedLocationType = mutableStateOf<LocationType?>(null)
+    val openSelectTimeRegionEvent = MutableSharedFlow<Event<Unit>>()
+    val continueButtonEnabled = mutableStateOf(false)
 
     init {
         viewModelScope.launch {
