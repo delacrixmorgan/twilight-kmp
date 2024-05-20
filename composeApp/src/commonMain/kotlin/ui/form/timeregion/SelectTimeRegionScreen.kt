@@ -37,13 +37,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
 import ui.common.observeEvent
+import ui.component.Header
 import ui.component.TimeRegionListRow
 import ui.keyboardShownState
 
@@ -53,17 +53,16 @@ fun SelectTimeRegionScreen(
     viewModel: SelectTimeRegionViewModel = viewModel { SelectTimeRegionViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Column {
+    Column(Modifier.fillMaxSize()) {
         val query by viewModel.query.collectAsState()
         val list by viewModel.timeRegions.collectAsState()
         val searching by viewModel.searching.collectAsState()
         val state = rememberLazyListState()
 
-        Text(
-            "Select Time Region",
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge
+        Header(
+            modifier = Modifier.padding(16.dp),
+            title = "Select Time Region",
+            description = "Pick one that suits you.",
         )
 
         if (searching) {

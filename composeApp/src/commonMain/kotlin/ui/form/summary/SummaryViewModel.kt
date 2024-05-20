@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
 import data.model.Location
 import data.model.LocationType
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -16,7 +17,7 @@ class SummaryViewModel : ViewModel(), KoinComponent {
 
     init {
         viewModelScope.launch {
-            store.observeLocation().collect {
+            store.observeLocation().first().let {
                 locationState.value = Location(
                     id = "",
                     label = it.label ?: "",

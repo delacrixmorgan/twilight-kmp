@@ -22,13 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
 import ui.common.observeEvent
+import ui.component.Header
 import ui.theme.DefaultColors
 
 @Composable
@@ -38,12 +38,11 @@ fun SetupNameScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text(
-            "Setup Name",
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge
+        Header(
+            title = "Setup Name",
+            description = "Pick one that suits you.",
         )
+
         Spacer(modifier = Modifier.weight(1F))
 
         Text(
