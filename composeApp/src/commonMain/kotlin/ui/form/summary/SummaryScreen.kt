@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
+import ui.component.LocationListRow
 
 @Composable
 fun SummaryScreen(
@@ -31,6 +33,13 @@ fun SummaryScreen(
             "Summary",
             style = MaterialTheme.typography.titleLarge
         )
+
+        Spacer(Modifier.height(16.dp))
+
+        viewModel.locationState.value?.let {
+            LocationListRow(it)
+        }
+
         Spacer(modifier = Modifier.weight(1F))
         Button(
             modifier = Modifier.fillMaxWidth(),

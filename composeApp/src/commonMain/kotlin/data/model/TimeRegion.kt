@@ -26,3 +26,7 @@ fun TimeRegion.localTime(): String {
     val now: LocalDateTime = LocalDateTime.now(timeZone)
     return now.format(DateFormat.twelfthHour)
 }
+
+fun TimeZone.localTime(): String {
+    return LocalDateTime.now(this).format(DateFormat.twelfthHour)
+}

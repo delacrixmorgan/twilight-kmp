@@ -1,11 +1,16 @@
 package data.model
 
+import kotlinx.datetime.TimeZone
+
 data class Location(
     val id: String,
-    val name: String,
+    val label: String,
+    val customRegionName: String,
     val type: LocationType,
-    val zoneIdString: String,
-)
+    val zoneId: String,
+) {
+    val timeRegion get() = TimeZone.of(zoneId)
+}
 
 enum class LocationType {
     Person,

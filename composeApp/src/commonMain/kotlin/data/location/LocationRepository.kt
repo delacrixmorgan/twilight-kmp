@@ -30,8 +30,8 @@ internal class LocationRepositoryImpl : LocationRepository, KoinComponent {
 
     override fun getLocations(): Flow<List<Location>> {
         return TwilightDatabase(sqlDriver).locationEntityQueries.selectAll(
-            mapper = { id, name, type, zoneIdString ->
-                Location(id, name, locationTypeEntityToModelMapper(type), zoneIdString)
+            mapper = { id, label, customRegionName, type, zoneIdString ->
+                Location(id, label, customRegionName, locationTypeEntityToModelMapper(type), zoneIdString)
             }
         ).asFlow().mapToList(Dispatchers.Default)
     }

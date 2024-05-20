@@ -1,13 +1,14 @@
 CREATE TABLE LocationEntity (
     id TEXT NOT NULL ,
-    name TEXT NOT NULL,
+    label TEXT NOT NULL,
+    customRegionName TEXT NOT NULL,
     type TEXT NOT NULL,
     zoneIdString TEXT NOT NULL,
     PRIMARY KEY(id)
 );
 
 insertItem:
-INSERT OR REPLACE INTO LocationEntity(id, name, type, zoneIdString) VALUES(?,?,?,?);
+INSERT OR REPLACE INTO LocationEntity(id, label, customRegionName, type, zoneIdString) VALUES(?,?,?,?,?);
 
 selectAll:
 SELECT * FROM LocationEntity;

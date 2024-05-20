@@ -8,30 +8,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import data.model.TimeRegion
+import data.model.Location
 import data.model.localTime
 
 @Composable
-internal fun TimeRegionListRow(
-    timeRegion: TimeRegion,
-    onClicked: (TimeRegion) -> Unit
+internal fun LocationListRow(
+    location: Location,
+    onClicked: ((Location) -> Unit?)? = null
 ) {
     Box(
         modifier = Modifier
-            .clickable { onClicked(timeRegion) }
+            .clickable { onClicked?.invoke(location) }
             .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
             .padding(8.dp),
     ) {
         ListView(
             label = {
                 ListViewColumnLabel(
-                    label = timeRegion.city,
-                    description = timeRegion.zone
+                    label = location.label,
+                    description = location.customRegionName.ifBlank { location.zoneId },
                 )
             },
             endLabel = {
                 ListViewColumnLabel(
-                    label = timeRegion.localTime()
+                    label = location.timeRegion.localTime()
                 )
             }
         )
