@@ -55,6 +55,8 @@ kotlin {
         }
         commonMain.dependencies {
             // Common
+            implementation(project.dependencies.platform(libs.compose.bom))
+            implementation(libs.compose.icons.extended)
             implementation(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
             implementation(project.dependencies.platform(libs.koin.bom))

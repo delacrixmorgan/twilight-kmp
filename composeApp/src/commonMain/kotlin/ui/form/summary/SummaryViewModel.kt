@@ -16,6 +16,7 @@ class SummaryViewModel : ViewModel(), KoinComponent {
     private val timescapeRepository: TimescapeRepository by inject()
 
     val locationState = mutableStateOf<Location?>(null)
+    val customRegionName = mutableStateOf("")
 
     init {
         viewModelScope.launch {
@@ -23,12 +24,16 @@ class SummaryViewModel : ViewModel(), KoinComponent {
                 locationState.value = Location(
                     id = "",
                     label = it.label ?: "",
-                    customRegionName = timescapeRepository.search(it.zoneId)?.city ?: "",
+                    customRegionName = customRegionName.value.ifBlank { timescapeRepository.search(it.zoneId)?.city ?: "" },
                     type = it.type ?: LocationType.Custom,
                     zoneId = it.zoneId ?: ""
                 )
             }
         }
+    }
+
+    fun onCustomRegionName(name: String) {
+        customRegionName.value = name
     }
 
     fun onCreateClicked() {

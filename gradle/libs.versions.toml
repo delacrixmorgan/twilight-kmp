@@ -3,7 +3,6 @@ agp = "8.2.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-compose = "1.6.7"
 compose-plugin = "1.6.2"
 kotlin = "2.0.0-RC1"
 kotlinx-serialization-json = "1.6.3"
@@ -11,18 +10,21 @@ kotlinx-datetime = "0.6.0-RC.2"
 androidx-navigation-compose = "2.8.0-alpha02"
 androidx-lifecycle = "2.8.0"
 androidx-datastore-preference = "1.1.1"
-koin = "3.5.6"
+composeBoM = "2024.05.00"
+koinBoM = "3.5.6"
 sqlDelight = "2.0.2"
 
 [libraries]
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation-compose" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-datastore-preference = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastore-preference" }
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBoM" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "compose-plugin" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBoM" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
