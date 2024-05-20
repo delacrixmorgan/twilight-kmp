@@ -39,8 +39,8 @@ fun SetupNameScreen(
 ) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Header(
-            title = "Setup Name",
-            description = "Pick one that suits you.",
+            title = "Setup name",
+            description = "Enter a name and customise your region name if you'd like.",
         )
 
         Spacer(modifier = Modifier.weight(1F))
@@ -72,7 +72,7 @@ fun SetupNameScreen(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Customise the region name (optional)",
+            "Region Name",
             style = MaterialTheme.typography.labelLarge
         )
 

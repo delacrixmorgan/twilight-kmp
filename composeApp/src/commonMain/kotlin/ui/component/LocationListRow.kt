@@ -16,12 +16,14 @@ internal fun LocationListRow(
     location: Location,
     onClicked: ((Location) -> Unit?)? = null
 ) {
-    Box(
-        modifier = Modifier
-            .clickable { onClicked?.invoke(location) }
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
-            .padding(8.dp),
-    ) {
+    val modifier = Modifier
+        .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
+        .padding(8.dp)
+
+    onClicked?.let {
+        modifier.clickable { it(location) }
+    }
+    Box(modifier = modifier) {
         ListView(
             label = {
                 ListViewColumnLabel(

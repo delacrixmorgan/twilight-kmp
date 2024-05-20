@@ -61,8 +61,8 @@ fun SelectTimeRegionScreen(
 
         Header(
             modifier = Modifier.padding(16.dp),
-            title = "Select Time Region",
-            description = "Pick one that suits you.",
+            title = "Select your time zone",
+            description = "Choose your time zone from the list below. Use the search bar to quickly find your specific time zone.",
         )
 
         if (searching) {

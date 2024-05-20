@@ -6,19 +6,23 @@ import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
 import data.model.Location
 import data.model.LocationType
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ui.common.Event
+import ui.common.triggerEvent
 
 class SummaryViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
-    val locationState = mutableStateOf<Location?>(null)
+    val location = mutableStateOf<Location?>(null)
+    val openDashboardEvent = MutableSharedFlow<Event<Unit>>()
 
     init {
         viewModelScope.launch {
             store.observeLocation().first().let {
-                locationState.value = Location(
+                location.value = Location(
                     id = "",
                     label = it.label ?: "",
                     customRegionName = it.customRegionName ?: "",
@@ -32,6 +36,7 @@ class SummaryViewModel : ViewModel(), KoinComponent {
     fun onCreateClicked() {
         viewModelScope.launch {
             store.clear()
+            openDashboardEvent.triggerEvent()
         }
     }
 }

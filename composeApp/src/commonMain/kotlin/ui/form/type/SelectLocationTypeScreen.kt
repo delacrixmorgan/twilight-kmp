@@ -31,7 +31,7 @@ fun SelectLocationTypeScreen(
 ) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Header(
-            title = "Select Location Type",
+            title = "Select location type",
             description = "Pick one that suits you.",
         )
 

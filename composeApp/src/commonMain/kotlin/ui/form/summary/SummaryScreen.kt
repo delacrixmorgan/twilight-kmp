@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Screens
+import ui.common.observeEvent
 import ui.component.Header
 import ui.component.LocationListRow
 import ui.keyboardShownState
@@ -22,7 +26,8 @@ import ui.keyboardShownState
 @Composable
 fun SummaryScreen(
     navHostController: NavHostController,
-    viewModel: SummaryViewModel = viewModel { SummaryViewModel() }
+    viewModel: SummaryViewModel = viewModel { SummaryViewModel() },
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     val localFocusManager = LocalFocusManager.current
     if (!keyboardShownState().value) localFocusManager.clearFocus()
@@ -35,7 +40,7 @@ fun SummaryScreen(
 
         Spacer(modifier = Modifier.weight(1F))
 
-        viewModel.locationState.value?.let {
+        viewModel.location.value?.let {
             LocationListRow(it)
         }
 
@@ -43,12 +48,15 @@ fun SummaryScreen(
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                viewModel.onCreateClicked()
-                navHostController.popBackStack(Screens.Dashboard.route, inclusive = false)
-            }
+            onClick = { viewModel.onCreateClicked() }
         ) {
             Text("Create", modifier = Modifier.padding(vertical = 8.dp))
+        }
+
+        LaunchedEffect(viewModel, lifecycleOwner) {
+            viewModel.openDashboardEvent.observeEvent(lifecycleOwner) {
+                navHostController.popBackStack(Screens.Dashboard.route, inclusive = false)
+            }
         }
     }
 }
