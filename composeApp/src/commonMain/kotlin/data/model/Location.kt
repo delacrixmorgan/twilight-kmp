@@ -1,11 +1,12 @@
 package data.model
 
 import kotlinx.datetime.TimeZone
+import randomUUID
 
 data class Location(
-    val id: String,
+    val id: String = randomUUID(),
     val label: String,
-    val customRegionName: String,
+    val regionName: String,
     val type: LocationType,
     val zoneId: String,
 ) {

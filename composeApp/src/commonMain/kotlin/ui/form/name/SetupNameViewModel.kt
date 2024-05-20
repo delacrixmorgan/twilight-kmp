@@ -18,7 +18,7 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
     private val timescapeRepository: TimescapeRepository by inject()
 
     var locationName = mutableStateOf("")
-    val customRegionName = mutableStateOf("")
+    val regionName = mutableStateOf("")
 
     val continueButtonEnabled = mutableStateOf(false)
     val openSummaryEvent = MutableSharedFlow<Event<Unit>>()
@@ -26,27 +26,29 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
     init {
         viewModelScope.launch {
             locationName.value = store.getName().first() ?: ""
-            customRegionName.value = store.getCustomRegionName().first()?.ifBlank { getFallbackRegionName() } ?: ""
+            regionName.value = (store.getRegionName().first() ?: "").ifBlank { getFallbackRegionName() ?: "" }
             continueButtonEnabled.value = locationName.value.isNotBlank()
         }
     }
 
-    private suspend fun getFallbackRegionName() =
-        timescapeRepository.search(requireNotNull(store.getZoneId().first()))?.city
+    private suspend fun getFallbackRegionName(): String? {
+        println("zoneId: ${store.getZoneId().first()}")
+        return timescapeRepository.search(requireNotNull(store.getZoneId().first()))?.city
+    }
 
     fun onLocationNameUpdated(name: String) {
         locationName.value = name
         continueButtonEnabled.value = locationName.value.isNotBlank()
     }
 
-    fun onCustomRegionNameUpdated(name: String) {
-        customRegionName.value = name
+    fun onRegionNameUpdated(name: String) {
+        regionName.value = name
     }
 
     fun onContinueClicked() {
         viewModelScope.launch {
             store.saveName(locationName.value)
-            store.saveCustomRegionName(customRegionName.value.ifBlank { getFallbackRegionName() ?: "" })
+            store.saveRegionName(regionName.value.ifBlank { getFallbackRegionName() ?: "" })
             openSummaryEvent.triggerEvent()
         }
     }

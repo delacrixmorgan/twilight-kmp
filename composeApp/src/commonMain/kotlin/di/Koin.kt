@@ -1,7 +1,10 @@
 package di
 
+import com.delacrixmorgan.twilight.TwilightDatabase
 import data.createnewlocation.CreateNewLocationRepository
 import data.createnewlocation.CreateNewLocationRepositoryImpl
+import data.location.LocationRepository
+import data.location.LocationRepositoryImpl
 import data.location.mapper.LocationTypeEntityToModelMapper
 import data.timeregion.TimescapeRepository
 import org.koin.core.context.startKoin
@@ -16,14 +19,20 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
     startKoin {
         appDeclaration()
         modules(
+            serviceModule(),
             repositoryModule(enableNetworkLogs = enableNetworkLogs),
             mapperModule(),
             platformModule()
         )
     }
 
+fun serviceModule() = module {
+    single<TwilightDatabase> { TwilightDatabase(get()) }
+}
+
 fun repositoryModule(enableNetworkLogs: Boolean) = module {
     single<CreateNewLocationRepository> { CreateNewLocationRepositoryImpl() }
+    single<LocationRepository> { LocationRepositoryImpl() }
     single<TimescapeRepository> { TimescapeRepository() }
 }
 

@@ -13,3 +13,5 @@ fun createDataStore(
 )
 
 expect fun platformModule(): Module
+
+expect fun randomUUID(): String

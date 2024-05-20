@@ -84,8 +84,8 @@ fun SetupNameScreen(
             shape = CircleShape,
             maxLines = 1,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
-            value = viewModel.customRegionName.value,
-            onValueChange = { viewModel.onCustomRegionNameUpdated(it) },
+            value = viewModel.regionName.value,
+            onValueChange = { viewModel.onRegionNameUpdated(it) },
             placeholder = { Text("Region Name") },
             leadingIcon = {
                 Icon(

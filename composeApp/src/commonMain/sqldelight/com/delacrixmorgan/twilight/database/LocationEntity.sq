@@ -1,17 +1,29 @@
 CREATE TABLE LocationEntity (
     id TEXT NOT NULL ,
     label TEXT NOT NULL,
-    customRegionName TEXT NOT NULL,
+    regionName TEXT NOT NULL,
     type TEXT NOT NULL,
     zoneIdString TEXT NOT NULL,
     PRIMARY KEY(id)
 );
 
 insertItem:
-INSERT OR REPLACE INTO LocationEntity(id, label, customRegionName, type, zoneIdString) VALUES(?,?,?,?,?);
+INSERT OR REPLACE INTO LocationEntity(id, label, regionName, type, zoneIdString)
+VALUES(?,?,?,?,?);
 
 selectAll:
 SELECT * FROM LocationEntity;
+
+selectById:
+SELECT * FROM LocationEntity WHERE id = ?;
+
+update:
+UPDATE LocationEntity
+SET label = ?, regionName = ?, type = ?, zoneIdString = ?
+WHERE id = ?;
+
+deleteById:
+DELETE FROM LocationEntity WHERE id = ?;
 
 deleteAll:
 DELETE FROM LocationEntity;

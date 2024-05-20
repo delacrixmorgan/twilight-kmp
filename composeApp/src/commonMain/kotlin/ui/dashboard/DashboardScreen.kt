@@ -10,7 +10,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -19,11 +23,14 @@ import androidx.navigation.compose.rememberNavController
 import nav.Screens
 import nav.dashboard.DashboardBottomNavHost
 import nav.dashboard.DashboardBottomNavItem
+import ui.common.observeEvent
 
 @Composable
 fun DashboardScreen(
     navHostController: NavHostController,
-    bottomNavHostController: NavHostController = rememberNavController()
+    viewModel: DashboardViewModel = viewModel { DashboardViewModel() },
+    bottomNavHostController: NavHostController = rememberNavController(),
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     Scaffold(
         bottomBar = { BottomNavigationBar(bottomNavHostController) },
@@ -32,12 +39,17 @@ fun DashboardScreen(
             ExtendedFloatingActionButton(
                 text = { Text("Add") },
                 icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add") },
-//                onClick = { navHostController.navigate(Screens.FormSetupName.route) }
-                onClick = { navHostController.navigate(Screens.FormSelectLocationType.route) }
+                onClick = { viewModel.onAddLocationClicked() }
             )
         }
     ) { innerPadding ->
         DashboardBottomNavHost(bottomNavHostController, innerPadding)
+    }
+
+    LaunchedEffect(viewModel, lifecycleOwner) {
+        viewModel.openFormEvent.observeEvent(lifecycleOwner) {
+            navHostController.navigate(Screens.FormSelectLocationType.route)
+        }
     }
 }
 

@@ -28,7 +28,7 @@ internal fun LocationListRow(
             label = {
                 ListViewColumnLabel(
                     label = location.label,
-                    description = location.customRegionName,
+                    description = location.regionName,
                 )
             },
             endLabel = {

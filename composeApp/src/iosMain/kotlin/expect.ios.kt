@@ -3,16 +3,21 @@ import androidx.datastore.preferences.core.Preferences
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import com.delacrixmorgan.twilight.TwilightDatabase
 import data.utils.LocalDataStore
+import di.TwilightDatabaseWrapper
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.dsl.module
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
+import platform.Foundation.NSUUID
 import platform.Foundation.NSUserDomainMask
 
 actual fun platformModule() = module {
     single { dataStore() }
-    single { NativeSqliteDriver(TwilightDatabase.Schema, "twilight.db") }
+    single {
+        val driver = NativeSqliteDriver(TwilightDatabase.Schema, "twilight.db")
+        TwilightDatabaseWrapper(TwilightDatabase(driver))
+    }
 }
 
 @OptIn(ExperimentalForeignApi::class)
@@ -28,3 +33,5 @@ fun dataStore(): DataStore<Preferences> = createDataStore(
         requireNotNull(documentDirectory).path + "/${LocalDataStore.CreateNewLocation.path()}"
     }
 )
+
+actual fun randomUUID(): String = NSUUID().UUIDString()
