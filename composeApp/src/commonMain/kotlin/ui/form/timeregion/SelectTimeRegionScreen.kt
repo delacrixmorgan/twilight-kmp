@@ -49,11 +49,12 @@ import ui.keyboardShownState
 
 @Composable
 fun SelectTimeRegionScreen(
+    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SelectTimeRegionViewModel = viewModel { SelectTimeRegionViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Column(Modifier.fillMaxSize()) {
+    Column(modifier.fillMaxSize()) {
         val query by viewModel.query.collectAsState()
         val list by viewModel.timeRegions.collectAsState()
         val searching by viewModel.searching.collectAsState()

@@ -25,6 +25,7 @@ import ui.keyboardShownState
 
 @Composable
 fun SummaryScreen(
+    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SummaryViewModel = viewModel { SummaryViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
@@ -32,7 +33,7 @@ fun SummaryScreen(
     val localFocusManager = LocalFocusManager.current
     if (!keyboardShownState().value) localFocusManager.clearFocus()
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier.fillMaxSize().padding(16.dp)) {
         Header(
             title = "Summary",
             description = "Here is what it will look like in your dashboard. You can still edit it later.",

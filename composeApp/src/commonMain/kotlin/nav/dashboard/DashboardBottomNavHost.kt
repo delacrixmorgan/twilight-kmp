@@ -26,7 +26,7 @@ fun DashboardBottomNavHost(
         navController = navController,
         startDestination = DashboardBottomNavItem.Home.route
     ) {
-        composable(DashboardBottomNavItem.Home.route) { HomeScreen() }
+//        composable(DashboardBottomNavItem.Home.route) { HomeScreen(navController) }
         composable(DashboardBottomNavItem.Settings.route) { SettingsScreen() }
     }
 }

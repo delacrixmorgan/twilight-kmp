@@ -1,9 +1,7 @@
 import androidx.compose.runtime.Composable
-import ui.theme.AppTheme
+import androidx.compose.ui.Modifier
 
 @Composable
-fun App() {
-    AppTheme {
-        TwilightApp()
-    }
+fun App(modifier: Modifier) {
+    TwilightApp(modifier)
 }

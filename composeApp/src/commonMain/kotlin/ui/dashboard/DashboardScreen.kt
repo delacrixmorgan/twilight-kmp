@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,15 +34,8 @@ fun DashboardScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     Scaffold(
+        topBar = {},
         bottomBar = { BottomNavigationBar(bottomNavHostController) },
-        floatingActionButtonPosition = FabPosition.End,
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Add") },
-                icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add") },
-                onClick = { viewModel.onAddLocationClicked() }
-            )
-        }
     ) { innerPadding ->
         DashboardBottomNavHost(bottomNavHostController, innerPadding)
     }

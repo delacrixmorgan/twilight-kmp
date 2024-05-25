@@ -33,11 +33,12 @@ import ui.theme.DefaultColors
 
 @Composable
 fun SetupNameScreen(
+    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SetupNameViewModel = viewModel { SetupNameViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier.fillMaxSize().padding(16.dp)) {
         Header(
             title = "Setup name",
             description = "Enter a name and customise your region name if you'd like.",

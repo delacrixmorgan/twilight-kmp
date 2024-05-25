@@ -25,11 +25,12 @@ import ui.component.RadioRowData
 
 @Composable
 fun SelectLocationTypeScreen(
+    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SelectLocationTypeViewModel = viewModel { SelectLocationTypeViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier.fillMaxSize().padding(16.dp)) {
         Header(
             title = "Select location type",
             description = "Pick one that suits you.",
