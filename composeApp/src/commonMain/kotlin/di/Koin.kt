@@ -12,17 +12,14 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 import platformModule
 
-// iOS
-fun initKoin() = initKoin(enableNetworkLogs = false) {}
-
 fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
         modules(
+            platformModule(),
             serviceModule(),
             repositoryModule(enableNetworkLogs = enableNetworkLogs),
-            mapperModule(),
-            platformModule()
+            mapperModule()
         )
     }
 
