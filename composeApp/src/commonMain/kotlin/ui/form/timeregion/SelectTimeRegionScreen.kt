@@ -77,10 +77,10 @@ fun SelectTimeRegionScreen(
                 state = state
             ) {
                 items(count = list.size, key = { list[it].timeZone.id }) { index ->
-                    val timeRegion = list[index]
+                    val item = list[index]
                     TimeRegionListRow(
-                        timeRegion = timeRegion,
-                        selected = viewModel.selectedTimeRegion.value?.zoneIdString == timeRegion.zoneIdString
+                        timeRegion = item,
+                        selected = viewModel.selectedTimeRegion.value?.zoneIdString == item.zoneIdString
                     ) { viewModel.onTimeRegionSelected(it) }
                 }
             }
