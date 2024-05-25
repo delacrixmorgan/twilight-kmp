@@ -1,5 +1,6 @@
 package ui.dashboard.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
@@ -110,26 +112,33 @@ private fun SummaryView(viewModel: HomeViewModel, currentTime: String) {
 
 @Composable
 private fun LocationListView(viewModel: HomeViewModel) {
-    val state = rememberLazyListState()
-    val list by viewModel.locations.collectAsState()
-    if (list.isNotEmpty()) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            state = state
-        ) {
-            items(count = list.size, key = { list[it].id }) { index ->
-                val location = list[index]
-                LocationListRow(location) {
-                    viewModel.onLocationClicked(it)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainer, shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
+            .padding(16.dp)
+    ) {
+        val state = rememberLazyListState()
+        val list by viewModel.locations.collectAsState()
+        if (list.isNotEmpty()) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                state = state
+            ) {
+                items(count = list.size, key = { list[it].id }) { index ->
+                    val location = list[index]
+                    LocationListRow(location) {
+                        viewModel.onLocationClicked(it)
+                    }
                 }
             }
-        }
-    } else {
-        Box(
-            Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Home")
+        } else {
+            Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Home")
+            }
         }
     }
 }

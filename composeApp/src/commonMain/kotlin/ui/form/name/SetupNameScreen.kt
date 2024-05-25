@@ -106,6 +106,8 @@ fun SetupNameScreen(
             Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
         }
 
+        Spacer(Modifier.height(16.dp))
+
         LaunchedEffect(viewModel, lifecycleOwner) {
             viewModel.openSummaryEvent.observeEvent(lifecycleOwner) {
                 navHostController.navigate(Screens.FormSummary.route)
