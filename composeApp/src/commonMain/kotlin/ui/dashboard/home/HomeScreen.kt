@@ -35,7 +35,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import data.model.DateFormat
-import data.utils.now
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import nav.Screens
@@ -87,22 +86,22 @@ private fun TopAppBar(viewModel: HomeViewModel) {
 }
 
 @Composable
-private fun SummaryView(viewModel: HomeViewModel, currentTime: String) {
+private fun SummaryView(viewModel: HomeViewModel, currentTime: LocalDateTime) {
     Column(Modifier.padding(vertical = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1F), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = LocalDateTime.now().format(DateFormat.dayOfWeek),
+                    text = currentTime.format(DateFormat.dayOfWeek),
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    text = LocalDateTime.now().format(DateFormat.date),
+                    text = currentTime.format(DateFormat.date),
                     style = MaterialTheme.typography.displayMedium,
                 )
             }
             Box(modifier = Modifier.weight(1F).fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
                 Text(
-                    text = currentTime,
+                    text = currentTime.format(DateFormat.twelfthHour),
                     style = MaterialTheme.typography.headlineMedium,
                 )
             }

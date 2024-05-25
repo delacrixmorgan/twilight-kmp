@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
 import data.location.LocationRepository
-import data.model.DateFormat
 import data.model.Location
 import data.utils.now
 import kotlinx.coroutines.Job
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
 import kotlinx.datetime.toInstant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -35,8 +33,9 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
     private val repository: LocationRepository by inject()
     private var timeListenerJob: Job? = null
-    private val _currentTime = MutableStateFlow("")
-    val currentTime: StateFlow<String> = _currentTime
+    private val _currentTime = MutableStateFlow(LocalDateTime.now())
+    
+    val currentTime: StateFlow<LocalDateTime> = _currentTime
     val locations: StateFlow<List<Location>> = repository.getLocations()
         .map { locations ->
             locations.sortedBy {
@@ -57,22 +56,18 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
     private fun setupTimeListenerJob() {
         if (timeListenerJob?.isActive == true) return
+        _currentTime.value = LocalDateTime.now()
 
-        _currentTime.value = getCurrentTime().format(DateFormat.twelfthHour)
         timeListenerJob = viewModelScope.launch {
             val offSetSeconds = max((60 - LocalDateTime.now().second) * 1_000L, 0L)
             delay(offSetSeconds)
-            _currentTime.value = getCurrentTime().format(DateFormat.twelfthHour)
+            _currentTime.value = LocalDateTime.now()
 
             while (true) {
                 delay(60_000)
-                _currentTime.value = getCurrentTime().format(DateFormat.twelfthHour)
+                _currentTime.value = LocalDateTime.now()
             }
         }
-    }
-
-    private fun getCurrentTime(): LocalDateTime {
-        return LocalDateTime.now()
     }
 
     fun onAddLocationClicked() {
