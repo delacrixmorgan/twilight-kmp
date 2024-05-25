@@ -6,7 +6,7 @@ import data.createnewlocation.CreateNewLocationRepositoryImpl
 import data.location.LocationRepository
 import data.location.LocationRepositoryImpl
 import data.location.mapper.LocationTypeEntityToModelMapper
-import data.timeregion.TimescapeRepository
+import data.timescape.TimescapeRepository
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module

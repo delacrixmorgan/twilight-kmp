@@ -1,7 +1,7 @@
 package mapper
 
 import data.model.Region
-import data.timeregion.TimescapeRepository
+import data.timescape.TimescapeRepository
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

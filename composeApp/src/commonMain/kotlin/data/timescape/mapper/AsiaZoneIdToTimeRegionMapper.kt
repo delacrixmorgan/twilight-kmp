@@ -1,4 +1,4 @@
-package data.timeregion.mapper
+package data.timescape.mapper
 
 import data.model.Region
 import data.model.TimeRegion
