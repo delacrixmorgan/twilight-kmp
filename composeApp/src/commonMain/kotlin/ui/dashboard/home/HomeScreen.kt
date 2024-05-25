@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -28,11 +28,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import data.model.DateFormat
+import data.utils.now
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format
 import nav.Screens
 import ui.common.observeEvent
 import ui.component.LocationListRow
@@ -44,9 +47,10 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel { HomeViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
+    val currentTime by viewModel.currentTime.collectAsState()
     Column(modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         TopAppBar(viewModel)
-        SummaryView(viewModel)
+        SummaryView(viewModel, currentTime)
         LocationListView(viewModel)
     }
 
@@ -59,35 +63,47 @@ fun HomeScreen(
 
 @Composable
 private fun TopAppBar(viewModel: HomeViewModel) {
-    Spacer(Modifier.height(16.dp))
-    Row {
-        Button(onClick = {}) {
-            Text("Today", modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp))
-        }
-        Spacer(Modifier.width(8.dp))
-        OutlinedButton(onClick = {}) {
-            Text("Settings", modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp))
-        }
-        Spacer(Modifier.weight(1F))
-        FloatingActionButton(
-            onClick = { viewModel.onAddLocationClicked() },
-            shape = CircleShape
-        ) {
-            Icon(Icons.Rounded.Add, "Add")
+    Column(Modifier.padding(vertical = 8.dp)) {
+        Row {
+            Button(onClick = {}) {
+                Text("Today", modifier = Modifier.padding(4.dp))
+            }
+            Spacer(Modifier.width(8.dp))
+            OutlinedButton(onClick = {}) {
+                Text("Settings", modifier = Modifier.padding(4.dp))
+            }
+            Spacer(Modifier.weight(1F))
+            FloatingActionButton(
+                modifier = Modifier.size(48.dp),
+                onClick = { viewModel.onAddLocationClicked() },
+                shape = CircleShape
+            ) {
+                Icon(Icons.Rounded.Add, "Add")
+            }
         }
     }
 }
 
 @Composable
-private fun SummaryView(viewModel: HomeViewModel) {
-    Row {
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            val currentTime by viewModel.currentTime.collectAsState()
-            Text(
-                text = currentTime,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium,
-            )
+private fun SummaryView(viewModel: HomeViewModel, currentTime: String) {
+    Column(Modifier.padding(vertical = 8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1F), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = LocalDateTime.now().format(DateFormat.dayOfWeek),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = LocalDateTime.now().format(DateFormat.date),
+                    style = MaterialTheme.typography.displayMedium,
+                )
+            }
+            Box(modifier = Modifier.weight(1F).fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                Text(
+                    text = currentTime,
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+            }
         }
     }
 }
@@ -96,7 +112,6 @@ private fun SummaryView(viewModel: HomeViewModel) {
 private fun LocationListView(viewModel: HomeViewModel) {
     val state = rememberLazyListState()
     val list by viewModel.locations.collectAsState()
-
     if (list.isNotEmpty()) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
