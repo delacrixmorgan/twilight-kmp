@@ -14,10 +14,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.toInstant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.common.Event
@@ -35,6 +38,11 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val _currentTime = MutableStateFlow("")
     val currentTime: StateFlow<String> = _currentTime
     val locations: StateFlow<List<Location>> = repository.getLocations()
+        .map { locations ->
+            locations.sortedBy {
+                LocalDateTime.now(it.timeRegion).toInstant(TimeZone.UTC).epochSeconds
+            }
+        }
         .catch { emit(emptyList()) }
         .stateIn(
             scope = viewModelScope,
