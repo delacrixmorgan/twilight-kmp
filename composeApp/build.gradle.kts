@@ -55,8 +55,6 @@ kotlin {
         }
         commonMain.dependencies {
             // Common
-            implementation(project.dependencies.platform(libs.compose.bom))
-            implementation(libs.compose.icons.extended)
             implementation(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
             implementation(project.dependencies.platform(libs.koin.bom))
@@ -64,6 +62,8 @@ kotlin {
             implementation(libs.sqldelight.coroutines.extensions)
 
             // Compose
+            implementation(project.dependencies.platform(libs.compose.bom))
+            implementation(libs.compose.icons.extended)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

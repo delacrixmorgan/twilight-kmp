@@ -39,6 +39,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import nav.Screens
 import ui.common.observeEvent
+import ui.component.LocationCard
 import ui.component.LocationListRow
 
 @Composable
@@ -126,7 +127,7 @@ private fun LocationListView(viewModel: HomeViewModel) {
             ) {
                 items(count = list.size, key = { list[it].id }) { index ->
                     val location = list[index]
-                    LocationListRow(location) {
+                    LocationCard(location) {
                         viewModel.onLocationClicked(it)
                     }
                 }

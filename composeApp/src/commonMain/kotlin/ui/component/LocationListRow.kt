@@ -9,7 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import data.model.Location
+import data.model.LocationType
 import data.model.localTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import ui.theme.AppTheme
 
 @Composable
 internal fun LocationListRow(
@@ -17,7 +20,7 @@ internal fun LocationListRow(
     onClicked: ((Location) -> Unit?)? = null
 ) {
     val modifier = Modifier
-        .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
+        .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.large)
         .padding(8.dp)
 
     onClicked?.let {
