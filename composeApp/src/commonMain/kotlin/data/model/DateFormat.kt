@@ -21,4 +21,10 @@ object DateFormat {
         char(' ')
         amPmMarker("AM", "PM")
     }
+
+    val twentyFourHour = LocalDateTime.Format {
+        hour()
+        char(':')
+        minute()
+    }
 }
