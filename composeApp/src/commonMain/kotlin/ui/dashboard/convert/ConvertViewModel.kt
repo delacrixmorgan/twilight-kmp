@@ -18,6 +18,10 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ConvertViewModel : ViewModel(), KoinComponent {
+    companion object {
+        const val SCROLL_WHEEL_PAGE_SIZE = 300
+    }
+
     private val repository: LocationRepository by inject()
 
     private val _locations = MutableStateFlow<List<Location>>(emptyList())

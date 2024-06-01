@@ -1,6 +1,8 @@
 package ui.dashboard.convert
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,6 +42,7 @@ import kotlinx.datetime.format
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import ui.dashboard.convert.ConvertViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
 @Composable
 fun ConvertScreen(
@@ -92,19 +95,21 @@ private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun VerticalScrollWheel(
     modifier: Modifier,
     viewModel: ConvertViewModel,
 ) {
-    val items = remember { mutableStateListOf<Int>().apply { addAll((0..100)) } }
+    val items = remember { mutableStateListOf<Int>() }
     val listState = rememberLazyListState()
 
     Text("Offset: ${viewModel.offsetInMinutes.value} minutes", modifier)
     LazyColumn(
-        modifier = modifier.then(Modifier.padding(horizontal = 16.dp)),
+        modifier = modifier.then(Modifier.padding(horizontal = 24.dp)),
         verticalArrangement = Arrangement.spacedBy(32.dp),
-        state = listState
+        state = listState,
+        flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
     ) {
         items(items) { index ->
             val label = (index).toString()
@@ -119,7 +124,7 @@ private fun VerticalScrollWheel(
         listState = listState,
         onListStateUpdated = { content ->
             viewModel.offsetInMinutes.value = content.firstVisibleIndex
-            if (content.reachedBottom) items.addAll((items.size..items.size + 100))
+            if (content.reachedBottom) items.addAll((items.size..items.size + SCROLL_WHEEL_PAGE_SIZE))
         }
     )
 }
