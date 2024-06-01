@@ -13,6 +13,7 @@ androidx-datastore-preference = "1.1.1"
 composeBoM = "2024.05.00"
 koinBoM = "3.5.6"
 sqlDelight = "2.0.2"
+kermit = "2.0.3"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
@@ -31,6 +32,7 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

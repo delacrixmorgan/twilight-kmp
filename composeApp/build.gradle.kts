@@ -55,6 +55,7 @@ kotlin {
         }
         commonMain.dependencies {
             // Common
+            implementation(libs.kermit)
             implementation(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
             implementation(project.dependencies.platform(libs.koin.bom))
