@@ -20,7 +20,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -30,13 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import co.touchlab.kermit.Logger
 import data.model.DateFormat
 import data.model.Location
 import data.utils.now
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun ConvertScreen(
@@ -58,18 +61,18 @@ fun ConvertScreen(
         ) {
             items(count = list.size, key = { list[it].id }) { index ->
                 val location = list[index]
-                NameTimeView(location)
+                NameTimeView(viewModel, location)
             }
         }
 
         Spacer(Modifier.weight(1F))
 
-        VerticalScrollWheel(modifier)
+        VerticalScrollWheel(modifier, viewModel)
     }
 }
 
 @Composable
-private fun NameTimeView(location: Location) {
+private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -78,20 +81,26 @@ private fun NameTimeView(location: Location) {
             text = location.regionName,
             style = MaterialTheme.typography.titleLarge
         )
+
+        val offsetMinutes = DateTimePeriod(minutes = viewModel.offsetInMinutes.value)
+        val formattedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion).format(DateFormat.twentyFourHour)
+
         Text(
-            text = LocalDateTime.now(location.timeRegion).format(DateFormat.twentyFourHour),
+            text = formattedTime,
             style = MaterialTheme.typography.displayMedium
         )
     }
 }
 
 @Composable
-private fun VerticalScrollWheel(modifier: Modifier) {
+private fun VerticalScrollWheel(
+    modifier: Modifier,
+    viewModel: ConvertViewModel,
+) {
     val items = remember { mutableStateListOf<Int>().apply { addAll((0..100)) } }
     val listState = rememberLazyListState()
-    val firstVisibleIndex = remember { mutableStateOf(0) }
 
-    Text("Index: ${firstVisibleIndex.value}", modifier)
+    Text("Offset: ${viewModel.offsetInMinutes.value} minutes", modifier)
     LazyColumn(
         modifier = modifier.then(Modifier.padding(horizontal = 16.dp)),
         verticalArrangement = Arrangement.spacedBy(32.dp),
@@ -109,12 +118,8 @@ private fun VerticalScrollWheel(modifier: Modifier) {
     InfiniteListHandler(
         listState = listState,
         onListStateUpdated = { content ->
-            Logger.i { "Hello: firstVisibleIndex (${content.firstVisibleIndex})" }
-            firstVisibleIndex.value = content.firstVisibleIndex
-            if (content.reachedBottom) {
-                Logger.i { "Hello: itemsSize (${items.size})" }
-                items.addAll((items.size..items.size + 100))
-            }
+            viewModel.offsetInMinutes.value = content.firstVisibleIndex
+            if (content.reachedBottom) items.addAll((items.size..items.size + 100))
         }
     )
 }
