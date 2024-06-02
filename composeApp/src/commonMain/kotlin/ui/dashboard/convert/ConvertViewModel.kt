@@ -7,6 +7,7 @@ import data.location.LocationRepository
 import data.model.Location
 import data.model.LocationType
 import data.utils.now
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -16,6 +17,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ui.common.Event
+import ui.common.triggerEvent
 
 class ConvertViewModel : ViewModel(), KoinComponent {
     companion object {
@@ -29,6 +32,9 @@ class ConvertViewModel : ViewModel(), KoinComponent {
         get() = _locations
 
     val offsetInMinutes = mutableStateOf(0)
+    val isFirstItemVisible = mutableStateOf(false)
+
+    val scrollToTopEvent = MutableSharedFlow<Event<Unit>>()
 
     init {
         loadLocations()
@@ -46,6 +52,12 @@ class ConvertViewModel : ViewModel(), KoinComponent {
                 LocalDateTime.now(it.timeRegion).toInstant(TimeZone.UTC).epochSeconds
             }
             _locations.value = sortedLocations
+        }
+    }
+
+    fun onScrollToTopClicked() {
+        viewModelScope.launch {
+            scrollToTopEvent.triggerEvent()
         }
     }
 }

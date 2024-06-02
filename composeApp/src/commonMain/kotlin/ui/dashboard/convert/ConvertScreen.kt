@@ -1,20 +1,29 @@
 package ui.dashboard.convert
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +34,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +46,9 @@ import androidx.navigation.NavHostController
 import data.model.DateFormat
 import data.model.Location
 import data.utils.now
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -44,6 +56,7 @@ import kotlinx.datetime.format
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import ui.common.observeEvent
 import ui.dashboard.convert.ConvertViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
 @Composable
@@ -53,26 +66,49 @@ fun ConvertScreen(
     viewModel: ConvertViewModel = viewModel { ConvertViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        val list by viewModel.locations.collectAsState()
-        LazyColumn(
-            modifier = modifier.then(Modifier.padding(vertical = 16.dp)),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
-            state = rememberLazyListState()
-        ) {
-            items(count = list.size, key = { list[it].id }) { index ->
-                val location = list[index]
-                NameTimeView(viewModel, location)
+        Row {
+            val list by viewModel.locations.collectAsState()
+            LazyColumn(
+                modifier = modifier.then(Modifier.padding(vertical = 16.dp)),
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                state = rememberLazyListState()
+            ) {
+                items(count = list.size, key = { list[it].id }) { index ->
+                    val location = list[index]
+                    NameTimeView(viewModel, location)
+                }
             }
+
+            Spacer(Modifier.weight(1F))
+
+            VerticalScrollWheel(modifier, viewModel)
         }
 
-        Spacer(Modifier.weight(1F))
-
-        VerticalScrollWheel(modifier, viewModel)
+        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+            AnimatedVisibility(
+                visible = !viewModel.isFirstItemVisible.value,
+                enter = slideInVertically(
+                    initialOffsetY = { it / 2 },
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { it / 2 },
+                ),
+            ) {
+                FloatingActionButton(
+                    modifier = Modifier.padding(bottom = 32.dp),
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    onClick = { viewModel.onScrollToTopClicked() },
+                    shape = CircleShape
+                ) {
+                    Icon(Icons.Rounded.ArrowUpward, "Up")
+                }
+            }
+        }
     }
 }
 
@@ -102,24 +138,23 @@ private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
 private fun VerticalScrollWheel(
     modifier: Modifier,
     viewModel: ConvertViewModel,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    buffer: Int = 2,
 ) {
     val items = remember { mutableStateListOf<Int>() }
     val listState = rememberLazyListState()
 
     Text("Offset: ${viewModel.offsetInMinutes.value} minutes", modifier)
+
     LazyColumn(
-        modifier = modifier.then(Modifier.padding(horizontal = 24.dp)),
+        modifier = modifier.fillMaxHeight().padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         state = listState,
         flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
     ) {
         items(items) { index ->
-            val width = if (index % 3 == 0) {
-                32.dp
-            } else {
-                16.dp
-            }
+            val width = if (index % 3 == 0) 32.dp else 16.dp
             HorizontalDivider(
                 Modifier.width(width),
                 color = MaterialTheme.colorScheme.onSurface,
@@ -127,21 +162,6 @@ private fun VerticalScrollWheel(
         }
     }
 
-    InfiniteListHandler(
-        listState = listState,
-        onListStateUpdated = { content ->
-            viewModel.offsetInMinutes.value = content.firstVisibleIndex
-            if (content.reachedBottom) items.addAll((items.size..items.size + SCROLL_WHEEL_PAGE_SIZE))
-        }
-    )
-}
-
-@Composable
-fun InfiniteListHandler(
-    listState: LazyListState,
-    buffer: Int = 2,
-    onListStateUpdated: (InfiniteListContent) -> Unit
-) {
     val listStateListener: State<InfiniteListContent> = remember {
         derivedStateOf {
             val layoutInfo = listState.layoutInfo
@@ -159,7 +179,20 @@ fun InfiniteListHandler(
     LaunchedEffect(listState) {
         snapshotFlow { listStateListener.value }
             .distinctUntilChanged()
-            .collect { onListStateUpdated(it) }
+            .collect { content ->
+                viewModel.offsetInMinutes.value = content.firstVisibleIndex
+                viewModel.isFirstItemVisible.value = content.isFirstItemVisible
+                if (content.reachedBottom) items.addAll((items.size..items.size + SCROLL_WHEEL_PAGE_SIZE))
+            }
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(viewModel, lifecycleOwner) {
+        viewModel.scrollToTopEvent.observeEvent(lifecycleOwner) {
+            coroutineScope.launch {
+                listState.animateScrollToItem(0)
+            }
+        }
     }
 }
 
