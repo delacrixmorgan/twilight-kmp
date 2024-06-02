@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -107,15 +109,20 @@ private fun VerticalScrollWheel(
     Text("Offset: ${viewModel.offsetInMinutes.value} minutes", modifier)
     LazyColumn(
         modifier = modifier.then(Modifier.padding(horizontal = 24.dp)),
-        verticalArrangement = Arrangement.spacedBy(32.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
         state = listState,
         flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
     ) {
         items(items) { index ->
-            val label = (index).toString()
-            Text(
-                text = label,
-                textAlign = TextAlign.End
+            val width = if (index % 3 == 0) {
+                32.dp
+            } else {
+                16.dp
+            }
+            HorizontalDivider(
+                Modifier.width(width),
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
