@@ -9,19 +9,19 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +46,6 @@ import androidx.navigation.NavHostController
 import data.model.DateFormat
 import data.model.Location
 import data.utils.now
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimePeriod
@@ -72,15 +71,22 @@ fun ConvertScreen(
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row {
-            val list by viewModel.locations.collectAsState()
-            LazyColumn(
-                modifier = modifier.then(Modifier.padding(vertical = 16.dp)),
-                verticalArrangement = Arrangement.spacedBy(32.dp),
-                state = rememberLazyListState()
-            ) {
-                items(count = list.size, key = { list[it].id }) { index ->
-                    val location = list[index]
-                    NameTimeView(viewModel, location)
+            Column(modifier.padding(top = 32.dp)) {
+                viewModel.localLocation.value?.let { location ->
+                    LocalNameTimeView(viewModel, location)
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                val list by viewModel.locations.collectAsState()
+                LazyColumn(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(32.dp),
+                    state = rememberLazyListState()
+                ) {
+                    items(count = list.size, key = { list[it].id }) { index ->
+                        val location = list[index]
+                        NameTimeView(viewModel, location)
+                    }
                 }
             }
 
@@ -89,9 +95,9 @@ fun ConvertScreen(
             VerticalScrollWheel(modifier, viewModel)
         }
 
-        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+        Box(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp)) {
             AnimatedVisibility(
-                visible = !viewModel.isFirstItemVisible.value,
+                visible = !viewModel.isFirstItemVisible.value && viewModel.offsetInMinutes.value != 0,
                 enter = slideInVertically(
                     initialOffsetY = { it / 2 },
                 ),
@@ -99,16 +105,42 @@ fun ConvertScreen(
                     targetOffsetY = { it / 2 },
                 ),
             ) {
-                FloatingActionButton(
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    onClick = { viewModel.onScrollToTopClicked() },
-                    shape = CircleShape
+                Button(
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        top = 4.dp,
+                        end = 12.dp,
+                        bottom = 4.dp,
+                    ),
+                    onClick = { viewModel.onScrollToTopClicked() }
                 ) {
+                    Text("+ ${viewModel.formatOffSetInMinutes(viewModel.offsetInMinutes.value)}")
+                    Spacer(Modifier.width(4.dp))
                     Icon(Icons.Rounded.ArrowUpward, "Up")
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun LocalNameTimeView(viewModel: ConvertViewModel, location: Location) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = location.regionName,
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        val offsetMinutes = DateTimePeriod(minutes = viewModel.offsetInMinutes.value)
+        val formattedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion).format(DateFormat.twentyFourHour)
+
+        Text(
+            text = formattedTime,
+            style = MaterialTheme.typography.displayMedium
+        )
     }
 }
 
@@ -144,12 +176,10 @@ private fun VerticalScrollWheel(
     val items = remember { mutableStateListOf<Int>() }
     val listState = rememberLazyListState()
 
-    Text("Offset: ${viewModel.offsetInMinutes.value} minutes", modifier)
-
     LazyColumn(
-        modifier = modifier.fillMaxHeight().padding(horizontal = 24.dp),
+        modifier = modifier.fillMaxSize().padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.End,
         state = listState,
         flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
     ) {

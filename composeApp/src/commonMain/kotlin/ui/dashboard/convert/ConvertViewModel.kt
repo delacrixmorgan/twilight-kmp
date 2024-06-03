@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import data.location.LocationRepository
 import data.model.Location
 import data.model.LocationType
+import data.timescape.TimescapeRepository
 import data.utils.now
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,10 +27,12 @@ class ConvertViewModel : ViewModel(), KoinComponent {
     }
 
     private val repository: LocationRepository by inject()
+    private val timescapeRepository: TimescapeRepository by inject()
 
     private val _locations = MutableStateFlow<List<Location>>(emptyList())
     val locations: StateFlow<List<Location>>
         get() = _locations
+    val localLocation = mutableStateOf<Location?>(null)
 
     val offsetInMinutes = mutableStateOf(0)
     val isFirstItemVisible = mutableStateOf(false)
@@ -41,17 +44,32 @@ class ConvertViewModel : ViewModel(), KoinComponent {
     }
 
     private fun loadLocations() {
-        viewModelScope.launch {
-            val currentLocation = Location(
-                label = "Morgan",
-                regionName = "Amsterdam",
-                type = LocationType.Person,
-                zoneId = "Europe/Amsterdam"
+        val currentTimeZone = TimeZone.currentSystemDefault()
+        val currentTimeRegion = timescapeRepository.search(currentTimeZone.id)
+        currentTimeRegion?.let {
+            localLocation.value = Location(
+                label = it.city,
+                regionName = it.city,
+                type = LocationType.Country,
+                zoneId = it.zoneIdString
             )
-            val sortedLocations = listOf(currentLocation) + repository.getLocations().first().sortedBy {
+        }
+        viewModelScope.launch {
+            _locations.value = repository.getLocations().first().sortedBy {
                 LocalDateTime.now(it.timeRegion).toInstant(TimeZone.UTC).epochSeconds
             }
-            _locations.value = sortedLocations
+        }
+    }
+
+    fun formatOffSetInMinutes(offSetMinutes: Int): String {
+        val days = offSetMinutes / (24 * 60)
+        val hours = (offSetMinutes % (24 * 60)) / 60
+        val minutes = offSetMinutes % 60
+
+        return buildString {
+            if (days != 0) append("${days}d ")
+            if (hours != 0) append("${hours}h ")
+            append("${minutes}m")
         }
     }
 
