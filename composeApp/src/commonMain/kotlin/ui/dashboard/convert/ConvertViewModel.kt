@@ -1,9 +1,9 @@
 package ui.dashboard.convert
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import data.createnewlocation.CreateNewLocationRepository
 import data.location.LocationRepository
 import data.model.Location
 import data.model.LocationType
@@ -12,7 +12,6 @@ import data.utils.now
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -27,6 +26,7 @@ class ConvertViewModel : ViewModel(), KoinComponent {
         const val SCROLL_WHEEL_PAGE_SIZE = 300
     }
 
+    private val store: CreateNewLocationRepository by inject()
     private val repository: LocationRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
@@ -39,6 +39,7 @@ class ConvertViewModel : ViewModel(), KoinComponent {
     val isFirstItemVisible = mutableStateOf(false)
     val selectedType = mutableStateOf(SegmentedButtonType.Person)
 
+    val openFormEvent = MutableSharedFlow<Event<Unit>>()
     val scrollToTopEvent = MutableSharedFlow<Event<Unit>>()
 
     init {
@@ -57,8 +58,10 @@ class ConvertViewModel : ViewModel(), KoinComponent {
             )
         }
         viewModelScope.launch {
-            _locations.value = repository.getLocations().first().sortedBy {
-                LocalDateTime.now(it.timeRegion).toInstant(TimeZone.UTC).epochSeconds
+            repository.getLocations().collect {
+                _locations.value = it.sortedBy {
+                    LocalDateTime.now(it.timeRegion).toInstant(TimeZone.UTC).epochSeconds
+                }
             }
         }
     }
@@ -78,6 +81,13 @@ class ConvertViewModel : ViewModel(), KoinComponent {
     fun onScrollToTopClicked() {
         viewModelScope.launch {
             scrollToTopEvent.triggerEvent()
+        }
+    }
+
+    fun onAddLocationClicked() {
+        viewModelScope.launch {
+            store.clear()
+            openFormEvent.triggerEvent()
         }
     }
 }

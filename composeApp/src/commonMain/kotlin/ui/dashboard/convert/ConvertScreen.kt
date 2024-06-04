@@ -19,13 +19,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +64,7 @@ import kotlinx.datetime.format
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import nav.Screens
 import ui.common.observeEvent
 import ui.dashboard.convert.ConvertViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
@@ -78,7 +82,7 @@ fun ConvertScreen(
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row {
-            Column(modifier.weight(1F).padding(top = 64.dp)) {
+            Column(modifier.weight(2F).padding(top = 64.dp)) {
                 viewModel.localLocation.value?.let { location ->
                     NameTimeView(viewModel, location)
 
@@ -97,12 +101,21 @@ fun ConvertScreen(
                         NameTimeView(viewModel, location)
                     }
                 }
+                Spacer(Modifier.height(32.dp))
             }
 
             VerticalScrollWheel(modifier.weight(1F), viewModel)
         }
 
-        
+        Box(modifier = modifier.align(Alignment.BottomStart).padding(16.dp)) {
+            FloatingActionButton(
+                onClick = { viewModel.onAddLocationClicked() },
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ) {
+                Icon(Icons.Rounded.Add, "Add", tint = MaterialTheme.colorScheme.onSecondary)
+            }
+        }
 
         Box(modifier = modifier.align(Alignment.TopCenter).padding(top = 8.dp)) {
             MultiChoiceSegmentedButtonRow {
@@ -148,6 +161,12 @@ fun ConvertScreen(
                     Icon(Icons.Rounded.ArrowUpward, "Up")
                 }
             }
+        }
+    }
+
+    LaunchedEffect(viewModel, lifecycleOwner) {
+        viewModel.openFormEvent.observeEvent(lifecycleOwner) {
+            navHostController.navigate(Screens.FormSelectLocationType.route)
         }
     }
 }
