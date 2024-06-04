@@ -1,6 +1,7 @@
 package ui.dashboard.convert
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.location.LocationRepository
@@ -36,6 +37,7 @@ class ConvertViewModel : ViewModel(), KoinComponent {
 
     val offsetInMinutes = mutableStateOf(0)
     val isFirstItemVisible = mutableStateOf(false)
+    val selectedType = mutableStateOf(SegmentedButtonType.Person)
 
     val scrollToTopEvent = MutableSharedFlow<Event<Unit>>()
 
@@ -78,4 +80,9 @@ class ConvertViewModel : ViewModel(), KoinComponent {
             scrollToTopEvent.triggerEvent()
         }
     }
+}
+
+enum class SegmentedButtonType {
+    Place,
+    Person
 }
