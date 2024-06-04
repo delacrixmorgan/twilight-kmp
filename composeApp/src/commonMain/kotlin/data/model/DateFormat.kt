@@ -27,4 +27,13 @@ object DateFormat {
         char(':')
         minute()
     }
+
+    val dayOfWeekDayMonth = LocalDateTime.Format {
+        dayOfWeek(DayOfWeekNames.ENGLISH_FULL)
+        char(',')
+        char(' ')
+        dayOfMonth()
+        char(' ')
+        monthName(MonthNames.ENGLISH_FULL)
+    }
 }

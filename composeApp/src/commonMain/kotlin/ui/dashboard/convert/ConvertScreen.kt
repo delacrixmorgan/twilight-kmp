@@ -71,10 +71,12 @@ fun ConvertScreen(
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row {
-            Column(modifier.padding(top = 32.dp)) {
+            Column(modifier.weight(1F).padding(top = 32.dp)) {
                 viewModel.localLocation.value?.let { location ->
-                    LocalNameTimeView(viewModel, location)
+                    NameTimeView(viewModel, location)
+
                     Spacer(Modifier.height(16.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
                 }
 
                 val list by viewModel.locations.collectAsState()
@@ -90,9 +92,7 @@ fun ConvertScreen(
                 }
             }
 
-            Spacer(Modifier.weight(1F))
-
-            VerticalScrollWheel(modifier, viewModel)
+            VerticalScrollWheel(modifier.weight(1F), viewModel)
         }
 
         Box(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp)) {
@@ -124,28 +124,12 @@ fun ConvertScreen(
 }
 
 @Composable
-private fun LocalNameTimeView(viewModel: ConvertViewModel, location: Location) {
-    Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text(
-            text = location.regionName,
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        val offsetMinutes = DateTimePeriod(minutes = viewModel.offsetInMinutes.value)
-        val formattedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion).format(DateFormat.twentyFourHour)
-
-        Text(
-            text = formattedTime,
-            style = MaterialTheme.typography.displayMedium
-        )
-    }
-}
-
-@Composable
 private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
+    val offsetMinutes = DateTimePeriod(minutes = viewModel.offsetInMinutes.value)
+    val adjustedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion)
+    val hourMinuteTime = adjustedTime.format(DateFormat.twentyFourHour)
+    val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
+
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -154,12 +138,12 @@ private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
             text = location.regionName,
             style = MaterialTheme.typography.titleLarge
         )
-
-        val offsetMinutes = DateTimePeriod(minutes = viewModel.offsetInMinutes.value)
-        val formattedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion).format(DateFormat.twentyFourHour)
-
         Text(
-            text = formattedTime,
+            text = dateMonthTime,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Text(
+            text = hourMinuteTime,
             style = MaterialTheme.typography.displayMedium
         )
     }
