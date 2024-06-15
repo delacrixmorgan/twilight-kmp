@@ -1,4 +1,4 @@
-package ui.dashboard.home
+package ui.archived.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

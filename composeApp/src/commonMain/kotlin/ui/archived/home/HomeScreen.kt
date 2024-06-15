@@ -1,4 +1,4 @@
-package ui.dashboard.home
+package ui.archived.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,17 +40,15 @@ import kotlinx.datetime.format
 import nav.Screens
 import ui.common.observeEvent
 import ui.component.LocationCard
-import ui.component.LocationListRow
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: HomeViewModel = viewModel { HomeViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     val currentTime by viewModel.currentTime.collectAsState()
-    Column(modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+    Column(Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         TopAppBar(viewModel)
         SummaryView(viewModel, currentTime)
         LocationListView(viewModel)

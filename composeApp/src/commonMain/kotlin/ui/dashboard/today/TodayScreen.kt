@@ -1,10 +1,9 @@
-package ui.dashboard.convert
+package ui.dashboard.today
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,21 +18,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MultiChoiceSegmentedButtonRow
-import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -66,23 +58,18 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import nav.Screens
 import ui.common.observeEvent
-import ui.dashboard.convert.ConvertViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
+import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConvertScreen(
+fun TodayScreen(
     modifier: Modifier,
     navHostController: NavHostController,
-    viewModel: ConvertViewModel = viewModel { ConvertViewModel() },
+    viewModel: TodayViewModel = viewModel { TodayViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Row {
-            Column(modifier.weight(2F).padding(top = 64.dp)) {
+            Column(modifier.weight(2F).padding(vertical = 16.dp)) {
                 viewModel.localLocation.value?.let { location ->
                     NameTimeView(viewModel, location)
 
@@ -107,33 +94,12 @@ fun ConvertScreen(
             VerticalScrollWheel(modifier.weight(1F), viewModel)
         }
 
-        Box(modifier = modifier.align(Alignment.BottomStart).padding(16.dp)) {
+        Box(modifier = modifier.align(Alignment.BottomEnd).padding(16.dp)) {
             FloatingActionButton(
                 onClick = { viewModel.onAddLocationClicked() },
-                shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.onSecondaryContainer
             ) {
                 Icon(Icons.Rounded.Add, "Add", tint = MaterialTheme.colorScheme.onSecondary)
-            }
-        }
-
-        Box(modifier = modifier.align(Alignment.TopCenter).padding(top = 8.dp)) {
-            MultiChoiceSegmentedButtonRow {
-                SegmentedButton(
-                    checked = viewModel.selectedType.value == SegmentedButtonType.Place,
-                    onCheckedChange = { viewModel.selectedType.value = SegmentedButtonType.Place },
-                    shape = RoundedCornerShape(topStart = 100.dp, bottomStart = 100.dp),
-                    label = { Text("Place") },
-                    icon = { Icon(Icons.Rounded.Place, "Place") }
-                )
-
-                SegmentedButton(
-                    checked = viewModel.selectedType.value == SegmentedButtonType.Person,
-                    onCheckedChange = { viewModel.selectedType.value = SegmentedButtonType.Person },
-                    shape = RoundedCornerShape(topEnd = 100.dp, bottomEnd = 100.dp),
-                    label = { Text("Person") },
-                    icon = { Icon(Icons.Rounded.Person, "Person") }
-                )
             }
         }
 
@@ -172,7 +138,7 @@ fun ConvertScreen(
 }
 
 @Composable
-private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
+private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
     val label = when (viewModel.selectedType.value) {
         SegmentedButtonType.Place -> location.regionName
         SegmentedButtonType.Person -> location.label
@@ -205,7 +171,7 @@ private fun NameTimeView(viewModel: ConvertViewModel, location: Location) {
 @Composable
 private fun VerticalScrollWheel(
     modifier: Modifier,
-    viewModel: ConvertViewModel,
+    viewModel: TodayViewModel,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     buffer: Int = 2,
 ) {

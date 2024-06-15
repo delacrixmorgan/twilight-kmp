@@ -1,49 +1,26 @@
 package ui.dashboard
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import nav.Screens
 import nav.dashboard.DashboardBottomNavHost
 import nav.dashboard.DashboardBottomNavItem
-import ui.common.observeEvent
 
 @Composable
 fun DashboardScreen(
     navHostController: NavHostController,
-    viewModel: DashboardViewModel = viewModel { DashboardViewModel() },
     bottomNavHostController: NavHostController = rememberNavController(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Scaffold(
-        topBar = {},
-        bottomBar = { BottomNavigationBar(bottomNavHostController) },
-    ) { innerPadding ->
-        DashboardBottomNavHost(bottomNavHostController, innerPadding)
-    }
-
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openFormEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Screens.FormSelectLocationType.route)
-        }
+    Scaffold(bottomBar = { BottomNavigationBar(bottomNavHostController) }) { innerPadding ->
+        DashboardBottomNavHost(navHostController, bottomNavHostController, innerPadding)
     }
 }
 

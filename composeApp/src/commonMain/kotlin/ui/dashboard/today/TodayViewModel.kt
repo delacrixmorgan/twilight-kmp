@@ -1,4 +1,4 @@
-package ui.dashboard.convert
+package ui.dashboard.today
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -21,7 +21,7 @@ import org.koin.core.component.inject
 import ui.common.Event
 import ui.common.triggerEvent
 
-class ConvertViewModel : ViewModel(), KoinComponent {
+class TodayViewModel : ViewModel(), KoinComponent {
     companion object {
         const val SCROLL_WHEEL_PAGE_SIZE = 300
     }

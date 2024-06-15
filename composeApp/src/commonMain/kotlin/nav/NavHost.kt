@@ -8,8 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import ui.dashboard.convert.ConvertScreen
-import ui.dashboard.home.HomeScreen
+import ui.dashboard.DashboardScreen
 import ui.form.name.SetupNameScreen
 import ui.form.summary.SummaryScreen
 import ui.form.timeregion.SelectTimeRegionScreen
@@ -28,10 +27,7 @@ fun TwilightNavHost(
         navController = navHostController,
         startDestination = Screens.Dashboard.route
     ) {
-        composable(Screens.Dashboard.route) {
-//            HomeScreen(modifier, navHostController)
-            ConvertScreen(modifier, navHostController)
-        }
+        composable(Screens.Dashboard.route) { DashboardScreen(navHostController) }
         formGraph(navHostController, modifier)
     }
 }

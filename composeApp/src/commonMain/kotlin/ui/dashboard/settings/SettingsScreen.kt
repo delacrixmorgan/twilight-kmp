@@ -19,5 +19,25 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text("Settings")
+
+        //        Box(modifier = modifier.align(Alignment.TopCenter).padding(top = 8.dp)) {
+//            MultiChoiceSegmentedButtonRow {
+//                SegmentedButton(
+//                    checked = viewModel.selectedType.value == SegmentedButtonType.Place,
+//                    onCheckedChange = { viewModel.selectedType.value = SegmentedButtonType.Place },
+//                    shape = RoundedCornerShape(topStart = 100.dp, bottomStart = 100.dp),
+//                    label = { Text("Place") },
+//                    icon = { Icon(Icons.Rounded.Place, "Place") }
+//                )
+//
+//                SegmentedButton(
+//                    checked = viewModel.selectedType.value == SegmentedButtonType.Person,
+//                    onCheckedChange = { viewModel.selectedType.value = SegmentedButtonType.Person },
+//                    shape = RoundedCornerShape(topEnd = 100.dp, bottomEnd = 100.dp),
+//                    label = { Text("Person") },
+//                    icon = { Icon(Icons.Rounded.Person, "Person") }
+//                )
+//            }
+//        }
     }
 }
