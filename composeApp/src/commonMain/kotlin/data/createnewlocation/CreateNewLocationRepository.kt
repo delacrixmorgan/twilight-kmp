@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import data.model.LocationType
 import data.model.NewLocationData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -15,12 +14,10 @@ import org.koin.core.component.inject
 interface CreateNewLocationRepository {
     suspend fun saveName(value: String)
     suspend fun saveRegionName(value: String)
-    suspend fun saveLocationType(value: LocationType)
     suspend fun saveZoneId(value: String)
 
     fun getName(): Flow<String?>
     fun getRegionName(): Flow<String?>
-    fun getLocationType(): Flow<LocationType?>
     fun getZoneId(): Flow<String?>
 
     fun observeLocation(): Flow<NewLocationData>
@@ -33,7 +30,6 @@ internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, Ko
     companion object {
         const val KEY_NAME = "Name"
         const val KEY_REGION_NAME = "RegionName"
-        const val KEY_LOCATION_TYPE = "LocationType"
         const val KEY_ZONE_ID = "ZoneId"
     }
 
@@ -47,10 +43,6 @@ internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, Ko
         dataStore.edit { it[stringPreferencesKey(KEY_REGION_NAME)] = value }
     }
 
-    override suspend fun saveLocationType(value: LocationType) {
-        dataStore.edit { it[stringPreferencesKey(KEY_LOCATION_TYPE)] = value.name }
-    }
-
     override suspend fun saveZoneId(value: String) {
         dataStore.edit { it[stringPreferencesKey(KEY_ZONE_ID)] = value }
     }
@@ -61,17 +53,12 @@ internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, Ko
     override fun getRegionName(): Flow<String?> =
         dataStore.data.map { it[stringPreferencesKey(KEY_REGION_NAME)] }
 
-    override fun getLocationType(): Flow<LocationType?> =
-        dataStore.data.map { preferences ->
-            LocationType.entries.firstOrNull { it.name == preferences[stringPreferencesKey(KEY_LOCATION_TYPE)] }
-        }
-
     override fun getZoneId(): Flow<String?> =
         dataStore.data.map { it[stringPreferencesKey(KEY_ZONE_ID)] }
 
     override fun observeLocation(): Flow<NewLocationData> {
-        return combine(getName(), getRegionName(), getLocationType(), getZoneId()) { name, customRegionName, locationType, zoneId ->
-            NewLocationData(name, customRegionName, locationType, zoneId)
+        return combine(getName(), getRegionName(), getZoneId()) { name, regionName, zoneId ->
+            NewLocationData(name, regionName, zoneId)
         }
     }
 

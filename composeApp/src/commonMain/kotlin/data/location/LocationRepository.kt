@@ -3,7 +3,6 @@ package data.location
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
-import data.location.mapper.LocationTypeEntityToModelMapper
 import data.model.Location
 import di.TwilightDatabaseWrapper
 import kotlinx.coroutines.Dispatchers
@@ -22,22 +21,21 @@ interface LocationRepository {
 }
 
 internal class LocationRepositoryImpl : LocationRepository, KoinComponent {
-    private val locationTypeEntityToModelMapper: LocationTypeEntityToModelMapper by inject()
     private val twilightDatabase: TwilightDatabaseWrapper by inject()
     private val queries get() = twilightDatabase.instance?.locationEntityQueries
 
     override fun getLocation(location: Location): Flow<Location?> =
         queries?.selectById(
             id = location.id,
-            mapper = { id, label, customRegionName, type, zoneIdString ->
-                Location(id, label, customRegionName, locationTypeEntityToModelMapper(type), zoneIdString)
+            mapper = { id, label, regionName, zoneIdString ->
+                Location(id, label, regionName, zoneIdString)
             }
         )?.asFlow()?.mapToOne(Dispatchers.Default) ?: flowOf(null)
 
     override fun getLocations(): Flow<List<Location>> =
         queries?.selectAll(
-            mapper = { id, label, customRegionName, type, zoneIdString ->
-                Location(id, label, customRegionName, locationTypeEntityToModelMapper(type), zoneIdString)
+            mapper = { id, label, regionName, zoneIdString ->
+                Location(id, label, regionName, zoneIdString)
             }
         )?.asFlow()?.mapToList(Dispatchers.Default) ?: flowOf(emptyList())
 
@@ -46,7 +44,6 @@ internal class LocationRepositoryImpl : LocationRepository, KoinComponent {
             id = location.id,
             label = location.label,
             regionName = location.regionName,
-            type = location.type.name,
             zoneIdString = location.zoneId
         )
     }
@@ -55,7 +52,6 @@ internal class LocationRepositoryImpl : LocationRepository, KoinComponent {
         queries?.update(
             label = location.label,
             regionName = location.regionName,
-            type = location.type.name,
             zoneIdString = location.zoneId,
             id = location.id
         )

@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
 import data.location.LocationRepository
 import data.model.Location
-import data.model.LocationType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -27,8 +26,7 @@ class SummaryViewModel : ViewModel(), KoinComponent {
             store.observeLocation().first().let {
                 location.value = Location(
                     label = it.label ?: "",
-                    regionName = it.customRegionName ?: "",
-                    type = it.type ?: LocationType.Custom,
+                    regionName = it.regionName ?: "",
                     zoneId = it.zoneId ?: ""
                 )
             }

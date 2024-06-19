@@ -56,7 +56,7 @@ fun HomeScreen(
 
     LaunchedEffect(viewModel, lifecycleOwner) {
         viewModel.openFormEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Screens.FormSelectLocationType.route)
+//            navHostController.navigate(Screens.FormSelectLocationType.route)
         }
     }
 }

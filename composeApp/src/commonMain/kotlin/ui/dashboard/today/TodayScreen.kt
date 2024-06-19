@@ -69,7 +69,7 @@ fun TodayScreen(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row {
-            Column(modifier.weight(2F).padding(vertical = 16.dp)) {
+            Column(modifier.weight(2F).padding(top = 16.dp)) {
                 viewModel.localLocation.value?.let { location ->
                     NameTimeView(viewModel, location)
 
@@ -96,10 +96,9 @@ fun TodayScreen(
 
         Box(modifier = modifier.align(Alignment.BottomEnd).padding(16.dp)) {
             FloatingActionButton(
-                onClick = { viewModel.onAddLocationClicked() },
-                containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+                onClick = { viewModel.onAddLocationClicked() }
             ) {
-                Icon(Icons.Rounded.Add, "Add", tint = MaterialTheme.colorScheme.onSecondary)
+                Icon(Icons.Rounded.Add, "Add")
             }
         }
 
@@ -132,7 +131,7 @@ fun TodayScreen(
 
     LaunchedEffect(viewModel, lifecycleOwner) {
         viewModel.openFormEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Screens.FormSelectLocationType.route)
+            navHostController.navigate(Screens.FormSelectTimeRegion.route)
         }
     }
 }

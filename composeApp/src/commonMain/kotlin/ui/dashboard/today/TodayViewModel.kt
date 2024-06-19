@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
 import data.location.LocationRepository
 import data.model.Location
-import data.model.LocationType
 import data.timescape.TimescapeRepository
 import data.utils.now
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,7 +52,6 @@ class TodayViewModel : ViewModel(), KoinComponent {
             localLocation.value = Location(
                 label = it.city,
                 regionName = it.city,
-                type = LocationType.Country,
                 zoneId = it.zoneIdString
             )
         }

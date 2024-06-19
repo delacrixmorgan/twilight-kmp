@@ -5,7 +5,6 @@ import data.createnewlocation.CreateNewLocationRepository
 import data.createnewlocation.CreateNewLocationRepositoryImpl
 import data.location.LocationRepository
 import data.location.LocationRepositoryImpl
-import data.location.mapper.LocationTypeEntityToModelMapper
 import data.timescape.TimescapeRepository
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
@@ -34,5 +33,4 @@ fun repositoryModule(enableNetworkLogs: Boolean) = module {
 }
 
 fun mapperModule() = module {
-    single { LocationTypeEntityToModelMapper() }
 }

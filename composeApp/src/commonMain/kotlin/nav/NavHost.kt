@@ -12,7 +12,6 @@ import ui.dashboard.DashboardScreen
 import ui.form.name.SetupNameScreen
 import ui.form.summary.SummaryScreen
 import ui.form.timeregion.SelectTimeRegionScreen
-import ui.form.type.SelectLocationTypeScreen
 
 @Composable
 fun TwilightNavHost(
@@ -34,7 +33,6 @@ fun TwilightNavHost(
 
 fun NavGraphBuilder.formGraph(navHostController: NavHostController, modifier: Modifier) {
     navigation(startDestination = Screens.FormSetupName.route, route = Screens.FormSetupName.name) {
-        composable(Screens.FormSelectLocationType.route) { SelectLocationTypeScreen(modifier, navHostController) }
         composable(Screens.FormSetupName.route) { SetupNameScreen(modifier, navHostController) }
         composable(Screens.FormSelectTimeRegion.route) { SelectTimeRegionScreen(modifier, navHostController) }
         composable(Screens.FormSummary.route) { SummaryScreen(modifier, navHostController) }
