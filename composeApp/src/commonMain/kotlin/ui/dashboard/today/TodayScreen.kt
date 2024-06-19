@@ -102,7 +102,7 @@ fun TodayScreen(
             }
         }
 
-        Box(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp)) {
+        Box(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp)) {
             AnimatedVisibility(
                 visible = !viewModel.isFirstItemVisible.value && viewModel.offsetInMinutes.value != 0,
                 enter = slideInVertically(
