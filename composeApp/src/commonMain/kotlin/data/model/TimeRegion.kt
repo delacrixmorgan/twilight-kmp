@@ -4,10 +4,12 @@ import data.utils.now
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import randomUUID
 
 data class TimeRegion(
     val zoneIdString: String,
     val region: Region,
+    val id: String = randomUUID(),
     private val country: List<String> = listOf(),
     private val states: List<String> = listOf(),
     private val cities: List<String> = listOf()

@@ -55,7 +55,7 @@ class TimescapeRepository : KoinComponent {
     private fun List<String>.genericZoneIdToTimezoneMapper(
         region: Region
     ): List<TimeRegion> = map {
-        TimeRegion(it, region)
+        TimeRegion(zoneIdString = it, region = region)
     }
 
     fun search(zoneId: String?): TimeRegion? {

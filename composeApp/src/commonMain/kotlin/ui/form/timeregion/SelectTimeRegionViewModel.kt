@@ -39,6 +39,7 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
 
     private val _searching = MutableStateFlow(false)
     val searching = _searching.asStateFlow()
+    val searchMode = mutableStateOf(false)
 
     private val favouriteTimeRegion = listOf(
         "Asia/Kuala_Lumpur",
