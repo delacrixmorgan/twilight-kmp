@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ui.dashboard.today.TodayScreen
 import ui.dashboard.settings.SettingsScreen
+import ui.dashboard.today.TodayScreen
 
 @Composable
 fun DashboardBottomNavHost(
@@ -18,13 +18,12 @@ fun DashboardBottomNavHost(
     innerPadding: PaddingValues,
 ) {
     NavHost(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding),
+        modifier = Modifier.fillMaxSize(),
         navController = bottomNavHostController,
-        startDestination = DashboardBottomNavItem.Today.route
+        startDestination = DashboardBottomNavItem.Settings.route
+//        startDestination = DashboardBottomNavItem.Today.route
     ) {
-        composable(DashboardBottomNavItem.Today.route) { TodayScreen(Modifier, navHostController) }
-        composable(DashboardBottomNavItem.Settings.route) { SettingsScreen() }
+        composable(DashboardBottomNavItem.Today.route) { TodayScreen(Modifier.padding(innerPadding), navHostController) }
+        composable(DashboardBottomNavItem.Settings.route) { SettingsScreen(Modifier.padding(innerPadding)) }
     }
 }

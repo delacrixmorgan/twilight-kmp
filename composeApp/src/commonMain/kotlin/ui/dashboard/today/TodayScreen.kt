@@ -67,9 +67,9 @@ fun TodayScreen(
     viewModel: TodayViewModel = viewModel { TodayViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         Row {
-            Column(modifier.weight(2F).padding(top = 16.dp)) {
+            Column(Modifier.weight(2F).padding(top = 16.dp)) {
                 viewModel.localLocation.value?.let { location ->
                     NameTimeView(viewModel, location)
 
@@ -91,10 +91,10 @@ fun TodayScreen(
                 Spacer(Modifier.height(32.dp))
             }
 
-            VerticalScrollWheel(modifier.weight(1F), viewModel)
+            VerticalScrollWheel(Modifier.weight(1F), viewModel)
         }
 
-        Box(modifier = modifier.align(Alignment.BottomEnd).padding(16.dp)) {
+        Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
             FloatingActionButton(
                 onClick = { viewModel.onAddLocationClicked() }
             ) {

@@ -45,7 +45,6 @@ import ui.theme.DefaultColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupNameScreen(
-    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SetupNameViewModel = viewModel { SetupNameViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,

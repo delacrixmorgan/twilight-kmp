@@ -56,7 +56,6 @@ import ui.keyboardShownState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectTimeRegionScreen(
-    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SelectTimeRegionViewModel = viewModel { SelectTimeRegionViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,

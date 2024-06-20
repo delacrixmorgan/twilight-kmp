@@ -38,7 +38,6 @@ import ui.keyboardShownState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SummaryScreen(
-    modifier: Modifier,
     navHostController: NavHostController,
     viewModel: SummaryViewModel = viewModel { SummaryViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
