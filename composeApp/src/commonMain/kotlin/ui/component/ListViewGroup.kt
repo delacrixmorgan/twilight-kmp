@@ -10,13 +10,11 @@ fun ListViewGroup(
     modifier: Modifier = Modifier,
     data: List<@Composable (ColumnScope.() -> Unit)>,
     divider: @Composable (() -> Unit)? = null,
-    showTopDivider: Boolean = false,
 ) {
     Column(modifier) {
-        if (showTopDivider) divider?.invoke()
-        data.forEach { listView ->
+        data.forEachIndexed { index, listView ->
+            if (index != 0) divider?.invoke()
             listView()
-            divider?.invoke()
         }
     }
 }

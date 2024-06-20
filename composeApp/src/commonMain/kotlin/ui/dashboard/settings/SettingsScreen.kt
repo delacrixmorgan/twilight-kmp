@@ -1,11 +1,17 @@
 package ui.dashboard.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.FormatPaint
@@ -15,11 +21,13 @@ import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.component.ListView
@@ -37,28 +45,41 @@ fun SettingsScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text("Settings", style = AppTypography.headlineLarge) },
+                title = { Text("Settings", style = AppTypography.headlineMedium) },
             )
         },
     ) { innerPadding ->
         Column(Modifier.fillMaxSize().padding(innerPadding).padding(16.dp)) {
-            ListViewGroup(
-                data = listOf(
-                    { Theme(viewModel) },
-                    { DateFormat(viewModel) },
-                    { LocationType(viewModel) },
-                ),
-                divider = { HorizontalDivider() }
-            )
-            ListViewGroup(
-                data = listOf(
-                    { AppInfo(viewModel) },
-                    { PrivacyPolicy(viewModel) },
-                    { SendFeedback(viewModel) },
-                    { RateUs(viewModel) },
-                ),
-                divider = { HorizontalDivider() }
-            )
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+            ) {
+                ListViewGroup(
+                    data = listOf(
+                        { Theme(viewModel) },
+                        { DateFormat(viewModel) },
+                        { LocationType(viewModel) },
+                    ),
+                    divider = { HorizontalDivider() }
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+            ) {
+                ListViewGroup(
+                    data = listOf(
+                        { AppInfo(viewModel) },
+                        { PrivacyPolicy(viewModel) },
+                        { SendFeedback(viewModel) },
+                        { RateUs(viewModel) },
+                    ),
+                    divider = { HorizontalDivider() }
+                )
+            }
         }
     }
 }
@@ -68,14 +89,21 @@ private fun Theme(viewModel: SettingsViewModel) {
     val label = "Theme"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.FormatPaint,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
@@ -84,14 +112,21 @@ private fun DateFormat(viewModel: SettingsViewModel) {
     val label = "Date Format"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.DateRange,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
@@ -100,14 +135,21 @@ private fun LocationType(viewModel: SettingsViewModel) {
     val label = "Location Type"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Badge,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
@@ -116,14 +158,21 @@ private fun AppInfo(viewModel: SettingsViewModel) {
     val label = "App Info"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Info,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
@@ -132,14 +181,21 @@ private fun PrivacyPolicy(viewModel: SettingsViewModel) {
     val label = "Privacy Policy"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Policy,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
@@ -148,14 +204,21 @@ private fun SendFeedback(viewModel: SettingsViewModel) {
     val label = "Send Feedback"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Feedback,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
@@ -164,14 +227,21 @@ private fun RateUs(viewModel: SettingsViewModel) {
     val label = "Rate Us"
     ListView(
         modifier = Modifier.clickable { },
+        label = { Text(label) },
         startIcon = {
             Icon(
-                modifier = TwilightModifiers.startIconModifier,
+                modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ThumbUp,
                 contentDescription = label
             )
         },
-        label = { Text(label) }
+        endIcon = {
+            Icon(
+                modifier = TwilightModifiers.iconModifier,
+                imageVector = Icons.Rounded.ChevronRight,
+                contentDescription = label
+            )
+        }
     )
 }
 
