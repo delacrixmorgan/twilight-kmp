@@ -28,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.component.ListView
@@ -82,6 +83,8 @@ fun SettingsScreen(
             }
         }
     }
+
+
 }
 
 @Composable
@@ -225,8 +228,10 @@ private fun SendFeedback(viewModel: SettingsViewModel) {
 @Composable
 private fun RateUs(viewModel: SettingsViewModel) {
     val label = "Rate Us"
+    val uriHandler = LocalUriHandler.current
+
     ListView(
-        modifier = Modifier.clickable { },
+        modifier = Modifier.clickable { uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight") },
         label = { Text(label) },
         startIcon = {
             Icon(
