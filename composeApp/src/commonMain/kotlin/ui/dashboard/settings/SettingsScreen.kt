@@ -22,15 +22,25 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ui.common.observeEvent
 import ui.component.ListView
 import ui.component.ListViewGroup
 import ui.theme.AppTypography
@@ -40,8 +50,10 @@ import ui.theme.TwilightModifiers
 @Composable
 fun SettingsScreen(
     modifier: Modifier,
-    viewModel: SettingsViewModel = viewModel { SettingsViewModel() }
+    viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
+    val uriHandler = LocalUriHandler.current
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -84,14 +96,42 @@ fun SettingsScreen(
         }
     }
 
+    var themeBottomSheetVisible by remember { mutableStateOf(false) }
+    var dateFormatBottomSheetVisible by remember { mutableStateOf(false) }
+    var locationTypeBottomSheetVisible by remember { mutableStateOf(false) }
 
+    if (themeBottomSheetVisible) {
+        ThemeBottomSheet(onDismiss = { themeBottomSheetVisible = false })
+    }
+
+    LaunchedEffect(viewModel, lifecycleOwner) {
+        viewModel.openThemeEvent.observeEvent(lifecycleOwner) {
+            themeBottomSheetVisible = true
+        }
+        viewModel.openDateFormatEvent.observeEvent(lifecycleOwner) {
+            dateFormatBottomSheetVisible = true
+        }
+        viewModel.openLocationTypeEvent.observeEvent(lifecycleOwner) {
+            locationTypeBottomSheetVisible = true
+        }
+        viewModel.openAppInfoEvent.observeEvent(lifecycleOwner) {
+        }
+        viewModel.openPrivacyPolicyEvent.observeEvent(lifecycleOwner) {
+        }
+        viewModel.openSendFeedbackEvent.observeEvent(lifecycleOwner) {
+            // TODO (Send Email)
+        }
+        viewModel.openRateUsEvent.observeEvent(lifecycleOwner) {
+            uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
+        }
+    }
 }
 
 @Composable
 private fun Theme(viewModel: SettingsViewModel) {
     val label = "Theme"
     ListView(
-        modifier = Modifier.clickable { },
+        modifier = Modifier.clickable { viewModel.onThemeClicked() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -110,11 +150,27 @@ private fun Theme(viewModel: SettingsViewModel) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ThemeBottomSheet(
+    onDismiss: () -> Unit
+) {
+    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = modalBottomSheetState,
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            Text("Theme", style = AppTypography.titleLarge)
+        }
+    }
+}
+
 @Composable
 private fun DateFormat(viewModel: SettingsViewModel) {
     val label = "Date Format"
     ListView(
-        modifier = Modifier.clickable { },
+        modifier = Modifier.clickable { viewModel.onDateFormatClicked() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -137,7 +193,7 @@ private fun DateFormat(viewModel: SettingsViewModel) {
 private fun LocationType(viewModel: SettingsViewModel) {
     val label = "Location Type"
     ListView(
-        modifier = Modifier.clickable { },
+        modifier = Modifier.clickable { viewModel.onLocationTypeClicked() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -160,7 +216,7 @@ private fun LocationType(viewModel: SettingsViewModel) {
 private fun AppInfo(viewModel: SettingsViewModel) {
     val label = "App Info"
     ListView(
-        modifier = Modifier.clickable { },
+        modifier = Modifier.clickable { viewModel.onAppInfoClicked() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -228,10 +284,9 @@ private fun SendFeedback(viewModel: SettingsViewModel) {
 @Composable
 private fun RateUs(viewModel: SettingsViewModel) {
     val label = "Rate Us"
-    val uriHandler = LocalUriHandler.current
 
     ListView(
-        modifier = Modifier.clickable { uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight") },
+        modifier = Modifier.clickable { viewModel.onRateUsClicked() },
         label = { Text(label) },
         startIcon = {
             Icon(
