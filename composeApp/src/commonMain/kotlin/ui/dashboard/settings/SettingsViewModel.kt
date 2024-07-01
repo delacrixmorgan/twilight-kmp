@@ -2,45 +2,51 @@ package ui.dashboard.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ui.common.Event
-import ui.common.triggerEvent
 
 class SettingsViewModel : ViewModel() {
-    val openThemeEvent = MutableSharedFlow<Event<Unit>>()
-    val openDateFormatEvent = MutableSharedFlow<Event<Unit>>()
-    val openLocationTypeEvent = MutableSharedFlow<Event<Unit>>()
-    val openAppInfoEvent = MutableSharedFlow<Event<Unit>>()
-    val openPrivacyPolicyEvent = MutableSharedFlow<Event<Unit>>()
-    val openSendFeedbackEvent = MutableSharedFlow<Event<Unit>>()
-    val openRateUsEvent = MutableSharedFlow<Event<Unit>>()
+    private val _uiState = MutableStateFlow(SettingsUiState())
+    val uiState: StateFlow<SettingsUiState> = _uiState
 
-    fun onThemeClicked() {
-        viewModelScope.launch { openThemeEvent.triggerEvent() }
+    fun onThemeClicked(show: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(showTheme = show) } }
     }
 
-    fun onDateFormatClicked() {
-        viewModelScope.launch { openDateFormatEvent.triggerEvent() }
+    fun onDateFormatClicked(show: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(showDateFormat = show) } }
     }
 
-    fun onLocationTypeClicked() {
-        viewModelScope.launch { openLocationTypeEvent.triggerEvent() }
+    fun onLocationTypeClicked(show: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(showLocationType = show) } }
     }
 
-    fun onAppInfoClicked() {
-        viewModelScope.launch { openAppInfoEvent.triggerEvent() }
+    fun onAppInfoClicked(open: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(openAppInfo = open) } }
     }
 
-    fun onPrivacyPolicyClicked() {
-        viewModelScope.launch { openPrivacyPolicyEvent.triggerEvent() }
+    fun onPrivacyPolicyClicked(open: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(openPrivacyPolicy = open) } }
     }
 
-    fun onSendFeedbackClicked() {
-        viewModelScope.launch { openSendFeedbackEvent.triggerEvent() }
+    fun onSendFeedbackClicked(open: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(openSendFeedback = open) } }
     }
 
-    fun onRateUsClicked() {
-        viewModelScope.launch { openRateUsEvent.triggerEvent() }
+    fun onRateUsClicked(open: Boolean) {
+        viewModelScope.launch { _uiState.update { it.copy(openRateUs = open) } }
     }
 }
+
+data class SettingsUiState(
+    val showTheme: Boolean = false,
+    val showDateFormat: Boolean = false,
+    val showLocationType: Boolean = false,
+
+    val openAppInfo: Boolean = false,
+    val openPrivacyPolicy: Boolean = false,
+    val openSendFeedback: Boolean = false,
+    val openRateUs: Boolean = false,
+)

@@ -9,49 +9,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Badge
-import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.Feedback
-import androidx.compose.material.icons.rounded.FormatPaint
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Policy
-import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ui.common.observeEvent
-import ui.component.ListView
 import ui.component.ListViewGroup
 import ui.theme.AppTypography
-import ui.theme.TwilightModifiers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     modifier: Modifier,
     viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     val uriHandler = LocalUriHandler.current
     Scaffold(
@@ -70,9 +49,9 @@ fun SettingsScreen(
             ) {
                 ListViewGroup(
                     data = listOf(
-                        { Theme(viewModel) },
-                        { DateFormat(viewModel) },
-                        { LocationType(viewModel) },
+                        { Theme(Modifier.clickable { viewModel.onThemeClicked(show = true) }) },
+                        { DateFormat(Modifier.clickable { viewModel.onDateFormatClicked(show = true) }) },
+                        { LocationType(Modifier.clickable { viewModel.onLocationTypeClicked(show = true) }) },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -85,10 +64,10 @@ fun SettingsScreen(
             ) {
                 ListViewGroup(
                     data = listOf(
-                        { AppInfo(viewModel) },
-                        { PrivacyPolicy(viewModel) },
-                        { SendFeedback(viewModel) },
-                        { RateUs(viewModel) },
+                        { AppInfo(Modifier.clickable { viewModel.onAppInfoClicked(open = true) }) },
+                        { PrivacyPolicy(Modifier.clickable { viewModel.onPrivacyPolicyClicked(open = true) }) },
+                        { SendFeedback(Modifier.clickable { viewModel.onSendFeedbackClicked(open = true) }) },
+                        { RateUs(Modifier.clickable { viewModel.onRateUsClicked(open = true) }) },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -96,232 +75,30 @@ fun SettingsScreen(
         }
     }
 
-    var themeBottomSheetVisible by remember { mutableStateOf(false) }
-    var dateFormatBottomSheetVisible by remember { mutableStateOf(false) }
-    var locationTypeBottomSheetVisible by remember { mutableStateOf(false) }
-
-    if (themeBottomSheetVisible) {
-        ThemeBottomSheet(onDismiss = { themeBottomSheetVisible = false })
+    val uiState by viewModel.uiState.collectAsState()
+    ThemeBottomSheet(
+        isVisible = uiState.showTheme,
+        onDismiss = { viewModel.onThemeClicked(show = false) }
+    )
+    DateFormatBottomSheet(
+        isVisible = uiState.showDateFormat,
+        onDismiss = { viewModel.onDateFormatClicked(show = false) }
+    )
+    LocationTypeBottomSheet(
+        isVisible = uiState.showLocationType,
+        onDismiss = { viewModel.onLocationTypeClicked(show = false) }
+    )
+    if (uiState.openAppInfo) {
+        viewModel.onAppInfoClicked(open = false)
     }
-
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openThemeEvent.observeEvent(lifecycleOwner) {
-            themeBottomSheetVisible = true
-        }
-        viewModel.openDateFormatEvent.observeEvent(lifecycleOwner) {
-            dateFormatBottomSheetVisible = true
-        }
-        viewModel.openLocationTypeEvent.observeEvent(lifecycleOwner) {
-            locationTypeBottomSheetVisible = true
-        }
-        viewModel.openAppInfoEvent.observeEvent(lifecycleOwner) {
-        }
-        viewModel.openPrivacyPolicyEvent.observeEvent(lifecycleOwner) {
-        }
-        viewModel.openSendFeedbackEvent.observeEvent(lifecycleOwner) {
-            // TODO (Send Email)
-        }
-        viewModel.openRateUsEvent.observeEvent(lifecycleOwner) {
-            uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
-        }
+    if (uiState.openPrivacyPolicy) {
+        viewModel.onPrivacyPolicyClicked(open = false)
+    }
+    if (uiState.openSendFeedback) {
+        viewModel.onSendFeedbackClicked(open = false)
+    }
+    if (uiState.openRateUs) {
+        uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
+        viewModel.onRateUsClicked(open = false)
     }
 }
-
-@Composable
-private fun Theme(viewModel: SettingsViewModel) {
-    val label = "Theme"
-    ListView(
-        modifier = Modifier.clickable { viewModel.onThemeClicked() },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.FormatPaint,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ThemeBottomSheet(
-    onDismiss: () -> Unit
-) {
-    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = modalBottomSheetState,
-    ) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text("Theme", style = AppTypography.titleLarge)
-        }
-    }
-}
-
-@Composable
-private fun DateFormat(viewModel: SettingsViewModel) {
-    val label = "Date Format"
-    ListView(
-        modifier = Modifier.clickable { viewModel.onDateFormatClicked() },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.DateRange,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-@Composable
-private fun LocationType(viewModel: SettingsViewModel) {
-    val label = "Location Type"
-    ListView(
-        modifier = Modifier.clickable { viewModel.onLocationTypeClicked() },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.Badge,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-@Composable
-private fun AppInfo(viewModel: SettingsViewModel) {
-    val label = "App Info"
-    ListView(
-        modifier = Modifier.clickable { viewModel.onAppInfoClicked() },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.Info,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-@Composable
-private fun PrivacyPolicy(viewModel: SettingsViewModel) {
-    val label = "Privacy Policy"
-    ListView(
-        modifier = Modifier.clickable { },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.Policy,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-@Composable
-private fun SendFeedback(viewModel: SettingsViewModel) {
-    val label = "Send Feedback"
-    ListView(
-        modifier = Modifier.clickable { },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.Feedback,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-@Composable
-private fun RateUs(viewModel: SettingsViewModel) {
-    val label = "Rate Us"
-
-    ListView(
-        modifier = Modifier.clickable { viewModel.onRateUsClicked() },
-        label = { Text(label) },
-        startIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ThumbUp,
-                contentDescription = label
-            )
-        },
-        endIcon = {
-            Icon(
-                modifier = TwilightModifiers.iconModifier,
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = label
-            )
-        }
-    )
-}
-
-
-//        Box(modifier = modifier.align(Alignment.TopCenter).padding(top = 8.dp)) {
-//            MultiChoiceSegmentedButtonRow {
-//                SegmentedButton(
-//                    checked = viewModel.selectedType.value == SegmentedButtonType.Place,
-//                    onCheckedChange = { viewModel.selectedType.value = SegmentedButtonType.Place },
-//                    shape = RoundedCornerShape(topStart = 100.dp, bottomStart = 100.dp),
-//                    label = { Text("Place") },
-//                    icon = { Icon(Icons.Rounded.Place, "Place") }
-//                )
-//
-//                SegmentedButton(
-//                    checked = viewModel.selectedType.value == SegmentedButtonType.Person,
-//                    onCheckedChange = { viewModel.selectedType.value = SegmentedButtonType.Person },
-//                    shape = RoundedCornerShape(topEnd = 100.dp, bottomEnd = 100.dp),
-//                    label = { Text("Person") },
-//                    icon = { Icon(Icons.Rounded.Person, "Person") }
-//                )
-//            }
-//        }
