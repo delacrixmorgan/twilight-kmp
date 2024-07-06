@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -57,7 +58,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import nav.Screens
-import ui.common.observeEvent
+import ui.dashboard.settings.SegmentedButtonType
 import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
 @Composable
@@ -67,6 +68,9 @@ fun TodayScreen(
     viewModel: TodayViewModel = viewModel { TodayViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
     Box(modifier = modifier.fillMaxSize()) {
         Row {
             Column(Modifier.weight(2F).padding(top = 16.dp)) {
@@ -91,12 +95,12 @@ fun TodayScreen(
                 Spacer(Modifier.height(32.dp))
             }
 
-            VerticalScrollWheel(Modifier.weight(1F), viewModel)
+            VerticalScrollWheel(Modifier.weight(1F), viewModel, listState)
         }
 
         Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
             FloatingActionButton(
-                onClick = { viewModel.onAddLocationClicked() }
+                onClick = { viewModel.onAddLocationClicked(open = true) }
             ) {
                 Icon(Icons.Rounded.Add, "Add")
             }
@@ -119,7 +123,7 @@ fun TodayScreen(
                         end = 12.dp,
                         bottom = 4.dp,
                     ),
-                    onClick = { viewModel.onScrollToTopClicked() }
+                    onClick = { viewModel.onScrollToTopClicked(click = true) }
                 ) {
                     Text("+ ${viewModel.formatOffSetInMinutes(viewModel.offsetInMinutes.value)}")
                     Spacer(Modifier.width(4.dp))
@@ -129,9 +133,17 @@ fun TodayScreen(
         }
     }
 
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openFormEvent.observeEvent(lifecycleOwner) {
+    val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(uiState, lifecycleOwner) {
+        if (uiState.openFormEvent) {
             navHostController.navigate(Screens.FormSelectTimeRegion.route)
+            viewModel.onAddLocationClicked(open = false)
+        }
+        if (uiState.scrollToTop) {
+            coroutineScope.launch {
+                listState.animateScrollToItem(0)
+                viewModel.onScrollToTopClicked(click = false)
+            }
         }
     }
 }
@@ -171,11 +183,10 @@ private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
 private fun VerticalScrollWheel(
     modifier: Modifier,
     viewModel: TodayViewModel,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    listState: LazyListState,
     buffer: Int = 2,
 ) {
     val items = remember { mutableStateListOf<Int>() }
-    val listState = rememberLazyListState()
 
     LazyColumn(
         modifier = modifier.fillMaxSize().padding(horizontal = 24.dp),
@@ -215,15 +226,6 @@ private fun VerticalScrollWheel(
                 viewModel.isFirstItemVisible.value = content.isFirstItemVisible
                 if (content.reachedBottom) items.addAll((items.size..items.size + SCROLL_WHEEL_PAGE_SIZE))
             }
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.scrollToTopEvent.observeEvent(lifecycleOwner) {
-            coroutineScope.launch {
-                listState.animateScrollToItem(0)
-            }
-        }
     }
 }
 

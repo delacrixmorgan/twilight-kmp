@@ -8,17 +8,16 @@ import data.location.LocationRepository
 import data.model.Location
 import data.timescape.TimescapeRepository
 import data.utils.now
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.common.Event
-import ui.common.triggerEvent
+import ui.dashboard.settings.SegmentedButtonType
 
 class TodayViewModel : ViewModel(), KoinComponent {
     companion object {
@@ -38,8 +37,8 @@ class TodayViewModel : ViewModel(), KoinComponent {
     val isFirstItemVisible = mutableStateOf(false)
     val selectedType = mutableStateOf(SegmentedButtonType.Person)
 
-    val openFormEvent = MutableSharedFlow<Event<Unit>>()
-    val scrollToTopEvent = MutableSharedFlow<Event<Unit>>()
+    private val _uiState = MutableStateFlow(TodayUiState())
+    val uiState: StateFlow<TodayUiState> = _uiState
 
     init {
         loadLocations()
@@ -76,21 +75,19 @@ class TodayViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun onScrollToTopClicked() {
-        viewModelScope.launch {
-            scrollToTopEvent.triggerEvent()
-        }
+    fun onScrollToTopClicked(click: Boolean) {
+        _uiState.update { it.copy(scrollToTop = click) }
     }
 
-    fun onAddLocationClicked() {
+    fun onAddLocationClicked(open: Boolean) {
         viewModelScope.launch {
             store.clear()
-            openFormEvent.triggerEvent()
+            _uiState.update { it.copy(openFormEvent = open) }
         }
     }
 }
 
-enum class SegmentedButtonType {
-    Place,
-    Person
-}
+data class TodayUiState(
+    val openFormEvent: Boolean = false,
+    val scrollToTop: Boolean = false
+)
