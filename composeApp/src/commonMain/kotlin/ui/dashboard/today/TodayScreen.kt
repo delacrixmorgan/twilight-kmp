@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,12 +24,15 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -89,7 +94,10 @@ fun TodayScreen(
                 ) {
                     items(count = list.size, key = { list[it].id }) { index ->
                         val location = list[index]
-                        NameTimeView(viewModel, location)
+                        NameTimeView(viewModel, location) {
+                            viewModel.selectedLocation.value = it
+                            viewModel.onItemClicked(click = true)
+                        }
                     }
                 }
                 Spacer(Modifier.height(32.dp))
@@ -134,10 +142,20 @@ fun TodayScreen(
     }
 
     val uiState by viewModel.uiState.collectAsState()
+    ItemSettingsBottomSheet(
+        isVisible = uiState.openItemSettings,
+        onEdit = { viewModel.onItemEditClicked(click = true) },
+        onDelete = { viewModel.onItemDeleteClicked() },
+        onDismiss = { viewModel.onItemClicked(click = false) },
+    )
+
     LaunchedEffect(uiState, lifecycleOwner) {
-        if (uiState.openFormEvent) {
+        if (uiState.openAddLocation) {
             navHostController.navigate(Screens.FormSelectTimeRegion.route)
             viewModel.onAddLocationClicked(open = false)
+        }
+        if (uiState.openItemEdit) {
+//            navHostController.navigate(Screens.FormSelectTimeRegion.route, viewModel.selectedLocation.value?.id)
         }
         if (uiState.scrollToTop) {
             coroutineScope.launch {
@@ -149,7 +167,36 @@ fun TodayScreen(
 }
 
 @Composable
-private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
+internal fun ItemSettingsBottomSheet(isVisible: Boolean, onEdit: () -> Unit, onDelete: () -> Unit, onDismiss: () -> Unit) {
+    if (!isVisible) return
+    AlertDialog(
+        icon = {
+            Icon(Icons.Rounded.Edit, contentDescription = "Edit")
+        },
+        title = {
+            Text(text = "Make changes")
+        },
+        text = {
+            Text(text = "Would you like to change or remove this location?")
+        },
+        onDismissRequest = {
+            onDismiss()
+        },
+        confirmButton = {
+            TextButton(onClick = { onEdit() }) {
+                Text("Edit")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDelete() }) {
+                Text("Delete", color = MaterialTheme.colorScheme.error)
+            }
+        }
+    )
+}
+
+@Composable
+private fun NameTimeView(viewModel: TodayViewModel, location: Location, onClicked: ((Location) -> Unit)? = null) {
     val label = when (viewModel.selectedType.value) {
         SegmentedButtonType.Place -> location.regionName
         SegmentedButtonType.Person -> location.label
@@ -160,7 +207,11 @@ private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
     val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
 
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = if (onClicked == null) {
+            Modifier.padding(horizontal = 16.dp)
+        } else {
+            Modifier.fillMaxWidth().clickable { onClicked(location) }.padding(horizontal = 16.dp)
+        },
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(

@@ -36,6 +36,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
     val offsetInMinutes = mutableStateOf(0)
     val isFirstItemVisible = mutableStateOf(false)
     val selectedType = mutableStateOf(SegmentedButtonType.Person)
+    val selectedLocation = mutableStateOf<Location?>(null)
 
     private val _uiState = MutableStateFlow(TodayUiState())
     val uiState: StateFlow<TodayUiState> = _uiState
@@ -82,12 +83,36 @@ class TodayViewModel : ViewModel(), KoinComponent {
     fun onAddLocationClicked(open: Boolean) {
         viewModelScope.launch {
             store.clear()
-            _uiState.update { it.copy(openFormEvent = open) }
+            _uiState.update { it.copy(openAddLocation = open) }
+        }
+    }
+
+    fun onItemClicked(click: Boolean) {
+        _uiState.update { it.copy(openItemSettings = click) }
+    }
+
+    fun onItemEditClicked(click: Boolean) {
+        _uiState.update { it.copy(openItemEdit = click) }
+        if (click){
+            _uiState.update { it.copy(openItemSettings = false) }
+        }
+    }
+
+    fun onItemDeleteClicked() {
+        viewModelScope.launch {
+            selectedLocation.value?.id?.let { locationId ->
+                repository.deleteLocation(locationId)
+                selectedLocation.value = null
+                _uiState.update { it.copy(openItemSettings = false) }
+            }
         }
     }
 }
 
 data class TodayUiState(
-    val openFormEvent: Boolean = false,
+    val openAddLocation: Boolean = false,
+    val openItemSettings: Boolean = false,
+    val openItemEdit: Boolean = false,
+
     val scrollToTop: Boolean = false
 )
