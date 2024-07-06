@@ -47,7 +47,7 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
 
     fun onContinueClicked() {
         viewModelScope.launch {
-            store.saveName(locationName.value)
+            store.saveName(locationName.value.trimEnd())
             store.saveRegionName(regionName.value.ifBlank { getFallbackRegionName() ?: "" })
             openSummaryEvent.triggerEvent()
         }

@@ -91,13 +91,6 @@ class TodayViewModel : ViewModel(), KoinComponent {
         _uiState.update { it.copy(openItemSettings = click) }
     }
 
-    fun onItemEditClicked(click: Boolean) {
-        _uiState.update { it.copy(openItemEdit = click) }
-        if (click){
-            _uiState.update { it.copy(openItemSettings = false) }
-        }
-    }
-
     fun onItemDeleteClicked() {
         viewModelScope.launch {
             selectedLocation.value?.id?.let { locationId ->
@@ -112,7 +105,6 @@ class TodayViewModel : ViewModel(), KoinComponent {
 data class TodayUiState(
     val openAddLocation: Boolean = false,
     val openItemSettings: Boolean = false,
-    val openItemEdit: Boolean = false,
 
     val scrollToTop: Boolean = false
 )

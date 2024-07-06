@@ -24,7 +24,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
@@ -144,7 +144,8 @@ fun TodayScreen(
     val uiState by viewModel.uiState.collectAsState()
     ItemSettingsBottomSheet(
         isVisible = uiState.openItemSettings,
-        onEdit = { viewModel.onItemEditClicked(click = true) },
+        location = viewModel.selectedLocation.value,
+        selectedType = viewModel.selectedType.value,
         onDelete = { viewModel.onItemDeleteClicked() },
         onDismiss = { viewModel.onItemClicked(click = false) },
     )
@@ -153,9 +154,6 @@ fun TodayScreen(
         if (uiState.openAddLocation) {
             navHostController.navigate(Screens.FormSelectTimeRegion.route)
             viewModel.onAddLocationClicked(open = false)
-        }
-        if (uiState.openItemEdit) {
-//            navHostController.navigate(Screens.FormSelectTimeRegion.route, viewModel.selectedLocation.value?.id)
         }
         if (uiState.scrollToTop) {
             coroutineScope.launch {
@@ -167,30 +165,30 @@ fun TodayScreen(
 }
 
 @Composable
-internal fun ItemSettingsBottomSheet(isVisible: Boolean, onEdit: () -> Unit, onDelete: () -> Unit, onDismiss: () -> Unit) {
+internal fun ItemSettingsBottomSheet(
+    isVisible: Boolean,
+    location: Location?,
+    selectedType: SegmentedButtonType,
+    onDelete: () -> Unit,
+    onDismiss: () -> Unit
+) {
     if (!isVisible) return
+    val label = when (selectedType) {
+        SegmentedButtonType.Place -> location?.regionName
+        SegmentedButtonType.Person -> location?.label
+    }
     AlertDialog(
-        icon = {
-            Icon(Icons.Rounded.Edit, contentDescription = "Edit")
-        },
-        title = {
-            Text(text = "Make changes")
-        },
-        text = {
-            Text(text = "Would you like to change or remove this location?")
-        },
-        onDismissRequest = {
-            onDismiss()
-        },
+        icon = { Icon(Icons.Rounded.Delete, contentDescription = "Delete") },
+        title = { Text(text = "Delete Location") },
+        text = { Text(text = "Are you sure you want to delete the location \"$label\"?") },
+        onDismissRequest = { onDismiss() },
         confirmButton = {
-            TextButton(onClick = { onEdit() }) {
-                Text("Edit")
-            }
-        },
-        dismissButton = {
             TextButton(onClick = { onDelete() }) {
                 Text("Delete", color = MaterialTheme.colorScheme.error)
             }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) { Text("Cancel") }
         }
     )
 }
