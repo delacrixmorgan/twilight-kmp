@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,14 +25,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -45,6 +50,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
@@ -81,23 +87,19 @@ fun TodayScreen(
             Column(Modifier.weight(2F).padding(top = 16.dp)) {
                 viewModel.localLocation.value?.let { location ->
                     NameTimeView(viewModel, location)
-
-                    Spacer(Modifier.height(16.dp))
                     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
                 }
 
                 val list by viewModel.locations.collectAsState()
                 LazyColumn(
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp),
                     state = rememberLazyListState()
                 ) {
                     items(count = list.size, key = { list[it].id }) { index ->
                         val location = list[index]
-                        NameTimeView(viewModel, location) {
+                        EditableNameTimeView(viewModel, location, onDeleted = {
                             viewModel.selectedLocation.value = it
                             viewModel.onItemClicked(click = true)
-                        }
+                        })
                     }
                 }
                 Spacer(Modifier.height(32.dp))
@@ -107,9 +109,7 @@ fun TodayScreen(
         }
 
         Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
-            FloatingActionButton(
-                onClick = { viewModel.onAddLocationClicked(open = true) }
-            ) {
+            FloatingActionButton(onClick = { viewModel.onAddLocationClicked(open = true) }) {
                 Icon(Icons.Rounded.Add, "Add")
             }
         }
@@ -193,8 +193,53 @@ internal fun ItemSettingsBottomSheet(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun NameTimeView(viewModel: TodayViewModel, location: Location, onClicked: ((Location) -> Unit)? = null) {
+private fun EditableNameTimeView(viewModel: TodayViewModel, location: Location, onDeleted: ((Location) -> Unit)) {
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { state ->
+            when (state) {
+                SwipeToDismissBoxValue.StartToEnd -> Unit
+                SwipeToDismissBoxValue.EndToStart -> onDeleted(location)
+                SwipeToDismissBoxValue.Settled -> Unit
+            }
+            false
+        }
+    )
+    val color = when (dismissState.dismissDirection) {
+        SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.tertiary
+        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
+        SwipeToDismissBoxValue.Settled -> Color.Transparent
+    }
+    SwipeToDismissBox(
+        state = dismissState,
+        backgroundContent = {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Icon(
+                    Icons.Rounded.Edit,
+                    contentDescription = "Edit"
+                )
+                Spacer(modifier = Modifier)
+                Icon(
+                    Icons.Rounded.Delete,
+                    contentDescription = "Delete"
+                )
+            }
+        },
+    ) {
+        NameTimeView(viewModel, location)
+    }
+}
+
+@Composable
+private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
     val label = when (viewModel.selectedType.value) {
         SegmentedButtonType.Place -> location.regionName
         SegmentedButtonType.Person -> location.label
@@ -205,11 +250,7 @@ private fun NameTimeView(viewModel: TodayViewModel, location: Location, onClicke
     val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
 
     Column(
-        modifier = if (onClicked == null) {
-            Modifier.padding(horizontal = 16.dp)
-        } else {
-            Modifier.fillMaxWidth().clickable { onClicked(location) }.padding(horizontal = 16.dp)
-        },
+        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
