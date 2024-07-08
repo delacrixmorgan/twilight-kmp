@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import nav.Screens
+import nav.Routes
 import ui.common.observeEvent
 import ui.keyboardShownState
 import ui.theme.DefaultColors
@@ -153,7 +153,7 @@ fun SetupNameScreen(
 
     LaunchedEffect(viewModel, lifecycleOwner) {
         viewModel.openSummaryEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Screens.FormSummary.route)
+            navHostController.navigate(Routes.FormSummary)
         }
     }
 }

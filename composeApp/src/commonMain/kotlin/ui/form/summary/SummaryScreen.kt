@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import nav.Screens
+import nav.Routes
 import ui.common.observeEvent
 import ui.component.LocationListRow
 import ui.keyboardShownState
@@ -99,7 +99,7 @@ fun SummaryScreen(
 
     LaunchedEffect(viewModel, lifecycleOwner) {
         viewModel.openDashboardEvent.observeEvent(lifecycleOwner) {
-            navHostController.popBackStack(Screens.Dashboard.route, inclusive = false)
+            navHostController.popBackStack(Routes.Dashboard, inclusive = false)
         }
     }
 }

@@ -24,17 +24,15 @@ fun TwilightNavHost(
 //    } ?: BottomNavItem.Dashboard
     NavHost(
         navController = navHostController,
-        startDestination = Screens.Dashboard.route
+        startDestination = Routes.Dashboard
     ) {
-        composable(Screens.Dashboard.route) { DashboardScreen(navHostController) }
+        composable<Routes.Dashboard> { DashboardScreen(navHostController) }
         formGraph(navHostController)
     }
 }
 
 fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
-    navigation(startDestination = Screens.FormSetupName.route, route = Screens.FormSetupName.name) {
-        composable(Screens.FormSetupName.route) { SetupNameScreen(navHostController) }
-        composable(Screens.FormSelectTimeRegion.route) { SelectTimeRegionScreen(navHostController) }
-        composable(Screens.FormSummary.route) { SummaryScreen(navHostController) }
-    }
+    composable<Routes.FormSetupName> { SetupNameScreen(navHostController) }
+    composable<Routes.FormSelectTimeRegion> { SelectTimeRegionScreen(navHostController) }
+    composable<Routes.FormSummary> { SummaryScreen(navHostController) }
 }

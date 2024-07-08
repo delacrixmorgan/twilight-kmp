@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import nav.Screens
+import nav.Routes
 import ui.common.observeEvent
 import ui.component.TimeRegionListRow
 import ui.keyboardShownState
@@ -123,7 +123,7 @@ fun SelectTimeRegionScreen(
 
     LaunchedEffect(viewModel, lifecycleOwner) {
         viewModel.openSetupNameEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Screens.FormSetupName.route)
+            navHostController.navigate(Routes.FormSetupName)
         }
     }
 }

@@ -68,7 +68,7 @@ import kotlinx.datetime.format
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import nav.Screens
+import nav.Routes
 import ui.dashboard.settings.SegmentedButtonType
 import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
@@ -152,7 +152,7 @@ fun TodayScreen(
 
     LaunchedEffect(uiState, lifecycleOwner) {
         if (uiState.openAddLocation) {
-            navHostController.navigate(Screens.FormSelectTimeRegion.route)
+            navHostController.navigate(Routes.FormSelectTimeRegion)
             viewModel.onAddLocationClicked(open = false)
         }
         if (uiState.scrollToTop) {

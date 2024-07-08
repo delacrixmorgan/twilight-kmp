@@ -37,7 +37,6 @@ import androidx.navigation.NavHostController
 import data.model.DateFormat
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
-import nav.Screens
 import ui.common.observeEvent
 import ui.component.LocationCard
 
