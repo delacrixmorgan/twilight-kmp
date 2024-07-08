@@ -7,6 +7,12 @@ sealed class Routes {
     data object Dashboard : Routes()
 
     @Serializable
+    data object Today : Routes()
+
+    @Serializable
+    data object Settings : Routes()
+
+    @Serializable
     data object FormSetupName : Routes()
 
     @Serializable

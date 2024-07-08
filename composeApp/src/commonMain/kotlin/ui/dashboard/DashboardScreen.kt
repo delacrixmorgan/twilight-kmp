@@ -5,9 +5,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -28,16 +28,20 @@ fun DashboardScreen(
 @Composable
 private fun BottomNavigationBar(navHostController: NavHostController) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar {
-        DashboardBottomNavItem.entries.forEach { screen ->
+        DashboardBottomNavItem.entries.forEach { navItem ->
+            val selected by remember(currentRoute) {
+                derivedStateOf { currentRoute == navItem.route::class.qualifiedName }
+            }
             NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = screen.title) },
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                icon = { Icon(navItem.icon, contentDescription = navItem.title) },
+                selected = selected,
                 onClick = {
-                    navHostController.navigate(screen.route) {
-                        popUpTo(navHostController.graph.findStartDestination().navigatorName) { saveState = true }
+                    if (selected) return@NavigationBarItem
+                    navHostController.navigate(navItem.route) {
+                        popUpTo(navHostController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
                     }
