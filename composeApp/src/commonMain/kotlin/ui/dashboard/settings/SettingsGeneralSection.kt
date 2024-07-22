@@ -1,12 +1,17 @@
 package ui.dashboard.settings
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.FormatPaint
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -15,7 +20,10 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import data.model.TwilightTheme
 import ui.component.ListItem
+import ui.component.RadioGroup
+import ui.component.RadioRowData
 import ui.theme.AppTypography
 import ui.theme.TwilightModifiers
 
@@ -46,13 +54,33 @@ internal fun Theme(modifier: Modifier) {
 @Composable
 internal fun ThemeBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
     if (!isVisible) return
-    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val modalBottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = modalBottomSheetState,
     ) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text("Theme", style = AppTypography.titleLarge)
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text(
+                "Theme",
+                modifier = Modifier.padding(horizontal = 16.dp),
+                style = AppTypography.titleLarge
+            )
+            RadioGroup(
+                options = TwilightTheme.entries.map {
+                    RadioRowData(id = it.name, label = it.name)
+                },
+                onSelected = { index, id ->
+                    TwilightTheme.entries[index]
+                }
+            )
+
+            Button(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                onClick = { onDismiss() },
+            ) {
+                Text("Done", modifier = Modifier.padding(vertical = 8.dp))
+            }
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
@@ -84,7 +112,7 @@ internal fun DateFormat(modifier: Modifier) {
 @Composable
 internal fun DateFormatBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
     if (!isVisible) return
-    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val modalBottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = modalBottomSheetState,
@@ -122,7 +150,7 @@ internal fun LocationType(modifier: Modifier) {
 @Composable
 internal fun LocationTypeBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
     if (!isVisible) return
-    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val modalBottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = modalBottomSheetState,

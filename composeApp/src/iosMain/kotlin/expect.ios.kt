@@ -5,6 +5,7 @@ import com.delacrixmorgan.twilight.TwilightDatabase
 import data.utils.LocalDataStore
 import di.TwilightDatabaseWrapper
 import kotlinx.cinterop.ExperimentalForeignApi
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -13,7 +14,8 @@ import platform.Foundation.NSUUID
 import platform.Foundation.NSUserDomainMask
 
 actual fun platformModule() = module {
-    single { dataStore() }
+    single(named(LocalDataStore.Preferences.name)) { dataStore(LocalDataStore.Preferences.path()) }
+    single(named(LocalDataStore.CreateNewLocation.name)) { dataStore(LocalDataStore.CreateNewLocation.path()) }
     single {
         val driver = NativeSqliteDriver(TwilightDatabase.Schema, "twilight.db")
         TwilightDatabaseWrapper(TwilightDatabase(driver))
@@ -21,7 +23,7 @@ actual fun platformModule() = module {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-fun dataStore(): DataStore<Preferences> = createDataStore(
+fun dataStore(path: String): DataStore<Preferences> = createDataStore(
     producePath = {
         val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
             directory = NSDocumentDirectory,
@@ -30,7 +32,7 @@ fun dataStore(): DataStore<Preferences> = createDataStore(
             create = false,
             error = null,
         )
-        requireNotNull(documentDirectory).path + "/${LocalDataStore.CreateNewLocation.path()}"
+        requireNotNull(documentDirectory).path + "/$path"
     }
 )
 

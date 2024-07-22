@@ -24,8 +24,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.core.component.inject
 import ui.component.ListView
 import ui.theme.AppTypography
 
@@ -94,18 +99,20 @@ fun SettingsScreen(
     )
 
     LaunchedEffect(uiState, lifecycleOwner) {
-        if (uiState.openAppInfo) {
-            viewModel.onAppInfoClicked(open = false)
-        }
-        if (uiState.openPrivacyPolicy) {
-            viewModel.onPrivacyPolicyClicked(open = false)
-        }
-        if (uiState.openSendFeedback) {
-            viewModel.onSendFeedbackClicked(open = false)
-        }
-        if (uiState.openRateUs) {
-            uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
-            viewModel.onRateUsClicked(open = false)
+        lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            if (uiState.openAppInfo) {
+                viewModel.onAppInfoClicked(open = false)
+            }
+            if (uiState.openPrivacyPolicy) {
+                viewModel.onPrivacyPolicyClicked(open = false)
+            }
+            if (uiState.openSendFeedback) {
+                viewModel.onSendFeedbackClicked(open = false)
+            }
+            if (uiState.openRateUs) {
+                uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
+                viewModel.onRateUsClicked(open = false)
+            }
         }
     }
 }

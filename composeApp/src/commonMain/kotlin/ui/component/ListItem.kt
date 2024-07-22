@@ -60,10 +60,7 @@ fun ListItemColumnLabel(
     labelColor: Color = MaterialTheme.colorScheme.onSurface,
     descriptionColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),

@@ -1,18 +1,18 @@
 package ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -30,7 +30,6 @@ fun RadioGroup(
     var selectedIndex by remember(initialIndex) { mutableStateOf(initialIndex) }
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         options.forEachIndexed { index, option ->
             val isSelected = index == selectedIndex
@@ -54,21 +53,19 @@ private fun RadioRow(
     option: RadioRowData,
     selected: () -> Unit = {},
 ) {
-    Box(
-        modifier = Modifier
-            .clickable { selected() }
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
-            .padding(8.dp),
+    Row(
+        modifier = Modifier.clickable { selected() }.padding(vertical = 8.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        ListItem(
-            label = { ListItemColumnLabel(label = option.label, description = option.description) },
-            endIcon = {
-                RadioButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    selected = isSelected,
-                    onClick = selected,
-                )
-            }
+        RadioButton(
+            selected = isSelected,
+            onClick = selected,
+        )
+        Text(
+            modifier = Modifier.weight(1F),
+            text = option.label,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -76,6 +73,5 @@ private fun RadioRow(
 data class RadioRowData(
     val id: String = "",
     val label: String,
-    val description: String? = null,
     val iconDrawableRes: Int? = null,
 )

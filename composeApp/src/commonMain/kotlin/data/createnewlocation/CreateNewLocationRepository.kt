@@ -5,11 +5,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import data.model.NewLocationData
+import data.utils.LocalDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.qualifier.named
 
 interface CreateNewLocationRepository {
     suspend fun saveName(value: String)
@@ -33,7 +35,7 @@ internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, Ko
         const val KEY_ZONE_ID = "ZoneId"
     }
 
-    private val dataStore: DataStore<Preferences> by inject()
+    private val dataStore: DataStore<Preferences> by inject(qualifier = named(LocalDataStore.CreateNewLocation.name))
 
     override suspend fun saveName(value: String) {
         dataStore.edit { it[stringPreferencesKey(KEY_NAME)] = value }
