@@ -60,8 +60,8 @@ private fun RadioRow(
             .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
             .padding(8.dp),
     ) {
-        ListView(
-            label = { ListViewColumnLabel(label = option.label, description = option.description) },
+        ListItem(
+            label = { ListItemColumnLabel(label = option.label, description = option.description) },
             endIcon = {
                 RadioButton(
                     modifier = Modifier.padding(horizontal = 8.dp),

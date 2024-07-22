@@ -15,14 +15,14 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ui.component.ListView
+import ui.component.ListItem
 import ui.theme.AppTypography
 import ui.theme.TwilightModifiers
 
 @Composable
 internal fun Theme(modifier: Modifier) {
     val label = "Theme"
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {
@@ -60,7 +60,7 @@ internal fun ThemeBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
 @Composable
 internal fun DateFormat(modifier: Modifier) {
     val label = "Date Format"
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {
@@ -98,7 +98,7 @@ internal fun DateFormatBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
 @Composable
 internal fun LocationType(modifier: Modifier) {
     val label = "Location Type"
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {

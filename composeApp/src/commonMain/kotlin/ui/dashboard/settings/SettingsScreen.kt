@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ui.component.ListViewGroup
+import ui.component.ListView
 import ui.theme.AppTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +51,7 @@ fun SettingsScreen(
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
             ) {
-                ListViewGroup(
+                ListView(
                     data = listOf(
                         { Theme(Modifier.clickable { viewModel.onThemeClicked(show = true) }) },
                         { DateFormat(Modifier.clickable { viewModel.onDateFormatClicked(show = true) }) },
@@ -66,7 +66,7 @@ fun SettingsScreen(
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
             ) {
-                ListViewGroup(
+                ListView(
                     data = listOf(
                         { AppInfo(Modifier.clickable { viewModel.onAppInfoClicked(open = true) }) },
                         { PrivacyPolicy(Modifier.clickable { viewModel.onPrivacyPolicyClicked(open = true) }) },

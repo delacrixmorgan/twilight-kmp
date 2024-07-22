@@ -10,13 +10,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import ui.component.ListView
+import ui.component.ListItem
 import ui.theme.TwilightModifiers
 
 @Composable
 internal fun AppInfo(modifier: Modifier) {
     val label = "App Info"
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {
@@ -39,7 +39,7 @@ internal fun AppInfo(modifier: Modifier) {
 @Composable
 internal fun PrivacyPolicy(modifier: Modifier) {
     val label = "Privacy Policy"
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {
@@ -62,7 +62,7 @@ internal fun PrivacyPolicy(modifier: Modifier) {
 @Composable
 internal fun SendFeedback(modifier: Modifier) {
     val label = "Send Feedback"
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {
@@ -86,7 +86,7 @@ internal fun SendFeedback(modifier: Modifier) {
 internal fun RateUs(modifier: Modifier) {
     val label = "Rate Us"
 
-    ListView(
+    ListItem(
         modifier = modifier,
         label = { Text(label) },
         startIcon = {

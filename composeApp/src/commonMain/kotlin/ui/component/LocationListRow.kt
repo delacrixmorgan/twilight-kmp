@@ -24,15 +24,15 @@ internal fun LocationListRow(
         modifier.clickable { it(location) }
     }
     Box(modifier = modifier) {
-        ListView(
+        ListItem(
             label = {
-                ListViewColumnLabel(
+                ListItemColumnLabel(
                     label = location.label,
                     description = location.regionName,
                 )
             },
             endLabel = {
-                ListViewColumnLabel(
+                ListItemColumnLabel(
                     label = location.timeRegion.localTime()
                 )
             }

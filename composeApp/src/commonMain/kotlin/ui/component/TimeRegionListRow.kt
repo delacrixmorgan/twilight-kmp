@@ -27,7 +27,7 @@ internal fun TimeRegionListRow(
             .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
             .padding(8.dp),
     ) {
-        ListView(
+        ListItem(
             startIcon = {
                 if (selected) {
                     Icon(
@@ -44,13 +44,13 @@ internal fun TimeRegionListRow(
                 }
             },
             label = {
-                ListViewColumnLabel(
+                ListItemColumnLabel(
                     label = timeRegion.city,
                     description = timeRegion.zone
                 )
             },
             endLabel = {
-                ListViewColumnLabel(
+                ListItemColumnLabel(
                     label = timeRegion.localTime()
                 )
             }
