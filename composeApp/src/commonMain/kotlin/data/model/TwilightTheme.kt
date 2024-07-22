@@ -3,5 +3,9 @@ package data.model
 enum class TwilightTheme {
     System,
     Light,
-    Dark
+    Dark;
+
+    companion object {
+        val Default = System
+    }
 }

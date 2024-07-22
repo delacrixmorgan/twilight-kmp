@@ -52,11 +52,16 @@ internal fun Theme(modifier: Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ThemeBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
+internal fun ThemeBottomSheet(
+    selectedTheme: TwilightTheme,
+    isVisible: Boolean,
+    onSelected: (TwilightTheme) -> Unit,
+    onDismissed: () -> Unit
+) {
     if (!isVisible) return
     val modalBottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismissed,
         sheetState = modalBottomSheetState,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -66,17 +71,18 @@ internal fun ThemeBottomSheet(isVisible: Boolean, onDismiss: () -> Unit) {
                 style = AppTypography.titleLarge
             )
             RadioGroup(
+                initialIndex = selectedTheme.ordinal,
                 options = TwilightTheme.entries.map {
                     RadioRowData(id = it.name, label = it.name)
                 },
-                onSelected = { index, id ->
-                    TwilightTheme.entries[index]
+                onSelected = { index, _ ->
+                    onSelected(TwilightTheme.entries[index])
                 }
             )
 
             Button(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                onClick = { onDismiss() },
+                onClick = { onDismissed() },
             ) {
                 Text("Done", modifier = Modifier.padding(vertical = 8.dp))
             }

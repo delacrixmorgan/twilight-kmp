@@ -1,21 +1,37 @@
 package ui.dashboard.settings
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import data.utils.LocalDataStore
+import androidx.lifecycle.viewModelScope
+import data.model.TwilightTheme
+import data.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.qualifier.named
 
 class SettingsViewModel : ViewModel(), KoinComponent {
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState
 
-    private val preferencesDataStore: DataStore<Preferences> by inject(qualifier = named(LocalDataStore.Preferences.name))
+    private val preferences: PreferencesRepository by inject()
+    val theme = mutableStateOf(TwilightTheme.Default)
+
+    init {
+        viewModelScope.launch {
+            loadData()
+        }
+    }
+
+    private suspend fun loadData() {
+        preferences.getTheme().collect { theme.value = it }
+    }
+
+    fun onThemeSelected(theme: TwilightTheme) {
+        viewModelScope.launch { preferences.saveTheme(theme) }
+    }
 
     fun onThemeClicked(show: Boolean) {
         _uiState.update { it.copy(showTheme = show) }

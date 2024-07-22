@@ -24,13 +24,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.koin.core.component.inject
 import ui.component.ListView
 import ui.theme.AppTypography
 
@@ -86,8 +83,10 @@ fun SettingsScreen(
 
     val uiState by viewModel.uiState.collectAsState()
     ThemeBottomSheet(
+        selectedTheme = viewModel.theme.value,
         isVisible = uiState.showTheme,
-        onDismiss = { viewModel.onThemeClicked(show = false) }
+        onSelected = { viewModel.onThemeSelected(it) },
+        onDismissed = { viewModel.onThemeClicked(show = false) }
     )
     DateFormatBottomSheet(
         isVisible = uiState.showDateFormat,
