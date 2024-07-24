@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import data.model.TwilightTheme
+import data.preferences.ThemePreference
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -85,13 +85,13 @@ private val darkScheme = darkColorScheme(
 
 @Composable
 fun AppTheme(
-    theme: TwilightTheme = TwilightTheme.Default,
+    theme: ThemePreference = ThemePreference.Default,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when (theme) {
-        TwilightTheme.System -> if (isSystemInDarkTheme()) darkScheme else lightScheme
-        TwilightTheme.Light -> lightScheme
-        TwilightTheme.Dark -> darkScheme
+        ThemePreference.System -> if (isSystemInDarkTheme()) darkScheme else lightScheme
+        ThemePreference.Light -> lightScheme
+        ThemePreference.Dark -> darkScheme
     }
     MaterialTheme(
         colorScheme = colorScheme,

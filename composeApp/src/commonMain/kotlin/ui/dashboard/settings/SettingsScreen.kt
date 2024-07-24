@@ -28,7 +28,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import data.preferences.DateFormatPreference
+import data.preferences.LocationTypePreference
+import data.preferences.ThemePreference
 import ui.component.ListView
+import ui.component.RadioGroupBottomSheet
+import ui.component.RadioRowData
 import ui.theme.AppTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,19 +87,31 @@ fun SettingsScreen(
     }
 
     val uiState by viewModel.uiState.collectAsState()
-    ThemeBottomSheet(
-        selectedTheme = viewModel.theme.value,
+    RadioGroupBottomSheet(
+        title = "Theme",
+        selectedIndex = viewModel.theme.value.ordinal,
+        items = ThemePreference.entries.map { RadioRowData(id = it.name, label = it.label) },
         isVisible = uiState.showTheme,
-        onSelected = { viewModel.onThemeSelected(it) },
+        onSelected = { selectedItem -> viewModel.onThemeSelected(ThemePreference.entries.first { it.name == selectedItem.id }) },
         onDismissed = { viewModel.onThemeClicked(show = false) }
     )
-    DateFormatBottomSheet(
+
+    RadioGroupBottomSheet(
+        title = "Date Format",
+        selectedIndex = viewModel.dateFormat.value.ordinal,
+        items = DateFormatPreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
         isVisible = uiState.showDateFormat,
-        onDismiss = { viewModel.onDateFormatClicked(show = false) }
+        onSelected = { selectedItem -> viewModel.onDateFormatSelected(DateFormatPreference.entries.first { it.name == selectedItem.id }) },
+        onDismissed = { viewModel.onDateFormatClicked(show = false) }
     )
-    LocationTypeBottomSheet(
+
+    RadioGroupBottomSheet(
+        title = "Location Type",
+        selectedIndex = viewModel.locationType.value.ordinal,
+        items = LocationTypePreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
         isVisible = uiState.showLocationType,
-        onDismiss = { viewModel.onLocationTypeClicked(show = false) }
+        onSelected = { selectedItem -> viewModel.onLocationTypeSelected(LocationTypePreference.entries.first { it.name == selectedItem.id }) },
+        onDismissed = { viewModel.onLocationTypeClicked(show = false) }
     )
 
     LaunchedEffect(uiState, lifecycleOwner) {

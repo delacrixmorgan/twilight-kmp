@@ -3,8 +3,10 @@ package ui.dashboard.settings
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.model.TwilightTheme
+import data.preferences.DateFormatPreference
+import data.preferences.LocationTypePreference
 import data.preferences.PreferencesRepository
+import data.preferences.ThemePreference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -17,28 +19,40 @@ class SettingsViewModel : ViewModel(), KoinComponent {
     val uiState: StateFlow<SettingsUiState> = _uiState
 
     private val preferences: PreferencesRepository by inject()
-    val theme = mutableStateOf(TwilightTheme.Default)
+    val theme = mutableStateOf(ThemePreference.Default)
+    val dateFormat = mutableStateOf(DateFormatPreference.Default)
+    val locationType = mutableStateOf(LocationTypePreference.Default)
 
     init {
+        loadPreferences()
+    }
+
+    private fun loadPreferences() {
         viewModelScope.launch {
-            loadData()
+            launch { preferences.getTheme().collect { theme.value = it } }
+            launch { preferences.getDateFormat().collect { dateFormat.value = it } }
+            launch { preferences.getLocationType().collect { locationType.value = it } }
         }
     }
 
-    private suspend fun loadData() {
-        preferences.getTheme().collect { theme.value = it }
-    }
-
-    fun onThemeSelected(theme: TwilightTheme) {
-        viewModelScope.launch { preferences.saveTheme(theme) }
+    fun onThemeSelected(item: ThemePreference) {
+        viewModelScope.launch { preferences.saveTheme(item) }
     }
 
     fun onThemeClicked(show: Boolean) {
         _uiState.update { it.copy(showTheme = show) }
     }
 
+    fun onDateFormatSelected(item: DateFormatPreference) {
+        viewModelScope.launch { preferences.saveDateFormat(item) }
+    }
+
     fun onDateFormatClicked(show: Boolean) {
         _uiState.update { it.copy(showDateFormat = show) }
+    }
+
+    fun onLocationTypeSelected(item: LocationTypePreference) {
+        viewModelScope.launch { preferences.saveLocationType(item) }
     }
 
     fun onLocationTypeClicked(show: Boolean) {

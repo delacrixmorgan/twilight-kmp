@@ -23,7 +23,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import data.model.TwilightTheme
+import data.preferences.ThemePreference
 import data.preferences.PreferencesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val theme = remember { mutableStateOf(TwilightTheme.Default) }
+            val theme = remember { mutableStateOf(ThemePreference.Default) }
             AppTheme(theme.value) {
                 Scaffold {
                     val insetModifier = Modifier
@@ -49,9 +49,9 @@ class MainActivity : ComponentActivity(), KoinComponent {
             SideEffect {
                 val window = (view.context as ComponentActivity).window
                 val isDarkTheme = when (theme.value) {
-                    TwilightTheme.System -> isSystemInDarkTheme()
-                    TwilightTheme.Light -> false
-                    TwilightTheme.Dark -> true
+                    ThemePreference.System -> isSystemInDarkTheme()
+                    ThemePreference.Light -> false
+                    ThemePreference.Dark -> true
                 }
                 WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
             }

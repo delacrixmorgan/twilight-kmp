@@ -6,15 +6,8 @@ import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
 
 object DateFormat {
-    val dayOfWeek = LocalDateTime.Format {
-        dayOfWeek(DayOfWeekNames.ENGLISH_FULL)
-    }
-    val date = LocalDateTime.Format {
-        dayOfMonth()
-        char(' ')
-        monthName(MonthNames.ENGLISH_FULL)
-    }
-    val twelfthHour = LocalDateTime.Format {
+    // 04:19 PM
+    val twelveHour = LocalDateTime.Format {
         amPmHour()
         char(':')
         minute()
@@ -22,12 +15,14 @@ object DateFormat {
         amPmMarker("AM", "PM")
     }
 
+    // 22:20
     val twentyFourHour = LocalDateTime.Format {
         hour()
         char(':')
         minute()
     }
 
+    // Thursday, 24 July
     val dayOfWeekDayMonth = LocalDateTime.Format {
         dayOfWeek(DayOfWeekNames.ENGLISH_FULL)
         char(',')

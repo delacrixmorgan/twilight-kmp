@@ -1,6 +1,7 @@
 package ui.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -61,17 +62,29 @@ private fun RadioRow(
             selected = isSelected,
             onClick = selected,
         )
-        Text(
+
+        Column(
             modifier = Modifier.weight(1F),
-            text = option.label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = option.label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            if (!option.description.isNullOrBlank()) {
+                Text(
+                    text = option.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
     }
 }
 
 data class RadioRowData(
     val id: String = "",
     val label: String,
-    val iconDrawableRes: Int? = null,
+    val description: String? = null,
 )
