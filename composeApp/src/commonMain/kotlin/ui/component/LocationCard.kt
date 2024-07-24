@@ -37,7 +37,7 @@ internal fun LocationCard(
     ) {
         Column(modifier = Modifier.weight(1F), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                text = location.label,
+                text = location.name,
                 style = MaterialTheme.typography.headlineLarge
             )
             AssistChip(

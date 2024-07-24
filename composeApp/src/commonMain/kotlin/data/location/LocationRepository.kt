@@ -42,7 +42,7 @@ internal class LocationRepositoryImpl : LocationRepository, KoinComponent {
     override suspend fun addLocation(location: Location) {
         queries?.insertItem(
             id = location.id,
-            label = location.label,
+            label = location.name,
             regionName = location.regionName,
             zoneIdString = location.zoneId
         )
@@ -50,7 +50,7 @@ internal class LocationRepositoryImpl : LocationRepository, KoinComponent {
 
     override suspend fun updateLocation(location: Location) {
         queries?.update(
-            label = location.label,
+            label = location.name,
             regionName = location.regionName,
             zoneIdString = location.zoneId,
             id = location.id

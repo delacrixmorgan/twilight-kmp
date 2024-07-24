@@ -27,7 +27,7 @@ internal fun LocationListRow(
         ListItem(
             label = {
                 ListItemColumnLabel(
-                    label = location.label,
+                    label = location.name,
                     description = location.regionName,
                 )
             },

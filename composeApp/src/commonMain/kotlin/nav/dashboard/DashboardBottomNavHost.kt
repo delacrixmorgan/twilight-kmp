@@ -21,8 +21,7 @@ fun DashboardBottomNavHost(
     NavHost(
         modifier = Modifier.fillMaxSize(),
         navController = bottomNavHostController,
-        startDestination = DashboardBottomNavItem.Settings.route
-//        startDestination = DashboardBottomNavItem.Today.route
+        startDestination = DashboardBottomNavItem.Today.route
     ) {
         composable<Routes.Today> { TodayScreen(Modifier.padding(innerPadding), navHostController) }
         composable<Routes.Settings> { SettingsScreen(Modifier.padding(innerPadding)) }

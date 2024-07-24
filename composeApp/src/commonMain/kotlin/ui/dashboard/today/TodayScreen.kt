@@ -58,6 +58,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import data.model.DateFormat
 import data.model.Location
+import data.preferences.DateFormatPreference
+import data.preferences.LocationTypePreference
 import data.utils.now
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -69,7 +71,6 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import nav.Routes
-import ui.dashboard.settings.SegmentedButtonType
 import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
 @Composable
@@ -86,7 +87,12 @@ fun TodayScreen(
         Row {
             Column(Modifier.weight(2F).padding(top = 16.dp)) {
                 viewModel.localLocation.value?.let { location ->
-                    NameTimeView(viewModel, location)
+                    NameTimeView(
+                        locationTypePreference = viewModel.locationTypePreference.value,
+                        dateFormatPreference = viewModel.dateFormatPreference.value,
+                        offsetInMinutes = viewModel.offsetInMinutes.value,
+                        location = location
+                    )
                     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
                 }
 
@@ -145,7 +151,7 @@ fun TodayScreen(
     ItemSettingsBottomSheet(
         isVisible = uiState.openItemSettings,
         location = viewModel.selectedLocation.value,
-        selectedType = viewModel.selectedType.value,
+        locationTypePreference = viewModel.locationTypePreference.value,
         onDelete = { viewModel.onItemDeleteClicked() },
         onDismiss = { viewModel.onItemClicked(click = false) },
     )
@@ -168,14 +174,14 @@ fun TodayScreen(
 internal fun ItemSettingsBottomSheet(
     isVisible: Boolean,
     location: Location?,
-    selectedType: SegmentedButtonType,
+    locationTypePreference: LocationTypePreference,
     onDelete: () -> Unit,
     onDismiss: () -> Unit
 ) {
     if (!isVisible) return
-    val label = when (selectedType) {
-        SegmentedButtonType.Place -> location?.regionName
-        SegmentedButtonType.Person -> location?.label
+    val label = when (locationTypePreference) {
+        LocationTypePreference.Place -> location?.regionName
+        LocationTypePreference.Person -> location?.name
     }
     AlertDialog(
         icon = { Icon(Icons.Rounded.Delete, contentDescription = "Delete") },
@@ -234,19 +240,30 @@ private fun EditableNameTimeView(viewModel: TodayViewModel, location: Location, 
             }
         },
     ) {
-        NameTimeView(viewModel, location)
+        NameTimeView(
+            locationTypePreference = viewModel.locationTypePreference.value,
+            dateFormatPreference = viewModel.dateFormatPreference.value,
+            offsetInMinutes = viewModel.offsetInMinutes.value,
+            location = location
+        )
     }
 }
 
 @Composable
-private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
-    val label = when (viewModel.selectedType.value) {
-        SegmentedButtonType.Place -> location.regionName
-        SegmentedButtonType.Person -> location.label
-    }
-    val offsetMinutes = DateTimePeriod(minutes = viewModel.offsetInMinutes.value)
+private fun NameTimeView(
+    locationTypePreference: LocationTypePreference,
+    dateFormatPreference: DateFormatPreference,
+    offsetInMinutes: Int,
+    location: Location,
+) {
+    val offsetMinutes = DateTimePeriod(minutes = offsetInMinutes)
     val adjustedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion)
-    val hourMinuteTime = adjustedTime.format(DateFormat.twentyFourHour)
+    val hourMinuteTime = adjustedTime.format(
+        when (dateFormatPreference) {
+            DateFormatPreference.Twelve -> DateFormat.twelveHour
+            DateFormatPreference.TwentyFour -> DateFormat.twentyFourHour
+        }
+    )
     val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
 
     Column(
@@ -254,7 +271,10 @@ private fun NameTimeView(viewModel: TodayViewModel, location: Location) {
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = label,
+            text = when (locationTypePreference) {
+                LocationTypePreference.Place -> location.regionName
+                LocationTypePreference.Person -> location.name
+            },
             style = MaterialTheme.typography.titleLarge
         )
         Text(

@@ -25,7 +25,7 @@ class SummaryViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             store.observeLocation().first().let {
                 location.value = Location(
-                    label = it.label ?: "",
+                    name = it.label ?: "",
                     regionName = it.regionName ?: "",
                     zoneId = it.zoneId ?: ""
                 )

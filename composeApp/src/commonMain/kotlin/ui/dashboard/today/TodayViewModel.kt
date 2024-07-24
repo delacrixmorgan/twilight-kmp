@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import data.createnewlocation.CreateNewLocationRepository
 import data.location.LocationRepository
 import data.model.Location
+import data.preferences.DateFormatPreference
+import data.preferences.LocationTypePreference
+import data.preferences.PreferencesRepository
 import data.timescape.TimescapeRepository
 import data.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,16 +20,16 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.dashboard.settings.SegmentedButtonType
 
 class TodayViewModel : ViewModel(), KoinComponent {
     companion object {
         const val SCROLL_WHEEL_PAGE_SIZE = 300
     }
 
-    private val store: CreateNewLocationRepository by inject()
+    private val preferences: PreferencesRepository by inject()
     private val repository: LocationRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
+    private val createNewLocationRepository: CreateNewLocationRepository by inject()
 
     private val _locations = MutableStateFlow<List<Location>>(emptyList())
     val locations: StateFlow<List<Location>>
@@ -35,14 +38,24 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     val offsetInMinutes = mutableStateOf(0)
     val isFirstItemVisible = mutableStateOf(false)
-    val selectedType = mutableStateOf(SegmentedButtonType.Person)
     val selectedLocation = mutableStateOf<Location?>(null)
+
+    val dateFormatPreference = mutableStateOf(DateFormatPreference.Default)
+    val locationTypePreference = mutableStateOf(LocationTypePreference.Default)
 
     private val _uiState = MutableStateFlow(TodayUiState())
     val uiState: StateFlow<TodayUiState> = _uiState
 
     init {
+        loadPreferences()
         loadLocations()
+    }
+
+    private fun loadPreferences() {
+        viewModelScope.launch {
+            launch { preferences.getDateFormat().collect { dateFormatPreference.value = it } }
+            launch { preferences.getLocationType().collect { locationTypePreference.value = it } }
+        }
     }
 
     private fun loadLocations() {
@@ -50,7 +63,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
         val currentTimeRegion = timescapeRepository.search(currentTimeZone.id)
         currentTimeRegion?.let {
             localLocation.value = Location(
-                label = it.city,
+                name = it.city,
                 regionName = it.city,
                 zoneId = it.zoneIdString
             )
@@ -82,7 +95,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     fun onAddLocationClicked(open: Boolean) {
         viewModelScope.launch {
-            store.clear()
+            createNewLocationRepository.clear()
             _uiState.update { it.copy(openAddLocation = open) }
         }
     }
