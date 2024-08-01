@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import nav.Routes
 import ui.common.observeEvent
 import ui.component.LocationListRow
+import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,14 +62,7 @@ fun SummaryScreen(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navHostController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = "Go back"
-                        )
-                    }
-                },
+                navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
             )
         },
         bottomBar = {

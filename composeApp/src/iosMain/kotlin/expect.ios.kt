@@ -12,6 +12,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUUID
 import platform.Foundation.NSUserDomainMask
+import platform.UIKit.UIApplication
 
 actual fun platformModule() = module {
     single(named(LocalDataStore.Preferences.name)) { dataStore(LocalDataStore.Preferences.path()) }
@@ -37,3 +38,12 @@ fun dataStore(path: String): DataStore<Preferences> = createDataStore(
 )
 
 actual fun randomUUID(): String = NSUUID().UUIDString()
+
+actual fun openUrlInBrowser(url: String) {
+    val nsUrl = NSURL.URLWithString(url)
+    if (nsUrl != null && UIApplication.sharedApplication.canOpenURL(nsUrl)) {
+        UIApplication.sharedApplication.openURL(nsUrl)
+    }
+}
+
+actual object AppContext

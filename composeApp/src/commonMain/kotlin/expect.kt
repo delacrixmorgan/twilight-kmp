@@ -15,3 +15,7 @@ fun createDataStore(
 expect fun platformModule(): Module
 
 expect fun randomUUID(): String
+
+expect fun openUrlInBrowser(url: String)
+
+expect object AppContext

@@ -1,4 +1,7 @@
+import android.app.Application
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
@@ -23,3 +26,27 @@ fun dataStore(context: Context, path: String): DataStore<Preferences> = createDa
 )
 
 actual fun randomUUID(): String = UUID.randomUUID().toString()
+
+actual fun openUrlInBrowser(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        data = Uri.parse(url)
+    }
+
+    AppContext.get().startActivity(intent)
+}
+
+actual object AppContext {
+    private lateinit var application: Application
+
+    @Synchronized
+    fun init(context: Context) {
+        check(!::application.isInitialized) { "Application already initialized" }
+        application = context.applicationContext as Application
+    }
+
+    fun get(): Context {
+        if (::application.isInitialized.not()) throw Exception("Application context isn't initialized")
+        return application.applicationContext
+    }
+}

@@ -20,4 +20,7 @@ sealed class Routes {
 
     @Serializable
     data object FormSummary : Routes()
+
+    @Serializable
+    data object AppInfo : Routes()
 }

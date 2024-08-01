@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,14 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import data.preferences.DateFormatPreference
 import data.preferences.LocationTypePreference
 import data.preferences.ThemePreference
+import nav.Routes
 import ui.component.ListView
 import ui.component.RadioGroupBottomSheet
 import ui.component.RadioRowData
@@ -40,6 +44,7 @@ import ui.theme.AppTypography
 @Composable
 fun SettingsScreen(
     modifier: Modifier,
+    navHostController: NavHostController,
     viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
@@ -83,6 +88,12 @@ fun SettingsScreen(
                     divider = { HorizontalDivider() }
                 )
             }
+            Spacer(Modifier.height(16.dp))
+            Text(
+                "2024.01 (1)",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
     }
 
@@ -118,6 +129,7 @@ fun SettingsScreen(
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
             if (uiState.openAppInfo) {
                 viewModel.onAppInfoClicked(open = false)
+                navHostController.navigate(Routes.AppInfo)
             }
             if (uiState.openPrivacyPolicy) {
                 viewModel.onPrivacyPolicyClicked(open = false)

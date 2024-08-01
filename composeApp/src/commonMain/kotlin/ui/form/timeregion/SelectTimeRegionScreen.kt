@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
@@ -51,6 +50,7 @@ import androidx.navigation.NavHostController
 import nav.Routes
 import ui.common.observeEvent
 import ui.component.TimeRegionListRow
+import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,14 +147,7 @@ private fun AppBar(
                 overflow = TextOverflow.Ellipsis
             )
         },
-        navigationIcon = {
-            IconButton(onClick = { navHostController.navigateUp() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = "Go back"
-                )
-            }
-        },
+        navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
         actions = {
             IconButton(onClick = { viewModel.searchMode.value = true }) {
                 Icon(
@@ -196,12 +189,7 @@ private fun SearchAppBar(
         },
         navigationIcon = {
             if (query.isNotBlank()) {
-                IconButton(onClick = { navHostController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = "Go back"
-                    )
-                }
+                NavigationBackIcon { navHostController.navigateUp() }
             } else {
                 IconButton(onClick = { viewModel.searchMode.value = false }) {
                     Icon(

@@ -39,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Routes
 import ui.common.observeEvent
+import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
 import ui.theme.DefaultColors
 
@@ -68,14 +69,7 @@ fun SetupNameScreen(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navHostController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = "Go back"
-                        )
-                    }
-                },
+                navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
             )
         },
         bottomBar = {

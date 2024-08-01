@@ -24,6 +24,6 @@ fun DashboardBottomNavHost(
         startDestination = DashboardBottomNavItem.Today.route
     ) {
         composable<Routes.Today> { TodayScreen(Modifier.padding(innerPadding), navHostController) }
-        composable<Routes.Settings> { SettingsScreen(Modifier.padding(innerPadding)) }
+        composable<Routes.Settings> { SettingsScreen(Modifier.padding(innerPadding), navHostController) }
     }
 }
