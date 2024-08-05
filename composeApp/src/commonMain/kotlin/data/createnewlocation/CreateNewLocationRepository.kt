@@ -14,10 +14,12 @@ import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
 interface CreateNewLocationRepository {
+    suspend fun saveID(value: String)
     suspend fun saveName(value: String)
     suspend fun saveRegionName(value: String)
     suspend fun saveZoneId(value: String)
 
+    fun getID(): Flow<String?>
     fun getName(): Flow<String?>
     fun getRegionName(): Flow<String?>
     fun getZoneId(): Flow<String?>
@@ -30,12 +32,17 @@ interface CreateNewLocationRepository {
 internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, KoinComponent {
 
     companion object {
+        const val KEY_ID = "ID"
         const val KEY_NAME = "Name"
         const val KEY_REGION_NAME = "RegionName"
         const val KEY_ZONE_ID = "ZoneId"
     }
 
     private val dataStore: DataStore<Preferences> by inject(qualifier = named(LocalDataStore.CreateNewLocation.name))
+
+    override suspend fun saveID(value: String) {
+        dataStore.edit { it[stringPreferencesKey(KEY_ID)] = value }
+    }
 
     override suspend fun saveName(value: String) {
         dataStore.edit { it[stringPreferencesKey(KEY_NAME)] = value }
@@ -49,6 +56,9 @@ internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, Ko
         dataStore.edit { it[stringPreferencesKey(KEY_ZONE_ID)] = value }
     }
 
+    override fun getID(): Flow<String?> =
+        dataStore.data.map { it[stringPreferencesKey(KEY_ID)] }
+
     override fun getName(): Flow<String?> =
         dataStore.data.map { it[stringPreferencesKey(KEY_NAME)] }
 
@@ -59,8 +69,8 @@ internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, Ko
         dataStore.data.map { it[stringPreferencesKey(KEY_ZONE_ID)] }
 
     override fun observeLocation(): Flow<NewLocationData> {
-        return combine(getName(), getRegionName(), getZoneId()) { name, regionName, zoneId ->
-            NewLocationData(name, regionName, zoneId)
+        return combine(getID(), getName(), getRegionName(), getZoneId()) { id, name, regionName, zoneId ->
+            NewLocationData(id, name, regionName, zoneId)
         }
     }
 

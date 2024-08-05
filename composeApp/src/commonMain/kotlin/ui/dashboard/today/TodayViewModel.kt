@@ -100,8 +100,20 @@ class TodayViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun onItemClicked(click: Boolean) {
-        _uiState.update { it.copy(openItemSettings = click) }
+    fun onEditSwiped(swiped: Boolean) {
+        viewModelScope.launch {
+            selectedLocation.value?.let {
+                createNewLocationRepository.saveID(it.id)
+                createNewLocationRepository.saveName(it.name)
+                createNewLocationRepository.saveRegionName(it.regionName)
+                createNewLocationRepository.saveZoneId(it.zoneId)
+            }
+            _uiState.update { it.copy(openEditLocation = swiped) }
+        }
+    }
+
+    fun onDeleteSwiped(swiped: Boolean) {
+        _uiState.update { it.copy(openDeleteConfirmation = swiped) }
     }
 
     fun onItemDeleteClicked() {
@@ -109,7 +121,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
             selectedLocation.value?.id?.let { locationId ->
                 repository.deleteLocation(locationId)
                 selectedLocation.value = null
-                _uiState.update { it.copy(openItemSettings = false) }
+                _uiState.update { it.copy(openDeleteConfirmation = false) }
             }
         }
     }
@@ -117,7 +129,8 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
 data class TodayUiState(
     val openAddLocation: Boolean = false,
-    val openItemSettings: Boolean = false,
+    val openEditLocation: Boolean = false,
+    val openDeleteConfirmation: Boolean = false,
 
     val scrollToTop: Boolean = false
 )

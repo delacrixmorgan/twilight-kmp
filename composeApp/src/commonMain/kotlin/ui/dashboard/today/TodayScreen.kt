@@ -97,15 +97,18 @@ fun TodayScreen(
                 }
 
                 val list by viewModel.locations.collectAsState()
-                LazyColumn(
-                    state = rememberLazyListState()
-                ) {
+                LazyColumn(state = rememberLazyListState()) {
                     items(count = list.size, key = { list[it].id }) { index ->
                         val location = list[index]
-                        EditableNameTimeView(viewModel, location, onDeleted = {
-                            viewModel.selectedLocation.value = it
-                            viewModel.onItemClicked(click = true)
-                        })
+                        EditableNameTimeView(viewModel, location,
+                            onEdit = {
+                                viewModel.selectedLocation.value = it
+                                viewModel.onEditSwiped(swiped = true)
+                            },
+                            onDelete = {
+                                viewModel.selectedLocation.value = it
+                                viewModel.onDeleteSwiped(swiped = true)
+                            })
                     }
                 }
                 Spacer(Modifier.height(32.dp))
@@ -149,17 +152,21 @@ fun TodayScreen(
 
     val uiState by viewModel.uiState.collectAsState()
     ItemSettingsBottomSheet(
-        isVisible = uiState.openItemSettings,
+        isVisible = uiState.openDeleteConfirmation,
         location = viewModel.selectedLocation.value,
         locationTypePreference = viewModel.locationTypePreference.value,
         onDelete = { viewModel.onItemDeleteClicked() },
-        onDismiss = { viewModel.onItemClicked(click = false) },
+        onDismiss = { viewModel.onDeleteSwiped(swiped = false) },
     )
 
     LaunchedEffect(uiState, lifecycleOwner) {
         if (uiState.openAddLocation) {
             navHostController.navigate(Routes.FormSelectTimeRegion)
             viewModel.onAddLocationClicked(open = false)
+        }
+        if (uiState.openEditLocation) {
+            navHostController.navigate(Routes.FormSelectTimeRegion)
+            viewModel.onEditSwiped(swiped = false)
         }
         if (uiState.scrollToTop) {
             coroutineScope.launch {
@@ -201,12 +208,17 @@ internal fun ItemSettingsBottomSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EditableNameTimeView(viewModel: TodayViewModel, location: Location, onDeleted: ((Location) -> Unit)) {
+private fun EditableNameTimeView(
+    viewModel: TodayViewModel,
+    location: Location,
+    onEdit: ((Location) -> Unit),
+    onDelete: ((Location) -> Unit)
+) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { state ->
             when (state) {
-                SwipeToDismissBoxValue.StartToEnd -> Unit
-                SwipeToDismissBoxValue.EndToStart -> onDeleted(location)
+                SwipeToDismissBoxValue.StartToEnd -> onEdit(location)
+                SwipeToDismissBoxValue.EndToStart -> onDelete(location)
                 SwipeToDismissBoxValue.Settled -> Unit
             }
             false
