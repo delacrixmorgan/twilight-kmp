@@ -25,13 +25,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import openUrlInBrowser
 import ui.component.ListItem
 import ui.component.ListItemColumnLabel
 import ui.component.ListView
@@ -72,14 +72,15 @@ fun AppInfoScreen(
     }
 
     val uiState by viewModel.uiState.collectAsState()
+    val uriHandler = LocalUriHandler.current
     LaunchedEffect(uiState, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
             if (uiState.openDeveloper) {
-                openUrlInBrowser("https://github.com/delacrixmorgan")
+                uriHandler.openUri("https://github.com/delacrixmorgan")
                 viewModel.onDeveloperClicked(show = false)
             }
             if (uiState.openSourceCode) {
-                openUrlInBrowser("https://github.com/delacrixmorgan/twilight-kmp")
+                uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp")
                 viewModel.onSourceCodeClicked(show = false)
             }
         }

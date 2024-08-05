@@ -1,5 +1,6 @@
 package ui.dashboard.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Feedback
@@ -14,10 +15,10 @@ import ui.component.ListItem
 import ui.theme.TwilightModifiers
 
 @Composable
-internal fun AppInfo(modifier: Modifier) {
+internal fun AppInfo(onClick: () -> Unit) {
     val label = "App Info"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -37,10 +38,10 @@ internal fun AppInfo(modifier: Modifier) {
 }
 
 @Composable
-internal fun PrivacyPolicy(modifier: Modifier) {
+internal fun PrivacyPolicy(onClick: () -> Unit) {
     val label = "Privacy Policy"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -60,10 +61,10 @@ internal fun PrivacyPolicy(modifier: Modifier) {
 }
 
 @Composable
-internal fun SendFeedback(modifier: Modifier) {
+internal fun SendFeedback(onClick: () -> Unit) {
     val label = "Send Feedback"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -83,11 +84,11 @@ internal fun SendFeedback(modifier: Modifier) {
 }
 
 @Composable
-internal fun RateUs(modifier: Modifier) {
+internal fun RateUs(onClick: () -> Unit) {
     val label = "Rate Us"
 
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(

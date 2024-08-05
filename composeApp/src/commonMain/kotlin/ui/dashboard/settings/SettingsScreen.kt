@@ -1,7 +1,6 @@
 package ui.dashboard.settings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -29,24 +26,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import data.preferences.DateFormatPreference
 import data.preferences.LocationTypePreference
 import data.preferences.ThemePreference
-import nav.Routes
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.component.ListView
 import ui.component.RadioGroupBottomSheet
 import ui.component.RadioRowData
+import ui.theme.AppTheme
 import ui.theme.AppTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     modifier: Modifier,
-    navHostController: NavHostController,
-    viewModel: SettingsViewModel = viewModel { SettingsViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    state: SettingsUiState,
+    onAction: (SettingsAction) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
     Scaffold(
@@ -65,9 +61,9 @@ fun SettingsScreen(
             ) {
                 ListView(
                     data = listOf(
-                        { Theme(Modifier.clickable { viewModel.onThemeClicked(show = true) }) },
-                        { DateFormat(Modifier.clickable { viewModel.onDateFormatClicked(show = true) }) },
-                        { LocationType(Modifier.clickable { viewModel.onLocationTypeClicked(show = true) }) },
+                        { Theme { onAction(SettingsAction.ToggleThemeVisibility(show = true)) } },
+                        { DateFormat { onAction(SettingsAction.ToggleDateFormatVisibility(show = true)) } },
+                        { LocationType { onAction(SettingsAction.ToggleLocationTypeVisibility(show = true)) } },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -80,10 +76,10 @@ fun SettingsScreen(
             ) {
                 ListView(
                     data = listOf(
-                        { AppInfo(Modifier.clickable { viewModel.onAppInfoClicked(open = true) }) },
-                        { PrivacyPolicy(Modifier.clickable { viewModel.onPrivacyPolicyClicked(open = true) }) },
-                        { SendFeedback(Modifier.clickable { viewModel.onSendFeedbackClicked(open = true) }) },
-                        { RateUs(Modifier.clickable { viewModel.onRateUsClicked(open = true) }) },
+                        { AppInfo { onAction(SettingsAction.OpenAppInfo(open = true)) } },
+                        { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy(open = true)) } },
+                        { SendFeedback { onAction(SettingsAction.OpenSendFeedback(open = true)) } },
+                        { RateUs { onAction(SettingsAction.OpenRateUs(open = true)) } },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -97,50 +93,63 @@ fun SettingsScreen(
         }
     }
 
-    val uiState by viewModel.uiState.collectAsState()
     RadioGroupBottomSheet(
         title = "Theme",
-        selectedIndex = viewModel.theme.value.ordinal,
+        selectedIndex = state.theme.ordinal,
         items = ThemePreference.entries.map { RadioRowData(id = it.name, label = it.label) },
-        isVisible = uiState.showTheme,
-        onSelected = { selectedItem -> viewModel.onThemeSelected(ThemePreference.entries.first { it.name == selectedItem.id }) },
-        onDismissed = { viewModel.onThemeClicked(show = false) }
+        isVisible = state.showTheme,
+        onSelected = { selectedItem ->
+            onAction(SettingsAction.OnThemeSelected(ThemePreference.entries.first { it.name == selectedItem.id }))
+        },
+        onDismissed = { onAction(SettingsAction.ToggleThemeVisibility(show = false)) }
     )
 
     RadioGroupBottomSheet(
         title = "Date Format",
-        selectedIndex = viewModel.dateFormat.value.ordinal,
+        selectedIndex = state.dateFormat.ordinal,
         items = DateFormatPreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
-        isVisible = uiState.showDateFormat,
-        onSelected = { selectedItem -> viewModel.onDateFormatSelected(DateFormatPreference.entries.first { it.name == selectedItem.id }) },
-        onDismissed = { viewModel.onDateFormatClicked(show = false) }
+        isVisible = state.showDateFormat,
+        onSelected = { selectedItem ->
+            onAction(SettingsAction.OnDateFormatSelected(DateFormatPreference.entries.first { it.name == selectedItem.id }))
+        },
+        onDismissed = { onAction(SettingsAction.ToggleDateFormatVisibility(show = false)) }
     )
 
     RadioGroupBottomSheet(
         title = "Location Type",
-        selectedIndex = viewModel.locationType.value.ordinal,
+        selectedIndex = state.locationType.ordinal,
         items = LocationTypePreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
-        isVisible = uiState.showLocationType,
-        onSelected = { selectedItem -> viewModel.onLocationTypeSelected(LocationTypePreference.entries.first { it.name == selectedItem.id }) },
-        onDismissed = { viewModel.onLocationTypeClicked(show = false) }
+        isVisible = state.showLocationType,
+        onSelected = { selectedItem ->
+            onAction(SettingsAction.OnLocationTypeSelected(LocationTypePreference.entries.first { it.name == selectedItem.id }))
+        },
+        onDismissed = { onAction(SettingsAction.ToggleLocationTypeVisibility(show = false)) }
     )
 
-    LaunchedEffect(uiState, lifecycleOwner) {
+    LaunchedEffect(state, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            if (uiState.openAppInfo) {
-                viewModel.onAppInfoClicked(open = false)
-                navHostController.navigate(Routes.AppInfo)
+            if (state.openPrivacyPolicy) {
+                uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp/blob/main/PRIVACY_POLICY.md")
+                onAction(SettingsAction.OpenPrivacyPolicy(open = false))
             }
-            if (uiState.openPrivacyPolicy) {
-                viewModel.onPrivacyPolicyClicked(open = false)
+            if (state.openSendFeedback) {
+                val email = "delacrixmorgan@gmail.com"
+                val subject = "Twilight - App Feedback"
+                uriHandler.openUri("mailto:$email?subject=$subject")
+                onAction(SettingsAction.OpenSendFeedback(open = false))
             }
-            if (uiState.openSendFeedback) {
-                viewModel.onSendFeedbackClicked(open = false)
-            }
-            if (uiState.openRateUs) {
+            if (state.openRateUs) {
                 uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
-                viewModel.onRateUsClicked(open = false)
+                onAction(SettingsAction.OpenRateUs(open = false))
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsScreenPreview() {
+    AppTheme {
+        SettingsScreen(Modifier, state = SettingsUiState(), onAction = {})
     }
 }

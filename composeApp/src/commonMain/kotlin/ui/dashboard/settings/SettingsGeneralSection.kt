@@ -1,5 +1,6 @@
 package ui.dashboard.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -13,10 +14,10 @@ import ui.component.ListItem
 import ui.theme.TwilightModifiers
 
 @Composable
-internal fun Theme(modifier: Modifier) {
+internal fun Theme(onClick: () -> Unit) {
     val label = "Theme"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -36,10 +37,10 @@ internal fun Theme(modifier: Modifier) {
 }
 
 @Composable
-internal fun DateFormat(modifier: Modifier) {
+internal fun DateFormat(onClick: () -> Unit) {
     val label = "Date Format"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(
@@ -59,10 +60,10 @@ internal fun DateFormat(modifier: Modifier) {
 }
 
 @Composable
-internal fun LocationType(modifier: Modifier) {
+internal fun LocationType(onClick: () -> Unit) {
     val label = "Location Type"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = { Text(label) },
         startIcon = {
             Icon(
