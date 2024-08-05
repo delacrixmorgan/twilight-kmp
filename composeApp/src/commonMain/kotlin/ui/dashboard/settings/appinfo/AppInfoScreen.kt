@@ -20,37 +20,37 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.component.ListItem
 import ui.component.ListItemColumnLabel
 import ui.component.ListView
 import ui.component.navigationIcon.NavigationBackIcon
+import ui.theme.AppTheme
 import ui.theme.AppTypography
 import ui.theme.TwilightModifiers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppInfoScreen(
-    navHostController: NavHostController,
-    viewModel: AppInfoViewModel = viewModel { AppInfoViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    uriHandler: UriHandler = LocalUriHandler.current,
+    state: AppInfoUiState,
+    onAction: (AppInfoAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("App Info", style = AppTypography.headlineMedium) },
-                navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
+                navigationIcon = { NavigationBackIcon { onAction(AppInfoAction.GoBack) } },
             )
         },
     ) { innerPadding ->
@@ -62,8 +62,8 @@ fun AppInfoScreen(
             ) {
                 ListView(
                     data = listOf(
-                        { Developer(Modifier.clickable { viewModel.onDeveloperClicked(show = true) }) },
-                        { SourceCode(Modifier.clickable { viewModel.onSourceCodeClicked(show = true) }) },
+                        { Developer { onAction(AppInfoAction.OpenDeveloper(show = true)) } },
+                        { SourceCode { onAction(AppInfoAction.OpenSourceCode(show = true)) } },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -71,28 +71,26 @@ fun AppInfoScreen(
         }
     }
 
-    val uiState by viewModel.uiState.collectAsState()
-    val uriHandler = LocalUriHandler.current
-    LaunchedEffect(uiState, lifecycleOwner) {
+    LaunchedEffect(state, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            if (uiState.openDeveloper) {
+            if (state.openDeveloper) {
                 uriHandler.openUri("https://github.com/delacrixmorgan")
-                viewModel.onDeveloperClicked(show = false)
+                onAction(AppInfoAction.OpenDeveloper(show = false))
             }
-            if (uiState.openSourceCode) {
+            if (state.openSourceCode) {
                 uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp")
-                viewModel.onSourceCodeClicked(show = false)
+                onAction(AppInfoAction.OpenSourceCode(show = false))
             }
         }
     }
 }
 
 @Composable
-private fun Developer(modifier: Modifier) {
+private fun Developer(onClick: () -> Unit) {
     val label = "Developer"
     val description = "Delacrix Morgan"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = {
             ListItemColumnLabel(
                 label = label,
@@ -117,11 +115,11 @@ private fun Developer(modifier: Modifier) {
 }
 
 @Composable
-private fun SourceCode(modifier: Modifier) {
+private fun SourceCode(onClick: () -> Unit) {
     val label = "Source Code"
     val description = "GitHub"
     ListItem(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick() },
         label = {
             ListItemColumnLabel(
                 label = label,
@@ -143,4 +141,12 @@ private fun SourceCode(modifier: Modifier) {
             )
         }
     )
+}
+
+@Preview
+@Composable
+private fun AppInfoScreenPreview() {
+    AppTheme {
+        AppInfoScreen(state = AppInfoUiState(), onAction = {})
+    }
 }

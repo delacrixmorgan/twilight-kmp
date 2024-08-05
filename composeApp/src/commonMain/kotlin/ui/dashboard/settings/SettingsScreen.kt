@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -41,17 +42,13 @@ import ui.theme.AppTypography
 fun SettingsScreen(
     modifier: Modifier,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    uriHandler: UriHandler = LocalUriHandler.current,
     state: SettingsUiState,
     onAction: (SettingsAction) -> Unit,
 ) {
-    val uriHandler = LocalUriHandler.current
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text("Settings", style = AppTypography.headlineMedium) },
-            )
-        },
+        topBar = { TopAppBar(title = { Text("Settings", style = AppTypography.headlineMedium) }) },
     ) { innerPadding ->
         Column(Modifier.fillMaxSize().padding(innerPadding).padding(16.dp)) {
             Box(
