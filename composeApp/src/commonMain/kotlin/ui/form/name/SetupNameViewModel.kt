@@ -17,6 +17,7 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
+    var isEditMode = mutableStateOf(false)
     var locationName = mutableStateOf("")
     val regionName = mutableStateOf("")
 
@@ -25,9 +26,12 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
 
     init {
         viewModelScope.launch {
-            locationName.value = store.getName().first() ?: ""
-            regionName.value = (store.getRegionName().first() ?: "").ifBlank { getFallbackRegionName() ?: "" }
-            continueButtonEnabled.value = locationName.value.isNotBlank()
+            store.observeLocation().first().let {
+                isEditMode.value = it.isEditMode
+                locationName.value = it.label ?: ""
+                regionName.value = (it.regionName ?: "").ifBlank { getFallbackRegionName() ?: "" }
+                continueButtonEnabled.value = locationName.value.isNotBlank()
+            }
         }
     }
 

@@ -142,7 +142,7 @@ private fun AppBar(
         ),
         title = {
             Text(
-                "Select your time zone",
+                if (viewModel.isEditMode.value) "Edit your time zone" else "Select your time zone",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

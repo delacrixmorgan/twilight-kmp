@@ -18,8 +18,8 @@ import ui.common.triggerEvent
 class SummaryViewModel : ViewModel(), KoinComponent {
     private val store: CreateNewLocationRepository by inject()
     private val locationRepository: LocationRepository by inject()
-    private val isEditMode = mutableStateOf(false)
 
+    val isEditMode = mutableStateOf(false)
     val location = mutableStateOf<Location?>(null)
     val openDashboardEvent = MutableSharedFlow<Event<Unit>>()
 

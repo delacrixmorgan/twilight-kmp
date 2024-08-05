@@ -68,14 +68,16 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
             _timeRegions.value
         )
 
+    var isEditMode = mutableStateOf(false)
     val selectedTimeRegion = mutableStateOf<TimeRegion?>(null)
     val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
     val continueButtonEnabled = mutableStateOf(false)
 
     init {
         viewModelScope.launch {
-            store.getZoneId().first()?.let {
-                selectedTimeRegion.value = timescapeRepository.search(it)
+            store.observeLocation().first().let {
+                isEditMode.value = it.isEditMode
+                selectedTimeRegion.value = timescapeRepository.search(it.zoneId)
                 continueButtonEnabled.value = true
             }
         }
