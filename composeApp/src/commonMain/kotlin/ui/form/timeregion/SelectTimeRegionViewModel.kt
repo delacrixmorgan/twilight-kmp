@@ -78,7 +78,7 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
             store.observeLocation().first().let {
                 isEditMode.value = it.isEditMode
                 selectedTimeRegion.value = timescapeRepository.search(it.zoneId)
-                continueButtonEnabled.value = true
+                continueButtonEnabled.value = selectedTimeRegion.value != null
             }
         }
     }
