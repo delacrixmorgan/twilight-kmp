@@ -19,6 +19,8 @@ class SummaryViewModel : ViewModel(), KoinComponent {
     private val store: LocationFormRepository by inject()
     private val locationRepository: LocationRepository by inject()
 
+
+    val title = mutableStateOf("")
     val isEditMode = mutableStateOf(false)
     val location = mutableStateOf<Location?>(null)
     val openDashboardEvent = MutableSharedFlow<Event<Unit>>()

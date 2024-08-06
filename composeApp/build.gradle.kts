@@ -60,6 +60,7 @@ kotlin {
             api(libs.kotlinx.datetime)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
+            implementation(libs.koin.composeVM)
             implementation(libs.sqldelight.coroutines.extensions)
 
             // Compose
