@@ -14,6 +14,7 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 import platformModule
 import ui.dashboard.settings.SettingsViewModel
+import ui.dashboard.today.TodayViewModel
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
@@ -28,6 +29,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     }
 
 fun viewModelModule() = module {
+    viewModel { TodayViewModel() }
     viewModel { SettingsViewModel() }
 }
 

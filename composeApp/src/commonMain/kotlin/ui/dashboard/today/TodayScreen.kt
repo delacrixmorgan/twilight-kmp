@@ -37,9 +37,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,8 +47,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import data.model.DateFormat
 import data.model.Location
 import data.preferences.DateFormatPreference
@@ -65,15 +61,14 @@ import kotlinx.datetime.format
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import nav.Routes
 import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 
 @Composable
 fun TodayScreen(
     modifier: Modifier,
-    navHostController: NavHostController,
-    viewModel: TodayViewModel = viewModel { TodayViewModel() },
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    state: TodayUiState,
+    onAction: (TodayAction) -> Unit,
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -81,44 +76,41 @@ fun TodayScreen(
     Box(modifier = modifier.fillMaxSize()) {
         Row {
             Column(Modifier.weight(2F).padding(top = 16.dp)) {
-                viewModel.localLocation.value?.let { location ->
+                state.localLocation?.let { location ->
                     NameTimeView(
-                        locationTypePreference = viewModel.locationTypePreference.value,
-                        dateFormatPreference = viewModel.dateFormatPreference.value,
-                        offsetInMinutes = viewModel.offsetInMinutes.value,
+                        locationTypePreference = state.locationTypePreference,
+                        dateFormatPreference = state.dateFormatPreference,
+                        offsetInMinutes = state.offsetInMinutes,
                         location = location
                     )
                     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
                 }
 
-                val list by viewModel.locations.collectAsState()
                 LazyColumn(state = rememberLazyListState()) {
-                    items(count = list.size, key = { list[it].id }) { index ->
-                        val location = list[index]
+                    items(count = state.locations.size, key = { state.locations[it].id }) { index ->
+                        val location = state.locations[index]
                         EditableNameTimeView(
-                            viewModel, location,
-                            onClick = {
-                                viewModel.selectedLocation.value = it
-                                viewModel.openEditLocationDialog(open = true)
-                            },
+                            state = state,
+                            location = location,
+                            onClick = { onAction(TodayAction.OnSelectedLocation(it)) },
                         )
                     }
                 }
                 Spacer(Modifier.height(32.dp))
             }
 
-            VerticalScrollWheel(Modifier.weight(1F), viewModel, listState)
+            VerticalScrollWheel(Modifier.weight(1F), listState, onAction)
         }
 
         Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
-            FloatingActionButton(onClick = { viewModel.onAddLocationClicked(open = true) }) {
+            FloatingActionButton(onClick = { onAction(TodayAction.OpenCreateLocation) }) {
                 Icon(Icons.Rounded.Add, "Add")
             }
         }
 
         Box(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp)) {
             AnimatedVisibility(
-                visible = !viewModel.isFirstItemVisible.value && viewModel.offsetInMinutes.value != 0,
+                visible = !state.isFirstItemVisible && state.offsetInMinutes != 0,
                 enter = slideInVertically(
                     initialOffsetY = { it / 2 },
                 ),
@@ -133,9 +125,9 @@ fun TodayScreen(
                         end = 12.dp,
                         bottom = 4.dp,
                     ),
-                    onClick = { viewModel.onScrollToTopClicked(click = true) }
+                    onClick = { onAction(TodayAction.OnScrollToTopClicked(scroll = true)) }
                 ) {
-                    Text("+ ${viewModel.formatOffSetInMinutes(viewModel.offsetInMinutes.value)}")
+                    Text(state.formattedOffSetInMinutes)
                     Spacer(Modifier.width(4.dp))
                     Icon(Icons.Rounded.ArrowUpward, "Up")
                 }
@@ -143,29 +135,20 @@ fun TodayScreen(
         }
     }
 
-    val uiState by viewModel.uiState.collectAsState()
     EditLocationDialog(
-        isVisible = uiState.openEditLocationDialog,
-        location = viewModel.selectedLocation.value,
-        locationTypePreference = viewModel.locationTypePreference.value,
-        onDelete = { viewModel.onItemDeleteClicked() },
-        onEdit = { viewModel.onItemEditClicked() },
-        onDismiss = { viewModel.openEditLocationDialog(open = false) }
+        isVisible = state.openEditLocationDialog,
+        location = state.selectedLocation,
+        locationTypePreference = state.locationTypePreference,
+        onDelete = { onAction(TodayAction.OnItemDeleteClicked) },
+        onEdit = { onAction(TodayAction.OnItemEditClicked) },
+        onDismiss = { onAction(TodayAction.CloseEditLocationDialog) }
     )
 
-    LaunchedEffect(uiState, lifecycleOwner) {
-        if (uiState.openAddLocation) {
-            navHostController.navigate(Routes.FormSelectTimeRegion)
-            viewModel.onAddLocationClicked(open = false)
-        }
-        if (uiState.openEditLocation) {
-            navHostController.navigate(Routes.FormSelectTimeRegion)
-            viewModel.openEditLocation(open = false)
-        }
-        if (uiState.scrollToTop) {
+    LaunchedEffect(state, lifecycleOwner) {
+        if (state.scrollToTop) {
             coroutineScope.launch {
                 listState.animateScrollToItem(0)
-                viewModel.onScrollToTopClicked(click = false)
+                onAction(TodayAction.OnScrollToTopClicked(scroll = false))
             }
         }
     }
@@ -201,14 +184,14 @@ internal fun EditLocationDialog(
 
 @Composable
 private fun EditableNameTimeView(
-    viewModel: TodayViewModel,
+    state: TodayUiState,
     location: Location,
     onClick: ((Location) -> Unit)
 ) {
     NameTimeView(
-        locationTypePreference = viewModel.locationTypePreference.value,
-        dateFormatPreference = viewModel.dateFormatPreference.value,
-        offsetInMinutes = viewModel.offsetInMinutes.value,
+        locationTypePreference = state.locationTypePreference,
+        dateFormatPreference = state.dateFormatPreference,
+        offsetInMinutes = state.offsetInMinutes,
         location = location,
         onClick = onClick
     )
@@ -262,8 +245,8 @@ private fun NameTimeView(
 @Composable
 private fun VerticalScrollWheel(
     modifier: Modifier,
-    viewModel: TodayViewModel,
     listState: LazyListState,
+    onAction: (TodayAction) -> Unit,
     buffer: Int = 2,
 ) {
     val items = remember { mutableStateListOf<Int>() }
@@ -302,8 +285,12 @@ private fun VerticalScrollWheel(
         snapshotFlow { listStateListener.value }
             .distinctUntilChanged()
             .collect { content ->
-                viewModel.offsetInMinutes.value = content.firstVisibleIndex
-                viewModel.isFirstItemVisible.value = content.isFirstItemVisible
+                onAction(
+                    TodayAction.OnTimeWheelScrolled(
+                        offsetInMinutes = content.firstVisibleIndex,
+                        isFirstItemVisible = content.isFirstItemVisible
+                    )
+                )
                 if (content.reachedBottom) items.addAll((items.size..items.size + SCROLL_WHEEL_PAGE_SIZE))
             }
     }

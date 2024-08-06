@@ -13,6 +13,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import ui.dashboard.settings.SettingsScreen
 import ui.dashboard.settings.SettingsViewModel
 import ui.dashboard.today.TodayScreen
+import ui.dashboard.today.TodayViewModel
 
 @Composable
 fun DashboardBottomNavHost(
@@ -26,7 +27,8 @@ fun DashboardBottomNavHost(
         startDestination = DashboardBottomNavItem.Today.route
     ) {
         composable<Routes.Today> {
-            TodayScreen(Modifier.padding(innerPadding), navHostController)
+            val viewModel = koinViewModel<TodayViewModel>()
+            TodayScreen(Modifier.padding(innerPadding), state = viewModel.state, onAction = { viewModel.onAction(navHostController, it) })
         }
         composable<Routes.Settings> {
             val viewModel = koinViewModel<SettingsViewModel>()
