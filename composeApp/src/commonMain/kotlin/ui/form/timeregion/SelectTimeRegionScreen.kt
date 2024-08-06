@@ -45,7 +45,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Routes
 import ui.common.observeEvent
@@ -57,7 +56,7 @@ import ui.keyboardShownState
 @Composable
 fun SelectTimeRegionScreen(
     navHostController: NavHostController,
-    viewModel: SelectTimeRegionViewModel = viewModel { SelectTimeRegionViewModel() },
+    viewModel: SelectTimeRegionViewModel,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())

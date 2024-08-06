@@ -33,7 +33,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import nav.Routes
 import ui.common.observeEvent
@@ -45,7 +44,7 @@ import ui.theme.DefaultColors
 @Composable
 fun SetupNameScreen(
     navHostController: NavHostController,
-    viewModel: SetupNameViewModel = viewModel { SetupNameViewModel() },
+    viewModel: SetupNameViewModel,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())

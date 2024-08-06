@@ -14,7 +14,11 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 import platformModule
 import ui.dashboard.settings.SettingsViewModel
+import ui.dashboard.settings.appinfo.AppInfoViewModel
 import ui.dashboard.today.TodayViewModel
+import ui.form.name.SetupNameViewModel
+import ui.form.summary.SummaryViewModel
+import ui.form.timeregion.SelectTimeRegionViewModel
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
@@ -29,8 +33,14 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     }
 
 fun viewModelModule() = module {
+    // Dashboard
     viewModel { TodayViewModel() }
     viewModel { SettingsViewModel() }
+    viewModel { AppInfoViewModel() }
+    // Form
+    viewModel { SetupNameViewModel() }
+    viewModel { SelectTimeRegionViewModel() }
+    viewModel { SummaryViewModel() }
 }
 
 fun serviceModule() = module {
