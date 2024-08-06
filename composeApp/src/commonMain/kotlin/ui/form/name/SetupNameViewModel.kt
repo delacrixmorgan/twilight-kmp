@@ -36,7 +36,6 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
     }
 
     private suspend fun getFallbackRegionName(): String? {
-        println("zoneId: ${store.getZoneId().first()}")
         return timescapeRepository.search(requireNotNull(store.getZoneId().first()))?.city
     }
 
