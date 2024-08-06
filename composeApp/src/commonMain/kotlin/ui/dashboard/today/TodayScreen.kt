@@ -5,6 +5,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,20 +25,15 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -50,7 +46,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
@@ -100,15 +95,13 @@ fun TodayScreen(
                 LazyColumn(state = rememberLazyListState()) {
                     items(count = list.size, key = { list[it].id }) { index ->
                         val location = list[index]
-                        EditableNameTimeView(viewModel, location,
-                            onEdit = {
+                        EditableNameTimeView(
+                            viewModel, location,
+                            onClick = {
                                 viewModel.selectedLocation.value = it
-                                viewModel.onEditSwiped(swiped = true)
+                                viewModel.openEditLocationDialog(open = true)
                             },
-                            onDelete = {
-                                viewModel.selectedLocation.value = it
-                                viewModel.onDeleteSwiped(swiped = true)
-                            })
+                        )
                     }
                 }
                 Spacer(Modifier.height(32.dp))
@@ -151,12 +144,13 @@ fun TodayScreen(
     }
 
     val uiState by viewModel.uiState.collectAsState()
-    ItemSettingsBottomSheet(
-        isVisible = uiState.openDeleteConfirmation,
+    EditLocationDialog(
+        isVisible = uiState.openEditLocationDialog,
         location = viewModel.selectedLocation.value,
         locationTypePreference = viewModel.locationTypePreference.value,
         onDelete = { viewModel.onItemDeleteClicked() },
-        onDismiss = { viewModel.onDeleteSwiped(swiped = false) },
+        onEdit = { viewModel.onItemEditClicked() },
+        onDismiss = { viewModel.openEditLocationDialog(open = false) }
     )
 
     LaunchedEffect(uiState, lifecycleOwner) {
@@ -166,7 +160,7 @@ fun TodayScreen(
         }
         if (uiState.openEditLocation) {
             navHostController.navigate(Routes.FormSelectTimeRegion)
-            viewModel.onEditSwiped(swiped = false)
+            viewModel.openEditLocation(open = false)
         }
         if (uiState.scrollToTop) {
             coroutineScope.launch {
@@ -178,11 +172,12 @@ fun TodayScreen(
 }
 
 @Composable
-internal fun ItemSettingsBottomSheet(
+internal fun EditLocationDialog(
     isVisible: Boolean,
     location: Location?,
     locationTypePreference: LocationTypePreference,
     onDelete: () -> Unit,
+    onEdit: () -> Unit,
     onDismiss: () -> Unit
 ) {
     if (!isVisible) return
@@ -191,74 +186,32 @@ internal fun ItemSettingsBottomSheet(
         LocationTypePreference.Person -> location?.name
     }
     AlertDialog(
-        icon = { Icon(Icons.Rounded.Delete, contentDescription = "Delete") },
-        title = { Text(text = "Delete Location") },
-        text = { Text(text = "Are you sure you want to delete the location \"$label\"?") },
-        onDismissRequest = { onDismiss() },
+        icon = { Icon(Icons.Rounded.Edit, contentDescription = "Edit") },
+        title = { Text(text = "Change Location") },
+        text = { Text(text = "What would you like to do to location \"$label\"?") },
         confirmButton = {
-            TextButton(onClick = { onDelete() }) {
-                Text("Delete", color = MaterialTheme.colorScheme.error)
-            }
+            TextButton(onClick = { onDelete() }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
         },
         dismissButton = {
-            TextButton(onClick = { onDismiss() }) { Text("Cancel") }
-        }
+            TextButton(onClick = { onEdit() }) { Text("Edit") }
+        },
+        onDismissRequest = { onDismiss() },
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EditableNameTimeView(
     viewModel: TodayViewModel,
     location: Location,
-    onEdit: ((Location) -> Unit),
-    onDelete: ((Location) -> Unit)
+    onClick: ((Location) -> Unit)
 ) {
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { state ->
-            when (state) {
-                SwipeToDismissBoxValue.StartToEnd -> onEdit(location)
-                SwipeToDismissBoxValue.EndToStart -> onDelete(location)
-                SwipeToDismissBoxValue.Settled -> Unit
-            }
-            false
-        }
+    NameTimeView(
+        locationTypePreference = viewModel.locationTypePreference.value,
+        dateFormatPreference = viewModel.dateFormatPreference.value,
+        offsetInMinutes = viewModel.offsetInMinutes.value,
+        location = location,
+        onClick = onClick
     )
-    val color = when (dismissState.dismissDirection) {
-        SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.tertiary
-        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
-        SwipeToDismissBoxValue.Settled -> Color.Transparent
-    }
-    SwipeToDismissBox(
-        state = dismissState,
-        backgroundContent = {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color)
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    Icons.Rounded.Edit,
-                    contentDescription = "Edit"
-                )
-                Spacer(modifier = Modifier)
-                Icon(
-                    Icons.Rounded.Delete,
-                    contentDescription = "Delete"
-                )
-            }
-        },
-    ) {
-        NameTimeView(
-            locationTypePreference = viewModel.locationTypePreference.value,
-            dateFormatPreference = viewModel.dateFormatPreference.value,
-            offsetInMinutes = viewModel.offsetInMinutes.value,
-            location = location
-        )
-    }
 }
 
 @Composable
@@ -267,6 +220,7 @@ private fun NameTimeView(
     dateFormatPreference: DateFormatPreference,
     offsetInMinutes: Int,
     location: Location,
+    onClick: ((Location) -> Unit)? = null,
 ) {
     val offsetMinutes = DateTimePeriod(minutes = offsetInMinutes)
     val adjustedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion)
@@ -279,7 +233,11 @@ private fun NameTimeView(
     val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
 
     Column(
-        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .then(if (onClick != null) Modifier.clickable { onClick(location) } else Modifier)
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(

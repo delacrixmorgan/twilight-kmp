@@ -3,8 +3,8 @@ package ui.dashboard.today
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.locationform.LocationFormRepository
 import data.location.LocationRepository
+import data.locationform.LocationFormRepository
 import data.model.Location
 import data.preferences.DateFormatPreference
 import data.preferences.LocationTypePreference
@@ -100,7 +100,15 @@ class TodayViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun onEditSwiped(swiped: Boolean) {
+    fun openEditLocationDialog(open: Boolean) {
+        _uiState.update { it.copy(openEditLocationDialog = open) }
+    }
+
+    fun openEditLocation(open: Boolean){
+        _uiState.update { it.copy(openEditLocation = open) }
+    }
+
+    fun onItemEditClicked() {
         viewModelScope.launch {
             selectedLocation.value?.let {
                 locationFormRepository.saveID(it.id)
@@ -108,12 +116,13 @@ class TodayViewModel : ViewModel(), KoinComponent {
                 locationFormRepository.saveRegionName(it.regionName)
                 locationFormRepository.saveZoneId(it.zoneId)
             }
-            _uiState.update { it.copy(openEditLocation = swiped) }
+            _uiState.update {
+                it.copy(
+                    openEditLocation = true,
+                    openEditLocationDialog = false
+                )
+            }
         }
-    }
-
-    fun onDeleteSwiped(swiped: Boolean) {
-        _uiState.update { it.copy(openDeleteConfirmation = swiped) }
     }
 
     fun onItemDeleteClicked() {
@@ -121,7 +130,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
             selectedLocation.value?.id?.let { locationId ->
                 repository.deleteLocation(locationId)
                 selectedLocation.value = null
-                _uiState.update { it.copy(openDeleteConfirmation = false) }
+                _uiState.update { it.copy(openEditLocationDialog = false) }
             }
         }
     }
@@ -130,7 +139,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
 data class TodayUiState(
     val openAddLocation: Boolean = false,
     val openEditLocation: Boolean = false,
-    val openDeleteConfirmation: Boolean = false,
+    val openEditLocationDialog: Boolean = false,
 
     val scrollToTop: Boolean = false
 )
