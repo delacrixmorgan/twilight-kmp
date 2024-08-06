@@ -1,8 +1,8 @@
 package di
 
 import com.delacrixmorgan.twilight.TwilightDatabase
-import data.createnewlocation.CreateNewLocationRepository
-import data.createnewlocation.CreateNewLocationRepositoryImpl
+import data.locationform.LocationFormRepository
+import data.locationform.LocationFormRepositoryImpl
 import data.location.LocationRepository
 import data.location.LocationRepositoryImpl
 import data.preferences.PreferencesRepository
@@ -29,10 +29,10 @@ fun serviceModule() = module {
 }
 
 fun repositoryModule(enableNetworkLogs: Boolean) = module {
-    single<CreateNewLocationRepository> { CreateNewLocationRepositoryImpl() }
+    single<TimescapeRepository> { TimescapeRepository() }
     single<PreferencesRepository> { PreferencesRepositoryImpl() }
     single<LocationRepository> { LocationRepositoryImpl() }
-    single<TimescapeRepository> { TimescapeRepository() }
+    single<LocationFormRepository> { LocationFormRepositoryImpl() }
 }
 
 fun mapperModule() = module {

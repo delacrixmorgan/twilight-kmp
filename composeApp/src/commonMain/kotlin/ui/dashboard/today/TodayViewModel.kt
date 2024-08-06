@@ -3,7 +3,7 @@ package ui.dashboard.today
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.createnewlocation.CreateNewLocationRepository
+import data.locationform.LocationFormRepository
 import data.location.LocationRepository
 import data.model.Location
 import data.preferences.DateFormatPreference
@@ -29,7 +29,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
     private val preferences: PreferencesRepository by inject()
     private val repository: LocationRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
-    private val createNewLocationRepository: CreateNewLocationRepository by inject()
+    private val locationFormRepository: LocationFormRepository by inject()
 
     private val _locations = MutableStateFlow<List<Location>>(emptyList())
     val locations: StateFlow<List<Location>>
@@ -95,7 +95,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     fun onAddLocationClicked(open: Boolean) {
         viewModelScope.launch {
-            createNewLocationRepository.clear()
+            locationFormRepository.clear()
             _uiState.update { it.copy(openAddLocation = open) }
         }
     }
@@ -103,10 +103,10 @@ class TodayViewModel : ViewModel(), KoinComponent {
     fun onEditSwiped(swiped: Boolean) {
         viewModelScope.launch {
             selectedLocation.value?.let {
-                createNewLocationRepository.saveID(it.id)
-                createNewLocationRepository.saveName(it.name)
-                createNewLocationRepository.saveRegionName(it.regionName)
-                createNewLocationRepository.saveZoneId(it.zoneId)
+                locationFormRepository.saveID(it.id)
+                locationFormRepository.saveName(it.name)
+                locationFormRepository.saveRegionName(it.regionName)
+                locationFormRepository.saveZoneId(it.zoneId)
             }
             _uiState.update { it.copy(openEditLocation = swiped) }
         }

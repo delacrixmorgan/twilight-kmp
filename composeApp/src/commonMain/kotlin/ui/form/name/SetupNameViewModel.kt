@@ -3,7 +3,7 @@ package ui.form.name
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.createnewlocation.CreateNewLocationRepository
+import data.locationform.LocationFormRepository
 import data.timescape.TimescapeRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,7 @@ import ui.common.Event
 import ui.common.triggerEvent
 
 class SetupNameViewModel : ViewModel(), KoinComponent {
-    private val store: CreateNewLocationRepository by inject()
+    private val store: LocationFormRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
     var isEditMode = mutableStateOf(false)

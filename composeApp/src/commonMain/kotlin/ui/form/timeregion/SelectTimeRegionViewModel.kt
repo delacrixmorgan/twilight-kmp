@@ -3,7 +3,7 @@ package ui.form.timeregion
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.createnewlocation.CreateNewLocationRepository
+import data.locationform.LocationFormRepository
 import data.model.TimeRegion
 import data.timescape.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
@@ -31,7 +31,7 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
         private const val TIMEOUT_IN_MILLISECONDS = 5_000L
     }
 
-    private val store: CreateNewLocationRepository by inject()
+    private val store: LocationFormRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
     private val _query = MutableStateFlow("")

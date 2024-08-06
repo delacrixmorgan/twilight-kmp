@@ -1,4 +1,4 @@
-package data.createnewlocation
+package data.locationform
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -13,7 +13,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 
-interface CreateNewLocationRepository {
+interface LocationFormRepository {
     suspend fun saveID(value: String)
     suspend fun saveName(value: String)
     suspend fun saveRegionName(value: String)
@@ -29,13 +29,13 @@ interface CreateNewLocationRepository {
     suspend fun clear()
 }
 
-internal class CreateNewLocationRepositoryImpl : CreateNewLocationRepository, KoinComponent {
+internal class LocationFormRepositoryImpl : LocationFormRepository, KoinComponent {
 
     companion object {
-        const val KEY_ID = "ID"
-        const val KEY_NAME = "Name"
-        const val KEY_REGION_NAME = "RegionName"
-        const val KEY_ZONE_ID = "ZoneId"
+        const val KEY_ID = "vrYeumMjGctxQbwKqapb"
+        const val KEY_NAME = "jpdDoCQTqeJrGsnaQcBW"
+        const val KEY_REGION_NAME = "VzDMLXFKRseRmWRBEFuX"
+        const val KEY_ZONE_ID = "XPXkEZAfgQPLvDsvaHAZ"
     }
 
     private val dataStore: DataStore<Preferences> by inject(qualifier = named(LocalDataStore.CreateNewLocation.name))
