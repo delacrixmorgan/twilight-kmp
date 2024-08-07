@@ -15,3 +15,7 @@ fun createDataStore(
 expect fun platformModule(): Module
 
 expect fun randomUUID(): String
+
+expect fun getVersionCode(): String
+
+expect fun getVersionName(): String

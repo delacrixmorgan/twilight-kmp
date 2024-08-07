@@ -10,6 +10,8 @@ import data.preferences.DateFormatPreference
 import data.preferences.LocationTypePreference
 import data.preferences.PreferencesRepository
 import data.preferences.ThemePreference
+import getVersionCode
+import getVersionName
 import kotlinx.coroutines.launch
 import nav.Routes
 import org.koin.core.component.KoinComponent
@@ -23,6 +25,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
     private val preferences: PreferencesRepository by inject()
 
     init {
+        state = state.copy(version = "${getVersionName()} (${getVersionCode()})")
         loadPreferences()
     }
 
@@ -71,6 +74,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 }
 
 data class SettingsUiState(
+    val version: String = "",
     val theme: ThemePreference = ThemePreference.Default,
     val dateFormat: DateFormatPreference = DateFormatPreference.Default,
     val locationType: LocationTypePreference = LocationTypePreference.Default,

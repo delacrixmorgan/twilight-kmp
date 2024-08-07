@@ -7,6 +7,7 @@ import di.TwilightDatabaseWrapper
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import platform.Foundation.NSBundle
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
@@ -37,3 +38,11 @@ fun dataStore(path: String): DataStore<Preferences> = createDataStore(
 )
 
 actual fun randomUUID(): String = NSUUID().UUIDString()
+
+actual fun getVersionCode(): String {
+    return NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleVersion") as? String ?: "Unknown"
+}
+
+actual fun getVersionName(): String {
+    return NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as? String ?: "Unknown"
+}

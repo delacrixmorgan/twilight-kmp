@@ -8,6 +8,7 @@ import di.TwilightDatabaseWrapper
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.UUID
+import com.delacrixmorgan.twilight.BuildConfig
 
 actual fun platformModule() = module {
     single(named(LocalDataStore.Preferences.name)) { dataStore(get(), LocalDataStore.Preferences.path()) }
@@ -23,3 +24,11 @@ fun dataStore(context: Context, path: String): DataStore<Preferences> = createDa
 )
 
 actual fun randomUUID(): String = UUID.randomUUID().toString()
+
+actual fun getVersionCode(): String {
+    return BuildConfig.VERSION_CODE.toString()
+}
+
+actual fun getVersionName(): String {
+    return BuildConfig.VERSION_NAME
+}

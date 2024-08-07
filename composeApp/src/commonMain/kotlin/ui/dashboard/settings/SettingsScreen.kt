@@ -82,8 +82,9 @@ fun SettingsScreen(
                 )
             }
             Spacer(Modifier.height(16.dp))
+
             Text(
-                "2024.01 (1)",
+                state.version,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
