@@ -69,7 +69,7 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
         )
 
     val isEditMode = mutableStateOf(false)
-    var selectedTimeRegion: TimeRegion? = null
+    val selectedTimeRegion = mutableStateOf<TimeRegion?>(null)
     val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
     val continueButtonEnabled = mutableStateOf(false)
 
@@ -77,8 +77,8 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             store.observeLocation().first().let {
                 isEditMode.value = it.isEditMode
-                selectedTimeRegion = timescapeRepository.search(it.zoneId)
-                continueButtonEnabled.value = selectedTimeRegion != null
+                selectedTimeRegion.value = timescapeRepository.search(it.zoneId)
+                continueButtonEnabled.value = selectedTimeRegion.value != null
             }
         }
     }
@@ -88,21 +88,18 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     }
 
     fun onTimeRegionSelected(timeRegion: TimeRegion) {
-        this.selectedTimeRegion = timeRegion
+        selectedTimeRegion.value = timeRegion
         continueButtonEnabled.value = true
     }
 
     fun onContinueClicked() {
         viewModelScope.launch {
-            store.saveZoneId(requireNotNull(selectedTimeRegion?.zoneIdString))
+            store.saveZoneId(requireNotNull(selectedTimeRegion.value?.zoneIdString))
             openSetupNameEvent.triggerEvent()
         }
     }
 
     private fun List<TimeRegion>.sorted(): List<TimeRegion> = sortedWith(
-        compareBy(
-            { it.zoneIdString != selectedTimeRegion?.zoneIdString },
-            { it.zoneIdString !in favouriteTimeRegion }
-        )
+        compareBy { it.zoneIdString !in favouriteTimeRegion }
     )
 }

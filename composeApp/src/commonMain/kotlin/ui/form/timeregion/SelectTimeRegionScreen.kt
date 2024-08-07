@@ -35,10 +35,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -50,7 +52,6 @@ import nav.Routes
 import ui.common.observeEvent
 import ui.component.TimeRegionListRow
 import ui.component.navigationIcon.NavigationBackIcon
-import ui.keyboardShownState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,8 +62,6 @@ fun SelectTimeRegionScreen(
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val query by viewModel.query.collectAsState()
-    val localFocusManager = LocalFocusManager.current
-    if (!keyboardShownState().value) localFocusManager.clearFocus()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -113,7 +112,7 @@ fun SelectTimeRegionScreen(
                     val item = list[index]
                     TimeRegionListRow(
                         timeRegion = item,
-                        selected = viewModel.selectedTimeRegion?.zoneIdString == item.zoneIdString
+                        selected = viewModel.selectedTimeRegion.value?.zoneIdString == item.zoneIdString
                     ) { viewModel.onTimeRegionSelected(it) }
                 }
             }
@@ -166,10 +165,11 @@ private fun SearchAppBar(
     navHostController: NavHostController,
     viewModel: SelectTimeRegionViewModel,
 ) {
+    val focusRequester = remember { FocusRequester() }
     TopAppBar(
         title = {
             TextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
                 value = query,
@@ -199,4 +199,7 @@ private fun SearchAppBar(
             }
         },
     )
+    LaunchedEffect(viewModel.searchMode) {
+        if (viewModel.searchMode.value) focusRequester.requestFocus()
+    }
 }
