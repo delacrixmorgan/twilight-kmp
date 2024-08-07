@@ -3,10 +3,8 @@ package ui.dashboard.today
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,8 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -36,12 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -52,7 +43,6 @@ import data.model.Location
 import data.preferences.DateFormatPreference
 import data.preferences.LocationFormatPreference
 import data.utils.now
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.LocalDateTime
@@ -61,7 +51,7 @@ import kotlinx.datetime.format
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
+import ui.component.VerticalScrollWheel
 
 @Composable
 fun TodayScreen(
@@ -99,7 +89,13 @@ fun TodayScreen(
                 Spacer(Modifier.height(32.dp))
             }
 
-            VerticalScrollWheel(Modifier.weight(1F), listState, onAction)
+            VerticalScrollWheel(
+                modifier = Modifier.weight(1F),
+                listState = listState,
+                onScrolled = { offsetInMinutes, isFirstItemVisible ->
+                    onAction(TodayAction.OnTimeWheelScrolled(offsetInMinutes, isFirstItemVisible))
+                }
+            )
         }
 
         Box(modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
@@ -240,64 +236,3 @@ private fun NameTimeView(
         )
     }
 }
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun VerticalScrollWheel(
-    modifier: Modifier,
-    listState: LazyListState,
-    onAction: (TodayAction) -> Unit,
-    buffer: Int = 2,
-) {
-    val items = remember { mutableStateListOf<Int>() }
-
-    LazyColumn(
-        modifier = modifier.fillMaxSize().padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-        horizontalAlignment = Alignment.End,
-        state = listState,
-        flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
-    ) {
-        items(items) { index ->
-            val width = if (index % 3 == 0) 32.dp else 16.dp
-            HorizontalDivider(
-                Modifier.width(width),
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        }
-    }
-
-    val listStateListener: State<InfiniteListContent> = remember {
-        derivedStateOf {
-            val layoutInfo = listState.layoutInfo
-            val totalItemsNumber = layoutInfo.totalItemsCount
-            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
-
-            InfiniteListContent(
-                firstVisibleIndex = listState.firstVisibleItemIndex,
-                isFirstItemVisible = listState.firstVisibleItemIndex == 0,
-                reachedBottom = lastVisibleItemIndex > (totalItemsNumber - buffer)
-            )
-        }
-    }
-
-    LaunchedEffect(listState) {
-        snapshotFlow { listStateListener.value }
-            .distinctUntilChanged()
-            .collect { content ->
-                onAction(
-                    TodayAction.OnTimeWheelScrolled(
-                        offsetInMinutes = content.firstVisibleIndex,
-                        isFirstItemVisible = content.isFirstItemVisible
-                    )
-                )
-                if (content.reachedBottom) items.addAll((items.size..items.size + SCROLL_WHEEL_PAGE_SIZE))
-            }
-    }
-}
-
-data class InfiniteListContent(
-    val firstVisibleIndex: Int,
-    val isFirstItemVisible: Boolean,
-    val reachedBottom: Boolean,
-)
