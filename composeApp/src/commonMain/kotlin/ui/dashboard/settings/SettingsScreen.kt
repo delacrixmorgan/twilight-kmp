@@ -74,9 +74,9 @@ fun SettingsScreen(
                 ListView(
                     data = listOf(
                         { AppInfo { onAction(SettingsAction.OpenAppInfo) } },
-                        { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy) } },
-                        { SendFeedback { onAction(SettingsAction.OpenSendFeedback) } },
-                        { RateUs { onAction(SettingsAction.OpenRateUs) } },
+                        { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy(open = true)) } },
+                        { SendFeedback { onAction(SettingsAction.OpenSendFeedback(open = true)) } },
+                        { RateUs { onAction(SettingsAction.OpenRateUs(open = true)) } },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -127,17 +127,17 @@ fun SettingsScreen(
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
             if (state.openPrivacyPolicy) {
                 uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp/blob/main/PRIVACY_POLICY.md")
-                onAction(SettingsAction.OpenPrivacyPolicy)
+                onAction(SettingsAction.OpenPrivacyPolicy(open = false))
             }
             if (state.openSendFeedback) {
                 val email = "delacrixmorgan@gmail.com"
                 val subject = "Twilight - App Feedback"
                 uriHandler.openUri("mailto:$email?subject=$subject")
-                onAction(SettingsAction.OpenSendFeedback)
+                onAction(SettingsAction.OpenSendFeedback(open = false))
             }
             if (state.openRateUs) {
                 uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
-                onAction(SettingsAction.OpenRateUs)
+                onAction(SettingsAction.OpenRateUs(open = false))
             }
         }
     }

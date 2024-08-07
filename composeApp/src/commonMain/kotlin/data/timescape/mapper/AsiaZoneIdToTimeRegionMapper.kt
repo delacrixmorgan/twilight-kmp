@@ -143,7 +143,7 @@ class AsiaZoneIdToTimeRegionMapper : Mapper<List<String>, List<TimeRegion>> {
                 zoneIdString, region,
                 country = listOf("India", "IN", "\uD83C\uDDEE\uD83C\uDDF3"),
                 states = emptyList(),
-                cities = listOf("Mumbai", "Delhi", "Bengaluru", "Kolkata", "Chennai", "Hyderabad", "Pune", "Ahmedabad", "Surat", "Jaipur"),
+                cities = listOf("Mumbai", "New Delhi", "Bengaluru", "Kolkata", "Chennai", "Hyderabad", "Pune", "Ahmedabad", "Surat", "Jaipur"),
             )
             "$region/Kathmandu" -> TimeRegion(
                 zoneIdString, region,

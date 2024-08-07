@@ -49,13 +49,13 @@ class SettingsViewModel : ViewModel(), KoinComponent {
                 navHostController.navigate(Routes.AppInfo)
             }
             is SettingsAction.OpenPrivacyPolicy -> {
-                state = state.copy(openPrivacyPolicy = false)
+                state = state.copy(openPrivacyPolicy = action.open)
             }
             is SettingsAction.OpenRateUs -> {
-                state = state.copy(openRateUs = false)
+                state = state.copy(openRateUs = action.open)
             }
             is SettingsAction.OpenSendFeedback -> {
-                state = state.copy(openSendFeedback = false)
+                state = state.copy(openSendFeedback = action.open)
             }
             is SettingsAction.OnThemeSelected -> {
                 viewModelScope.launch { preferences.saveTheme(action.theme) }
@@ -90,9 +90,9 @@ sealed interface SettingsAction {
     data class ToggleLocationTypeVisibility(val show: Boolean) : SettingsAction
 
     data object OpenAppInfo : SettingsAction
-    data object OpenPrivacyPolicy : SettingsAction
-    data object OpenSendFeedback : SettingsAction
-    data object OpenRateUs : SettingsAction
+    data class OpenPrivacyPolicy(val open: Boolean) : SettingsAction
+    data class OpenSendFeedback(val open: Boolean) : SettingsAction
+    data class OpenRateUs(val open: Boolean) : SettingsAction
 
     data class OnThemeSelected(val theme: ThemePreference) : SettingsAction
     data class OnDateFormatSelected(val dateFormat: DateFormatPreference) : SettingsAction
