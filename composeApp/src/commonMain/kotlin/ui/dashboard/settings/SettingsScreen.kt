@@ -28,7 +28,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import data.preferences.DateFormatPreference
-import data.preferences.LocationTypePreference
+import data.preferences.LocationFormatPreference
 import data.preferences.ThemePreference
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.component.ListView
@@ -60,7 +60,7 @@ fun SettingsScreen(
                     data = listOf(
                         { Theme { onAction(SettingsAction.ToggleThemeVisibility(show = true)) } },
                         { DateFormat { onAction(SettingsAction.ToggleDateFormatVisibility(show = true)) } },
-                        { LocationType { onAction(SettingsAction.ToggleLocationTypeVisibility(show = true)) } },
+                        { LocationFormat { onAction(SettingsAction.ToggleLocationFormatVisibility(show = true)) } },
                     ),
                     divider = { HorizontalDivider() }
                 )
@@ -114,14 +114,14 @@ fun SettingsScreen(
     )
 
     RadioGroupBottomSheet(
-        title = "Location Type",
-        selectedIndex = state.locationType.ordinal,
-        items = LocationTypePreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
-        isVisible = state.showLocationType,
+        title = "Location Format",
+        selectedIndex = state.locationFormat.ordinal,
+        items = LocationFormatPreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
+        isVisible = state.showLocationFormat,
         onSelected = { selectedItem ->
-            onAction(SettingsAction.OnLocationTypeSelected(LocationTypePreference.entries.first { it.name == selectedItem.id }))
+            onAction(SettingsAction.OnLocationFormatSelected(LocationFormatPreference.entries.first { it.name == selectedItem.id }))
         },
-        onDismissed = { onAction(SettingsAction.ToggleLocationTypeVisibility(show = false)) }
+        onDismissed = { onAction(SettingsAction.ToggleLocationFormatVisibility(show = false)) }
     )
 
     LaunchedEffect(state, lifecycleOwner) {

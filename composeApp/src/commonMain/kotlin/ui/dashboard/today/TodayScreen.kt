@@ -50,7 +50,7 @@ import androidx.lifecycle.LifecycleOwner
 import data.model.DateFormat
 import data.model.Location
 import data.preferences.DateFormatPreference
-import data.preferences.LocationTypePreference
+import data.preferences.LocationFormatPreference
 import data.utils.now
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -78,7 +78,7 @@ fun TodayScreen(
             Column(Modifier.weight(2F).padding(top = 16.dp)) {
                 state.localLocation?.let { location ->
                     NameTimeView(
-                        locationTypePreference = state.locationTypePreference,
+                        locationFormatPreference = state.locationFormatPreference,
                         dateFormatPreference = state.dateFormatPreference,
                         offsetInMinutes = state.offsetInMinutes,
                         location = location
@@ -138,7 +138,7 @@ fun TodayScreen(
     EditLocationDialog(
         isVisible = state.openEditLocationDialog,
         location = state.selectedLocation,
-        locationTypePreference = state.locationTypePreference,
+        locationFormatPreference = state.locationFormatPreference,
         onDelete = { onAction(TodayAction.OnItemDeleteClicked) },
         onEdit = { onAction(TodayAction.OnItemEditClicked) },
         onDismiss = { onAction(TodayAction.CloseEditLocationDialog) }
@@ -158,15 +158,15 @@ fun TodayScreen(
 internal fun EditLocationDialog(
     isVisible: Boolean,
     location: Location?,
-    locationTypePreference: LocationTypePreference,
+    locationFormatPreference: LocationFormatPreference,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
     onDismiss: () -> Unit
 ) {
     if (!isVisible) return
-    val label = when (locationTypePreference) {
-        LocationTypePreference.Place -> location?.regionName
-        LocationTypePreference.Person -> location?.name
+    val label = when (locationFormatPreference) {
+        LocationFormatPreference.Place -> location?.regionName
+        LocationFormatPreference.Person -> location?.name
     }
     AlertDialog(
         icon = { Icon(Icons.Rounded.Edit, contentDescription = "Edit") },
@@ -189,7 +189,7 @@ private fun EditableNameTimeView(
     onClick: ((Location) -> Unit)
 ) {
     NameTimeView(
-        locationTypePreference = state.locationTypePreference,
+        locationFormatPreference = state.locationFormatPreference,
         dateFormatPreference = state.dateFormatPreference,
         offsetInMinutes = state.offsetInMinutes,
         location = location,
@@ -199,7 +199,7 @@ private fun EditableNameTimeView(
 
 @Composable
 private fun NameTimeView(
-    locationTypePreference: LocationTypePreference,
+    locationFormatPreference: LocationFormatPreference,
     dateFormatPreference: DateFormatPreference,
     offsetInMinutes: Int,
     location: Location,
@@ -224,9 +224,9 @@ private fun NameTimeView(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = when (locationTypePreference) {
-                LocationTypePreference.Place -> location.regionName
-                LocationTypePreference.Person -> location.name
+            text = when (locationFormatPreference) {
+                LocationFormatPreference.Place -> location.regionName
+                LocationFormatPreference.Person -> location.name
             },
             style = MaterialTheme.typography.titleLarge
         )

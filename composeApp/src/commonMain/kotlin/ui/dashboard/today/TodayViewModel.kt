@@ -10,7 +10,7 @@ import data.location.LocationRepository
 import data.locationform.LocationFormRepository
 import data.model.Location
 import data.preferences.DateFormatPreference
-import data.preferences.LocationTypePreference
+import data.preferences.LocationFormatPreference
 import data.preferences.PreferencesRepository
 import data.timescape.TimescapeRepository
 import data.utils.now
@@ -43,7 +43,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
     private fun loadPreferences() {
         viewModelScope.launch {
             launch { preferences.getDateFormat().collect { state = state.copy(dateFormatPreference = it) } }
-            launch { preferences.getLocationType().collect { state = state.copy(locationTypePreference = it) } }
+            launch { preferences.getLocationFormat().collect { state = state.copy(locationFormatPreference = it) } }
         }
     }
 
@@ -147,7 +147,7 @@ data class TodayUiState(
     val isFirstItemVisible: Boolean = false,
     val localLocation: Location? = null,
     val dateFormatPreference: DateFormatPreference = DateFormatPreference.Default,
-    val locationTypePreference: LocationTypePreference = LocationTypePreference.Default,
+    val locationFormatPreference: LocationFormatPreference = LocationFormatPreference.Default,
 
     val openAddLocation: Boolean = false,
     val openEditLocation: Boolean = false,

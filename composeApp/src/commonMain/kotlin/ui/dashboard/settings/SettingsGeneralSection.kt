@@ -60,8 +60,8 @@ internal fun DateFormat(onClick: () -> Unit) {
 }
 
 @Composable
-internal fun LocationType(onClick: () -> Unit) {
-    val label = "Location Type"
+internal fun LocationFormat(onClick: () -> Unit) {
+    val label = "Location Format"
     ListItem(
         modifier = Modifier.clickable { onClick() },
         label = { Text(label) },

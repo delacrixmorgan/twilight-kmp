@@ -1,6 +1,6 @@
 package data.preferences
 
-enum class LocationTypePreference {
+enum class LocationFormatPreference {
     Place,
     Person;
 

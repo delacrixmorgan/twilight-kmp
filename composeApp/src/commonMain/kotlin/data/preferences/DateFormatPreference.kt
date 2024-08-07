@@ -6,22 +6,22 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 
 enum class DateFormatPreference {
-    Twelve,
-    TwentyFour;
+    TwentyFour,
+    Twelve;
 
     companion object {
-        val Default = Twelve
+        val Default = TwentyFour
     }
 
     val label: String
         get() = when (this) {
-            Twelve -> "12-hour clock"
             TwentyFour -> "24-hour clock"
+            Twelve -> "12-hour clock"
         }
 
     val description: String
         get() = when (this) {
-            Twelve -> LocalDateTime.now().format(DateFormat.twelveHour)
             TwentyFour -> LocalDateTime.now().format(DateFormat.twentyFourHour)
+            Twelve -> LocalDateTime.now().format(DateFormat.twelveHour)
         }
 }
