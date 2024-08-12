@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.1" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
+agp = "8.5.2" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
