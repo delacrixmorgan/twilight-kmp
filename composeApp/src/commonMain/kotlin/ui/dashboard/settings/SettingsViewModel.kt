@@ -1,8 +1,5 @@
 package ui.dashboard.settings
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -12,6 +9,10 @@ import data.preferences.PreferencesRepository
 import data.preferences.ThemePreference
 import getVersionCode
 import getVersionName
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nav.Routes
 import org.koin.core.component.KoinComponent
@@ -19,46 +20,47 @@ import org.koin.core.component.inject
 
 class SettingsViewModel : ViewModel(), KoinComponent {
 
-    var state by mutableStateOf(SettingsUiState())
-        private set
+    private var _state = MutableStateFlow(SettingsUiState())
+    val state: StateFlow<SettingsUiState>
+        get() = _state.asStateFlow()
 
     private val preferences: PreferencesRepository by inject()
 
     init {
-        state = state.copy(version = "${getVersionName()} (${getVersionCode()})")
+        _state.update { it.copy(version = "${getVersionName()} (${getVersionCode()})") }
         loadPreferences()
     }
 
     private fun loadPreferences() {
         viewModelScope.launch {
-            launch { preferences.getTheme().collect { state = state.copy(theme = it) } }
-            launch { preferences.getDateFormat().collect { state = state.copy(dateFormat = it) } }
-            launch { preferences.getLocationFormat().collect { state = state.copy(locationFormat = it) } }
+            launch { preferences.getTheme().collect { theme -> _state.update { it.copy(theme = theme) } } }
+            launch { preferences.getDateFormat().collect { dateFormat -> _state.update { it.copy(dateFormat = dateFormat) } } }
+            launch { preferences.getLocationFormat().collect { locationFormat -> _state.update { it.copy(locationFormat = locationFormat) } } }
         }
     }
 
     fun onAction(navHostController: NavHostController, action: SettingsAction) {
         when (action) {
             is SettingsAction.ToggleThemeVisibility -> {
-                state = state.copy(showTheme = action.show)
+                _state.update { it.copy(showTheme = action.show) }
             }
             is SettingsAction.ToggleDateFormatVisibility -> {
-                state = state.copy(showDateFormat = action.show)
+                _state.update { it.copy(showDateFormat = action.show) }
             }
             is SettingsAction.ToggleLocationFormatVisibility -> {
-                state = state.copy(showLocationFormat = action.show)
+                _state.update { it.copy(showLocationFormat = action.show) }
             }
             is SettingsAction.OpenAppInfo -> {
                 navHostController.navigate(Routes.AppInfo)
             }
             is SettingsAction.OpenPrivacyPolicy -> {
-                state = state.copy(openPrivacyPolicy = action.open)
+                _state.update { it.copy(openPrivacyPolicy = action.open) }
             }
             is SettingsAction.OpenRateUs -> {
-                state = state.copy(openRateUs = action.open)
+                _state.update { it.copy(openRateUs = action.open) }
             }
             is SettingsAction.OpenSendFeedback -> {
-                state = state.copy(openSendFeedback = action.open)
+                _state.update { it.copy(openSendFeedback = action.open) }
             }
             is SettingsAction.OnThemeSelected -> {
                 viewModelScope.launch { preferences.saveTheme(action.theme) }
@@ -85,7 +87,7 @@ data class SettingsUiState(
 
     val openPrivacyPolicy: Boolean = false,
     val openSendFeedback: Boolean = false,
-    val openRateUs: Boolean = false,
+    val openRateUs: Boolean = false
 )
 
 sealed interface SettingsAction {

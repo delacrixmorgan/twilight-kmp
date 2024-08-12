@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -32,7 +33,7 @@ fun DashboardBottomNavHost(
         }
         composable<Routes.Settings> {
             val viewModel = koinViewModel<SettingsViewModel>()
-            SettingsScreen(Modifier.padding(innerPadding), state = viewModel.state, onAction = { viewModel.onAction(navHostController, it) })
+            SettingsScreen(Modifier.padding(innerPadding), state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
         }
     }
 }
