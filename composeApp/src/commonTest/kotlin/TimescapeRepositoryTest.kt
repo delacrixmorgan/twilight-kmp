@@ -1,12 +1,31 @@
 import data.timescape.TimescapeRepository
 import data.timescape.convert
 import kotlinx.datetime.LocalDateTime
+import org.koin.core.component.inject
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TimescapeRepositoryTest {
-    private val netherlandsTimeRegion by lazy { TimescapeRepository.search("Amsterdam").first() }
-    private val malaysiaTimeRegion by lazy { TimescapeRepository.search("Kuala Lumpur").first() }
+class TimescapeRepositoryTest : KoinTest {
+
+    private val timescapeRepository: TimescapeRepository by inject()
+
+    private val netherlandsTimeRegion by lazy { timescapeRepository.search("Europe/Amsterdam")!! }
+    private val malaysiaTimeRegion by lazy { timescapeRepository.search("Asia/Kuala_Lumpur")!! }
+
+    @BeforeTest
+    fun setup() {
+        startKoin { modules(repositoryModules) }
+    }
+
+    @AfterTest
+    fun tearDown() {
+        stopKoin()
+    }
 
     /**
      * Initialisation

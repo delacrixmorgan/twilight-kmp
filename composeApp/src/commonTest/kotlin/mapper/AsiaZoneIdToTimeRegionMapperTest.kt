@@ -2,14 +2,34 @@ package mapper
 
 import data.model.Region
 import data.timescape.TimescapeRepository
+import org.koin.core.component.inject
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
+import repositoryModules
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class AsiaZoneIdToTimeRegionMapperTest {
+class AsiaZoneIdToTimeRegionMapperTest : KoinTest {
+
+    private val timescapeRepository: TimescapeRepository by inject()
+
     private val zoneIds by lazy {
-        TimescapeRepository.timeRegions
+        timescapeRepository.timeRegions
             .filter { it.region == Region.Asia }
             .map { it.timeZone.toString() }
+    }
+
+    @BeforeTest
+    fun setup() {
+        startKoin { modules(repositoryModules) }
+    }
+
+    @AfterTest
+    fun tearDown() {
+        stopKoin()
     }
 
     @Test
