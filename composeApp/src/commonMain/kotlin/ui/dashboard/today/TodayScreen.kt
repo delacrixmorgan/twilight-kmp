@@ -163,8 +163,10 @@ internal fun EditLocationDialog(
 ) {
     if (!isVisible) return
     val label = when (locationFormatPreference) {
-        LocationFormatPreference.Place -> location?.regionName
-        LocationFormatPreference.Person -> location?.name
+        LocationFormatPreference.Place,
+        LocationFormatPreference.PlaceWithGMT -> location?.regionName
+        LocationFormatPreference.Person,
+        LocationFormatPreference.PersonWithGMT -> location?.name
     }
     AlertDialog(
         icon = { Icon(Icons.Rounded.Edit, contentDescription = "Edit") },
@@ -212,7 +214,6 @@ private fun NameTimeView(
         }
     )
     val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
-    val gmtOffset = adjustedTime.toInstant(location.timeRegion).offsetIn(location.timeRegion).toString()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -227,17 +228,22 @@ private fun NameTimeView(
         ) {
             Text(
                 text = when (locationFormatPreference) {
-                    LocationFormatPreference.Place -> location.regionName
-                    LocationFormatPreference.Person -> location.name
+                    LocationFormatPreference.Place,
+                    LocationFormatPreference.PlaceWithGMT -> location.regionName
+                    LocationFormatPreference.Person,
+                    LocationFormatPreference.PersonWithGMT -> location.name
                 },
                 style = MaterialTheme.typography.titleLarge
             )
-            Text(
-                modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(8.dp)).padding(6.dp),
-                color = MaterialTheme.colorScheme.onSurface,
-                text = "GMT $gmtOffset",
-                style = MaterialTheme.typography.labelLarge,
-            )
+            if (locationFormatPreference == LocationFormatPreference.PlaceWithGMT || locationFormatPreference == LocationFormatPreference.PersonWithGMT) {
+                val gmtOffset = adjustedTime.toInstant(location.timeRegion).offsetIn(location.timeRegion).toString()
+                Text(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(8.dp)).padding(6.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = "GMT $gmtOffset",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            }
         }
         Text(
             text = dateMonthTime,
