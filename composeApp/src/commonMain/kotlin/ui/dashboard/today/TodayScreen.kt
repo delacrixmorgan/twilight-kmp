@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -48,6 +49,7 @@ import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.offsetIn
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -210,7 +212,7 @@ private fun NameTimeView(
         }
     )
     val dateMonthTime = adjustedTime.format(DateFormat.dayOfWeekDayMonth)
-
+    val gmtOffset = adjustedTime.toInstant(location.timeRegion).offsetIn(location.timeRegion).toString()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -219,17 +221,29 @@ private fun NameTimeView(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(
-            text = when (locationFormatPreference) {
-                LocationFormatPreference.Place -> location.regionName
-                LocationFormatPreference.Person -> location.name
-            },
-            style = MaterialTheme.typography.titleLarge
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = when (locationFormatPreference) {
+                    LocationFormatPreference.Place -> location.regionName
+                    LocationFormatPreference.Person -> location.name
+                },
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(8.dp)).padding(6.dp),
+                color = MaterialTheme.colorScheme.onSurface,
+                text = "GMT $gmtOffset",
+                style = MaterialTheme.typography.labelLarge,
+            )
+        }
         Text(
             text = dateMonthTime,
             style = MaterialTheme.typography.bodyLarge
         )
+
         Text(
             text = hourMinuteTime,
             style = MaterialTheme.typography.displayMedium

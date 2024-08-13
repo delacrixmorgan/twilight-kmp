@@ -140,12 +140,13 @@ class TodayViewModel : ViewModel(), KoinComponent {
 }
 
 data class TodayUiState(
+    val localLocation: Location? = null,
     val locations: List<Location> = emptyList(),
     val selectedLocation: Location? = null,
+
     val offsetInMinutes: Int = 0,
     val formattedOffSetInMinutes: String = "",
     val isFirstItemVisible: Boolean = false,
-    val localLocation: Location? = null,
     val dateFormatPreference: DateFormatPreference = DateFormatPreference.Default,
     val locationFormatPreference: LocationFormatPreference = LocationFormatPreference.Default,
 
