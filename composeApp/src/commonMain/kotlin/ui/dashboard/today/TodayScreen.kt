@@ -82,7 +82,9 @@ fun TodayScreen(
                     items(count = state.locations.size, key = { state.locations[it].id }) { index ->
                         val location = state.locations[index]
                         EditableNameTimeView(
-                            state = state,
+                            locationFormatPreference = state.locationFormatPreference,
+                            dateFormatPreference = state.dateFormatPreference,
+                            offsetInMinutes = state.offsetInMinutes,
                             location = location,
                             onClick = { onAction(TodayAction.OnSelectedLocation(it)) },
                         )
@@ -184,14 +186,16 @@ internal fun EditLocationDialog(
 
 @Composable
 private fun EditableNameTimeView(
-    state: TodayUiState,
+    locationFormatPreference: LocationFormatPreference,
+    dateFormatPreference: DateFormatPreference,
+    offsetInMinutes: Int,
     location: Location,
     onClick: ((Location) -> Unit)
 ) {
     NameTimeView(
-        locationFormatPreference = state.locationFormatPreference,
-        dateFormatPreference = state.dateFormatPreference,
-        offsetInMinutes = state.offsetInMinutes,
+        locationFormatPreference = locationFormatPreference,
+        dateFormatPreference = dateFormatPreference,
+        offsetInMinutes = offsetInMinutes,
         location = location,
         onClick = onClick
     )

@@ -1,20 +1,20 @@
 package ui.dashboard.settings
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -30,65 +30,65 @@ import androidx.lifecycle.repeatOnLifecycle
 import data.preferences.DateFormatPreference
 import data.preferences.LocationFormatPreference
 import data.preferences.ThemePreference
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.component.ListView
 import ui.component.RadioGroupBottomSheet
 import ui.component.RadioRowData
-import ui.theme.AppTheme
-import ui.theme.AppTypography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    modifier: Modifier,
+    innerPadding: PaddingValues,
+    scrollState: ScrollState,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     uriHandler: UriHandler = LocalUriHandler.current,
     state: SettingsUiState,
     onAction: (SettingsAction) -> Unit,
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = { TopAppBar(title = { Text("Settings", style = AppTypography.headlineMedium) }) },
-    ) { innerPadding ->
-        Column(Modifier.fillMaxSize().padding(innerPadding).padding(16.dp)) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                ListView(
-                    data = listOf(
-                        { Theme { onAction(SettingsAction.ToggleThemeVisibility(show = true)) } },
-                        { DateFormat { onAction(SettingsAction.ToggleDateFormatVisibility(show = true)) } },
-                        { LocationFormat { onAction(SettingsAction.ToggleLocationFormatVisibility(show = true)) } },
-                    ),
-                    divider = { HorizontalDivider() }
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                ListView(
-                    data = listOf(
-                        { AppInfo { onAction(SettingsAction.OpenAppInfo) } },
-                        { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy(open = true)) } },
-                        { SendFeedback { onAction(SettingsAction.OpenSendFeedback(open = true)) } },
-                        { RateUs { onAction(SettingsAction.OpenRateUs(open = true)) } },
-                    ),
-                    divider = { HorizontalDivider() }
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-
-            Text(
-                state.version,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+            .padding(horizontal = 16.dp)
+            .verticalScroll(scrollState)
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+        ) {
+            ListView(
+                data = listOf(
+                    { Theme { onAction(SettingsAction.ToggleThemeVisibility(show = true)) } },
+                    { DateFormat { onAction(SettingsAction.ToggleDateFormatVisibility(show = true)) } },
+                    { LocationFormat { onAction(SettingsAction.ToggleLocationFormatVisibility(show = true)) } },
+                ),
+                divider = { HorizontalDivider() }
             )
         }
+        Spacer(Modifier.height(16.dp))
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+        ) {
+            ListView(
+                data = listOf(
+                    { AppInfo { onAction(SettingsAction.OpenAppInfo) } },
+                    { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy(open = true)) } },
+                    { SendFeedback { onAction(SettingsAction.OpenSendFeedback(open = true)) } },
+                    { RateUs { onAction(SettingsAction.OpenRateUs(open = true)) } },
+                ),
+                divider = { HorizontalDivider() }
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            state.version,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(32.dp))
     }
 
     RadioGroupBottomSheet(
@@ -141,13 +141,5 @@ fun SettingsScreen(
                 onAction(SettingsAction.OpenRateUs(open = false))
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun SettingsScreenPreview() {
-    AppTheme {
-        SettingsScreen(Modifier, state = SettingsUiState(), onAction = {})
     }
 }
