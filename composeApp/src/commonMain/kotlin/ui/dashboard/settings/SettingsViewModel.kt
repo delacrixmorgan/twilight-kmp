@@ -33,7 +33,8 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 
     private fun loadPreferences() {
         viewModelScope.launch {
-            launch { preferences.getTheme().collect { theme -> _state.update { it.copy(theme = theme) } } }
+            launch { preferences.getTheme().collect { theme ->
+                _state.update { it.copy(theme = theme) } } }
             launch { preferences.getDateFormat().collect { dateFormat -> _state.update { it.copy(dateFormat = dateFormat) } } }
             launch { preferences.getLocationFormat().collect { locationFormat -> _state.update { it.copy(locationFormat = locationFormat) } } }
         }

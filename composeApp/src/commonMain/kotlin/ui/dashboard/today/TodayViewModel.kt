@@ -1,8 +1,5 @@
 package ui.dashboard.today
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -14,6 +11,10 @@ import data.preferences.LocationFormatPreference
 import data.preferences.PreferencesRepository
 import data.timescape.TimescapeRepository
 import data.utils.now
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -32,8 +33,9 @@ class TodayViewModel : ViewModel(), KoinComponent {
     private val timescapeRepository: TimescapeRepository by inject()
     private val locationFormRepository: LocationFormRepository by inject()
 
-    var state by mutableStateOf(TodayUiState())
-        private set
+    private var _state = MutableStateFlow(TodayUiState())
+    val state: StateFlow<TodayUiState>
+        get() = _state.asStateFlow()
 
     init {
         loadPreferences()
@@ -42,30 +44,42 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     private fun loadPreferences() {
         viewModelScope.launch {
-            launch { preferences.getDateFormat().collect { state = state.copy(dateFormatPreference = it) } }
-            launch { preferences.getLocationFormat().collect { state = state.copy(locationFormatPreference = it) } }
+            launch {
+                preferences.getDateFormat().collect { dateFormat ->
+                    _state.update { it.copy(dateFormatPreference = dateFormat) }
+                }
+            }
+            launch {
+                preferences.getLocationFormat().collect { locationFormat ->
+                    _state.update { it.copy(locationFormatPreference = locationFormat) }
+                }
+            }
         }
     }
 
     private fun loadLocations() {
         val currentTimeZone = TimeZone.currentSystemDefault()
         val currentTimeRegion = timescapeRepository.search(currentTimeZone.id)
-        currentTimeRegion?.let {
-            state = state.copy(
-                localLocation = Location(
-                    name = it.city,
-                    regionName = it.city,
-                    zoneId = it.zoneIdString
+        if (currentTimeRegion != null) {
+            _state.update {
+                it.copy(
+                    localLocation = Location(
+                        name = currentTimeRegion.city,
+                        regionName = currentTimeRegion.city,
+                        zoneId = currentTimeRegion.zoneIdString
+                    )
                 )
-            )
+            }
         }
         viewModelScope.launch {
             repository.getLocations().collect { locations ->
-                state = state.copy(
-                    locations = locations.sortedBy {
-                        LocalDateTime.now(it.timeRegion).toInstant(TimeZone.UTC).epochSeconds
-                    }
-                )
+                _state.update {
+                    it.copy(
+                        locations = locations.sortedBy { location ->
+                            LocalDateTime.now(location.timeRegion).toInstant(TimeZone.UTC).epochSeconds
+                        }
+                    )
+                }
             }
         }
     }
@@ -79,49 +93,58 @@ class TodayViewModel : ViewModel(), KoinComponent {
                 }
             }
             TodayAction.CloseEditLocationDialog -> {
-                state = state.copy(openEditLocationDialog = false)
+                _state.update { it.copy(openEditLocationDialog = false) }
+
             }
             TodayAction.OnItemEditClicked -> {
                 viewModelScope.launch {
-                    state.selectedLocation?.let {
+                    state.value.selectedLocation?.let {
                         locationFormRepository.saveID(it.id)
                         locationFormRepository.saveName(it.name)
                         locationFormRepository.saveRegionName(it.regionName)
                         locationFormRepository.saveZoneId(it.zoneId)
                     }
-                    state = state.copy(
-                        openEditLocation = true,
-                        openEditLocationDialog = false
-                    )
+                    _state.update {
+                        it.copy(
+                            openEditLocation = true,
+                            openEditLocationDialog = false
+                        )
+                    }
                     navHostController.navigate(Routes.FormSelectTimeRegion)
                 }
             }
             TodayAction.OnItemDeleteClicked -> {
                 viewModelScope.launch {
-                    state.selectedLocation?.id?.let { locationId ->
+                    state.value.selectedLocation?.id?.let { locationId ->
                         repository.deleteLocation(locationId)
-                        state = state.copy(
-                            selectedLocation = null,
-                            openEditLocationDialog = false
-                        )
+                        _state.update {
+                            it.copy(
+                                selectedLocation = null,
+                                openEditLocationDialog = false
+                            )
+                        }
                     }
                 }
             }
             is TodayAction.OnSelectedLocation -> {
-                state = state.copy(
-                    selectedLocation = action.location,
-                    openEditLocationDialog = true
-                )
+                _state.update {
+                    it.copy(
+                        selectedLocation = action.location,
+                        openEditLocationDialog = true
+                    )
+                }
             }
             is TodayAction.OnScrollToTopClicked -> {
-                state = state.copy(scrollToTop = action.scroll)
+                _state.update { it.copy(scrollToTop = action.scroll) }
             }
             is TodayAction.OnTimeWheelScrolled -> {
-                state = state.copy(
-                    offsetInMinutes = action.offsetInMinutes,
-                    formattedOffSetInMinutes = "+ ${formatOffSetInMinutes(action.offsetInMinutes)}",
-                    isFirstItemVisible = state.isFirstItemVisible,
-                )
+                _state.update {
+                    it.copy(
+                        offsetInMinutes = action.offsetInMinutes,
+                        formattedOffSetInMinutes = "+ ${formatOffSetInMinutes(action.offsetInMinutes)}",
+                        isFirstItemVisible = state.value.isFirstItemVisible,
+                    )
+                }
             }
         }
     }

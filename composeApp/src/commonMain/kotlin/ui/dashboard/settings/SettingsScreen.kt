@@ -50,6 +50,7 @@ fun SettingsScreen(
             .padding(horizontal = 16.dp)
             .verticalScroll(scrollState)
     ) {
+        Spacer(Modifier.height(16.dp))
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
@@ -88,7 +89,7 @@ fun SettingsScreen(
             textAlign = TextAlign.Center
         )
 
-        Spacer(Modifier.height(32.dp))
+//        Spacer(Modifier.height(32.dp))
     }
 
     RadioGroupBottomSheet(

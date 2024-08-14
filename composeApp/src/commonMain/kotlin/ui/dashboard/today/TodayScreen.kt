@@ -147,7 +147,7 @@ fun TodayScreen(
     LaunchedEffect(state, lifecycleOwner) {
         if (state.scrollToTop) {
             coroutineScope.launch {
-                listState.animateScrollToItem(0)
+                listState.scrollToItem(0)
                 onAction(TodayAction.OnScrollToTopClicked(scroll = false))
             }
         }

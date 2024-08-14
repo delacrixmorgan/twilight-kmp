@@ -117,6 +117,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_20
         targetCompatibility = JavaVersion.VERSION_20
     }
+    buildFeatures {
+        buildConfig = true
+    }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }

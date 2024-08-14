@@ -31,7 +31,7 @@ fun DashboardBottomNavHost(
     ) {
         composable<Routes.Today> {
             val viewModel = koinViewModel<TodayViewModel>()
-            TodayScreen(Modifier.padding(innerPadding), state = viewModel.state, onAction = { viewModel.onAction(navHostController, it) })
+            TodayScreen(Modifier.padding(innerPadding), state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
         }
         composable<Routes.Settings> {
             val viewModel = koinViewModel<SettingsViewModel>()
