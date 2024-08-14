@@ -1,53 +1,78 @@
 package ui.form.summary
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.locationform.LocationFormRepository
+import androidx.navigation.NavHostController
 import data.location.LocationRepository
+import data.locationform.LocationFormRepository
 import data.model.Location
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nav.Routes
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import randomUUID
-import ui.common.Event
-import ui.common.triggerEvent
 
 class SummaryViewModel : ViewModel(), KoinComponent {
     private val store: LocationFormRepository by inject()
     private val locationRepository: LocationRepository by inject()
 
-
-    val title = mutableStateOf("")
-    val isEditMode = mutableStateOf(false)
-    val location = mutableStateOf<Location?>(null)
-    val openDashboardEvent = MutableSharedFlow<Event<Unit>>()
+    private var _state = MutableStateFlow(SummaryUiState())
+    val state: StateFlow<SummaryUiState>
+        get() = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            store.observeLocation().first().let {
-                isEditMode.value = it.isEditMode
-                location.value = Location(
-                    id = it.id ?: randomUUID(),
-                    name = it.label ?: "",
-                    regionName = it.regionName ?: "",
-                    zoneId = it.zoneId ?: ""
-                )
+            store.observeLocation().first().let { newLocationData ->
+                _state.update {
+                    it.copy(
+                        isEditMode = newLocationData.isEditMode,
+                        location = Location(
+                            id = newLocationData.id ?: randomUUID(),
+                            name = newLocationData.label ?: "",
+                            regionName = newLocationData.regionName ?: "",
+                            zoneId = newLocationData.zoneId ?: ""
+                        )
+                    )
+                }
             }
         }
     }
 
-    fun onCreateClicked() {
-        viewModelScope.launch {
-            if (isEditMode.value) {
-                locationRepository.updateLocation(requireNotNull(location.value))
-            } else {
-                locationRepository.addLocation(requireNotNull(location.value))
+    fun onAction(navHostController: NavHostController, action: SummaryAction) {
+        when (action) {
+            SummaryAction.OnSubmitClicked -> {
+                viewModelScope.launch {
+                    val location = state.value.location
+                    if (location != null) {
+                        if (state.value.isEditMode) {
+                            locationRepository.updateLocation(location)
+                        } else {
+                            locationRepository.addLocation(location)
+                        }
+                    }
+                    store.clear()
+                    onAction(navHostController, SummaryAction.OpenDashboard)
+                }
             }
-            store.clear()
-            openDashboardEvent.triggerEvent()
+            SummaryAction.OpenDashboard -> navHostController.popBackStack(Routes.Dashboard, inclusive = false)
+            SummaryAction.OnBackClicked -> navHostController.navigateUp()
         }
     }
+}
+
+data class SummaryUiState(
+    val title: String = "",
+    val location: Location? = null,
+    val isEditMode: Boolean = false,
+)
+
+sealed interface SummaryAction {
+    data object OnSubmitClicked : SummaryAction
+    data object OpenDashboard : SummaryAction
+    data object OnBackClicked : SummaryAction
 }

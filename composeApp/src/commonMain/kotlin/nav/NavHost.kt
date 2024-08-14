@@ -48,7 +48,7 @@ fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
     }
     composable<Routes.FormSummary> {
         val viewModel = koinViewModel<SummaryViewModel>()
-        SummaryScreen(navHostController, viewModel)
+        SummaryScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.AppInfo> {
         val viewModel = koinViewModel<AppInfoViewModel>()

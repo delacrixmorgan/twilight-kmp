@@ -16,17 +16,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavHostController
-import nav.Routes
-import ui.common.observeEvent
 import ui.component.LocationListRow
 import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
@@ -34,9 +28,8 @@ import ui.keyboardShownState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SummaryScreen(
-    navHostController: NavHostController,
-    viewModel: SummaryViewModel,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    state: SummaryUiState,
+    onAction: (SummaryAction) -> Unit
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val localFocusManager = LocalFocusManager.current
@@ -52,22 +45,22 @@ fun SummaryScreen(
                 ),
                 title = {
                     Text(
-                        if (viewModel.isEditMode.value) "Edit Summary" else "Summary",
+                        if (state.isEditMode) "Edit Summary" else "Summary",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
+                navigationIcon = { NavigationBackIcon { onAction(SummaryAction.OnBackClicked) } },
             )
         },
         bottomBar = {
             Column(Modifier.padding(16.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onCreateClicked() }
+                    onClick = { onAction(SummaryAction.OnSubmitClicked) }
                 ) {
                     Text(
-                        if (viewModel.isEditMode.value) "Save Changes" else "Create",
+                        if (state.isEditMode) "Save Changes" else "Create",
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
@@ -83,15 +76,9 @@ fun SummaryScreen(
 
             Spacer(modifier = Modifier.weight(1F))
 
-            viewModel.location.value?.let {
+            state.location?.let {
                 LocationListRow(it)
             }
-        }
-    }
-
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openDashboardEvent.observeEvent(lifecycleOwner) {
-            navHostController.popBackStack(Routes.Dashboard, inclusive = false)
         }
     }
 }
