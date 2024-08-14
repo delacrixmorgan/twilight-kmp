@@ -26,6 +26,7 @@ import org.koin.core.component.inject
 class TodayViewModel : ViewModel(), KoinComponent {
     companion object {
         const val SCROLL_WHEEL_PAGE_SIZE = 300
+        const val SMOOTH_SCROLL_IN_MINUTES_THRESHOLD = 5 * 60
     }
 
     private val preferences: PreferencesRepository by inject()

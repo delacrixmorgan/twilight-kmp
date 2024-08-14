@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,6 +55,8 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import ui.component.VerticalScrollWheel
+import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
+import ui.dashboard.today.TodayViewModel.Companion.SMOOTH_SCROLL_IN_MINUTES_THRESHOLD
 
 @Composable
 fun TodayScreen(
@@ -94,7 +97,7 @@ fun TodayScreen(
             }
 
             VerticalScrollWheel(
-                modifier = Modifier.weight(1F),
+                modifier = Modifier.weight(1F).fillMaxSize().defaultMinSize(minHeight = 0.dp).padding(horizontal = 24.dp),
                 listState = listState,
                 onScrolled = { offsetInMinutes, isFirstItemVisible ->
                     onAction(TodayAction.OnTimeWheelScrolled(offsetInMinutes, isFirstItemVisible))
@@ -147,7 +150,12 @@ fun TodayScreen(
     LaunchedEffect(state, lifecycleOwner) {
         if (state.scrollToTop) {
             coroutineScope.launch {
-                listState.scrollToItem(0)
+                if (state.offsetInMinutes > SMOOTH_SCROLL_IN_MINUTES_THRESHOLD) {
+                    listState.scrollToItem(SCROLL_WHEEL_PAGE_SIZE)
+                    listState.animateScrollToItem(0)
+                } else {
+                    listState.animateScrollToItem(0)
+                }
                 onAction(TodayAction.OnScrollToTopClicked(scroll = false))
             }
         }

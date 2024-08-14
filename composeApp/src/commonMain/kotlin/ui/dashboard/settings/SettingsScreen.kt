@@ -31,6 +31,7 @@ import data.preferences.ThemePreference
 import ui.component.ListView
 import ui.component.RadioGroupBottomSheet
 import ui.component.RadioRowData
+import ui.theme.AppTypography
 
 @Composable
 fun SettingsScreen(
@@ -46,7 +47,9 @@ fun SettingsScreen(
             .padding(innerPadding)
             .padding(horizontal = 16.dp)
     ) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(32.dp))
+        Text("Settings", style = AppTypography.headlineMedium)
+        Spacer(Modifier.height(24.dp))
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
