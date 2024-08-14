@@ -1,6 +1,7 @@
 package nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -37,13 +38,13 @@ fun TwilightNavHost(
 }
 
 fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
-    composable<Routes.FormSetupName> {
-        val viewModel = koinViewModel<SetupNameViewModel>()
-        SetupNameScreen(navHostController, viewModel)
-    }
     composable<Routes.FormSelectTimeRegion> {
         val viewModel = koinViewModel<SelectTimeRegionViewModel>()
         SelectTimeRegionScreen(navHostController, viewModel)
+    }
+    composable<Routes.FormSetupName> {
+        val viewModel = koinViewModel<SetupNameViewModel>()
+        SetupNameScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.FormSummary> {
         val viewModel = koinViewModel<SummaryViewModel>()

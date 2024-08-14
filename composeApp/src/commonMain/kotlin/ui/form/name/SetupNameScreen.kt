@@ -23,19 +23,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavHostController
-import nav.Routes
-import ui.common.observeEvent
 import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
 import ui.theme.DefaultColors
@@ -43,9 +37,8 @@ import ui.theme.DefaultColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupNameScreen(
-    navHostController: NavHostController,
-    viewModel: SetupNameViewModel,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    state: SetupNameUiState,
+    onAction: (SetupNameAction) -> Unit
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val localFocusManager = LocalFocusManager.current
@@ -61,20 +54,20 @@ fun SetupNameScreen(
                 ),
                 title = {
                     Text(
-                        if (viewModel.isEditMode.value) "Edit name" else "Pick a name",
+                        if (state.isEditMode) "Edit name" else "Pick a name",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
+                navigationIcon = { NavigationBackIcon { onAction(SetupNameAction.OnBackClicked) } },
             )
         },
         bottomBar = {
             Column(Modifier.padding(16.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onContinueClicked() },
-                    enabled = viewModel.continueButtonEnabled.value
+                    enabled = state.continueButtonEnabled,
+                    onClick = { onAction(SetupNameAction.OnContinueClicked) }
                 ) {
                     Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
                 }
@@ -103,8 +96,8 @@ fun SetupNameScreen(
                 shape = CircleShape,
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
-                value = viewModel.locationName.value,
-                onValueChange = { viewModel.onLocationNameUpdated(it) },
+                value = state.locationName,
+                onValueChange = { onAction(SetupNameAction.OnLocationNameUpdated(it)) },
                 placeholder = { Text("Name") },
                 leadingIcon = {
                     Icon(
@@ -129,8 +122,8 @@ fun SetupNameScreen(
                 shape = CircleShape,
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
-                value = viewModel.regionName.value,
-                onValueChange = { viewModel.onRegionNameUpdated(it) },
+                value = state.regionName,
+                onValueChange = { onAction(SetupNameAction.OnRegionNameUpdated(it)) },
                 placeholder = { Text("Region Name") },
                 leadingIcon = {
                     Icon(
@@ -139,12 +132,6 @@ fun SetupNameScreen(
                     )
                 },
             )
-        }
-    }
-
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openSummaryEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Routes.FormSummary)
         }
     }
 }

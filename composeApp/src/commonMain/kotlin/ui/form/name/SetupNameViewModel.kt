@@ -1,36 +1,39 @@
 package ui.form.name
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import data.locationform.LocationFormRepository
 import data.timescape.TimescapeRepository
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nav.Routes
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.common.Event
-import ui.common.triggerEvent
 
 class SetupNameViewModel : ViewModel(), KoinComponent {
     private val store: LocationFormRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
-    var isEditMode = mutableStateOf(false)
-    var locationName = mutableStateOf("")
-    val regionName = mutableStateOf("")
-
-    val continueButtonEnabled = mutableStateOf(false)
-    val openSummaryEvent = MutableSharedFlow<Event<Unit>>()
+    private var _state = MutableStateFlow(SetupNameUiState())
+    val state: StateFlow<SetupNameUiState>
+        get() = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            store.observeLocation().first().let {
-                isEditMode.value = it.isEditMode
-                locationName.value = it.label ?: ""
-                regionName.value = (it.regionName ?: "").ifBlank { getFallbackRegionName() ?: "" }
-                continueButtonEnabled.value = locationName.value.isNotBlank()
+            store.observeLocation().first().let { location ->
+                _state.update {
+                    it.copy(
+                        locationName = location.label ?: "",
+                        regionName = (location.regionName ?: "").ifBlank { getFallbackRegionName() ?: "" },
+                        isEditMode = location.isEditMode,
+                        continueButtonEnabled = state.value.locationName.isNotBlank()
+                    )
+                }
             }
         }
     }
@@ -39,20 +42,43 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
         return timescapeRepository.search(requireNotNull(store.getZoneId().first()))?.city
     }
 
-    fun onLocationNameUpdated(name: String) {
-        locationName.value = name
-        continueButtonEnabled.value = locationName.value.isNotBlank()
-    }
-
-    fun onRegionNameUpdated(name: String) {
-        regionName.value = name
-    }
-
-    fun onContinueClicked() {
-        viewModelScope.launch {
-            store.saveName(locationName.value.trimEnd())
-            store.saveRegionName(regionName.value.ifBlank { getFallbackRegionName() ?: "" })
-            openSummaryEvent.triggerEvent()
+    fun onAction(navHostController: NavHostController, action: SetupNameAction) {
+        when (action) {
+            is SetupNameAction.OnLocationNameUpdated -> {
+                _state.update {
+                    it.copy(
+                        locationName = action.name,
+                        continueButtonEnabled = action.name.isNotBlank()
+                    )
+                }
+            }
+            is SetupNameAction.OnRegionNameUpdated -> {
+                _state.update { it.copy(regionName = action.name) }
+            }
+            SetupNameAction.OnContinueClicked -> {
+                viewModelScope.launch {
+                    store.saveName(state.value.locationName.trimEnd())
+                    store.saveRegionName(state.value.regionName.ifBlank { getFallbackRegionName() ?: "" })
+                    onAction(navHostController, SetupNameAction.OpenSummary)
+                }
+            }
+            SetupNameAction.OpenSummary -> navHostController.navigate(Routes.FormSummary)
+            SetupNameAction.OnBackClicked -> navHostController.navigateUp()
         }
     }
+}
+
+data class SetupNameUiState(
+    var locationName: String = "",
+    val regionName: String = "",
+    val isEditMode: Boolean = false,
+    val continueButtonEnabled: Boolean = false
+)
+
+sealed interface SetupNameAction {
+    data class OnLocationNameUpdated(val name: String) : SetupNameAction
+    data class OnRegionNameUpdated(val name: String) : SetupNameAction
+    data object OnContinueClicked : SetupNameAction
+    data object OpenSummary : SetupNameAction
+    data object OnBackClicked : SetupNameAction
 }
