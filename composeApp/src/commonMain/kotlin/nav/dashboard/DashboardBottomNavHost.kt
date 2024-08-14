@@ -1,6 +1,5 @@
 package nav.dashboard
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,6 @@ fun DashboardBottomNavHost(
     navHostController: NavHostController,
     bottomNavHostController: NavHostController,
     innerPadding: PaddingValues,
-    scrollState: ScrollState,
 ) {
     NavHost(
         modifier = Modifier.fillMaxSize(),
@@ -35,7 +33,7 @@ fun DashboardBottomNavHost(
         }
         composable<Routes.Settings> {
             val viewModel = koinViewModel<SettingsViewModel>()
-            SettingsScreen(innerPadding, scrollState, state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+            SettingsScreen(innerPadding, state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
         }
     }
 }
