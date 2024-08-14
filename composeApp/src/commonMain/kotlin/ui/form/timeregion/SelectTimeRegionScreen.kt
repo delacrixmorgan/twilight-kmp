@@ -33,51 +33,42 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavHostController
-import nav.Routes
-import ui.common.observeEvent
 import ui.component.TimeRegionListRow
 import ui.component.navigationIcon.NavigationBackIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectTimeRegionScreen(
-    navHostController: NavHostController,
-    viewModel: SelectTimeRegionViewModel,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    state: SelectTimeRegionUiState,
+    onAction: (SelectTimeRegionAction) -> Unit
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val query by viewModel.query.collectAsState()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            if (viewModel.searchMode.value) {
-                SearchAppBar(query, navHostController, viewModel)
+            if (state.searchMode) {
+                SearchAppBar(state, onAction)
             } else {
-                AppBar(scrollBehavior, navHostController, viewModel)
+                AppBar(scrollBehavior, state, onAction)
             }
         },
         bottomBar = {
             Column(Modifier.padding(16.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onContinueClicked() },
-                    enabled = viewModel.continueButtonEnabled.value
+                    onClick = { onAction(SelectTimeRegionAction.OnContinueClicked) },
+                    enabled = state.continueButtonEnabled
                 ) {
                     Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
                 }
@@ -85,9 +76,9 @@ fun SelectTimeRegionScreen(
             }
         }
     ) { innerPadding ->
-        val list by viewModel.timeRegions.collectAsState()
-        val searching by viewModel.searching.collectAsState()
-        val state = rememberLazyListState()
+        val list = state.timeRegions
+        val searching = state.searching
+        val lazyListState = rememberLazyListState()
 
         if (searching) {
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
@@ -98,9 +89,9 @@ fun SelectTimeRegionScreen(
                 modifier = Modifier.fillMaxSize().padding(innerPadding),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                state = state
+                state = lazyListState
             ) {
-                if (!viewModel.searchMode.value) {
+                if (!state.searchMode) {
                     item {
                         Text(
                             "Choose your time zone from the list below. Use the search bar to quickly find your specific time zone.",
@@ -112,16 +103,10 @@ fun SelectTimeRegionScreen(
                     val item = list[index]
                     TimeRegionListRow(
                         timeRegion = item,
-                        selected = viewModel.selectedTimeRegion.value?.zoneIdString == item.zoneIdString
-                    ) { viewModel.onTimeRegionSelected(it) }
+                        selected = state.selectedTimeRegion?.zoneIdString == item.zoneIdString
+                    ) { onAction(SelectTimeRegionAction.OnTimeRegionSelected(it)) }
                 }
             }
-        }
-    }
-
-    LaunchedEffect(viewModel, lifecycleOwner) {
-        viewModel.openSetupNameEvent.observeEvent(lifecycleOwner) {
-            navHostController.navigate(Routes.FormSetupName)
         }
     }
 }
@@ -130,8 +115,8 @@ fun SelectTimeRegionScreen(
 @Composable
 private fun AppBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    navHostController: NavHostController,
-    viewModel: SelectTimeRegionViewModel,
+    state: SelectTimeRegionUiState,
+    onAction: (SelectTimeRegionAction) -> Unit
 ) {
     MediumTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -140,14 +125,14 @@ private fun AppBar(
         ),
         title = {
             Text(
-                if (viewModel.isEditMode.value) "Edit your time zone" else "Select your time zone",
+                if (state.isEditMode) "Edit your time zone" else "Select your time zone",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         },
-        navigationIcon = { NavigationBackIcon { navHostController.navigateUp() } },
+        navigationIcon = { NavigationBackIcon { onAction(SelectTimeRegionAction.OnBackClicked) } },
         actions = {
-            IconButton(onClick = { viewModel.searchMode.value = true }) {
+            IconButton(onClick = { onAction(SelectTimeRegionAction.OnSearchModeUpdated(searchMode = true)) }) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = "Search"
@@ -161,9 +146,8 @@ private fun AppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchAppBar(
-    query: String,
-    navHostController: NavHostController,
-    viewModel: SelectTimeRegionViewModel,
+    state: SelectTimeRegionUiState,
+    onAction: (SelectTimeRegionAction) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
@@ -172,13 +156,13 @@ private fun SearchAppBar(
                 modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
-                value = query,
-                onValueChange = viewModel::onSearchQueryChange,
+                value = state.query,
+                onValueChange = { onAction(SelectTimeRegionAction.OnQueryUpdated(it)) },
                 placeholder = { Text(text = "Search") },
                 trailingIcon = {
-                    if (query.isNotEmpty()) {
+                    if (state.query.isNotEmpty()) {
                         Icon(
-                            modifier = Modifier.clickable { viewModel.onSearchQueryChange("") },
+                            modifier = Modifier.clickable { onAction(SelectTimeRegionAction.OnQueryUpdated("")) },
                             imageVector = Icons.Rounded.Clear,
                             contentDescription = null
                         )
@@ -187,10 +171,10 @@ private fun SearchAppBar(
             )
         },
         navigationIcon = {
-            if (query.isNotBlank()) {
-                NavigationBackIcon { navHostController.navigateUp() }
+            if (state.query.isNotBlank()) {
+                NavigationBackIcon { onAction(SelectTimeRegionAction.OnBackClicked) }
             } else {
-                IconButton(onClick = { viewModel.searchMode.value = false }) {
+                IconButton(onClick = { onAction(SelectTimeRegionAction.OnSearchModeUpdated(searchMode = false)) }) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
                         contentDescription = "Close"
@@ -199,7 +183,7 @@ private fun SearchAppBar(
             }
         },
     )
-    LaunchedEffect(viewModel.searchMode) {
-        if (viewModel.searchMode.value) focusRequester.requestFocus()
+    LaunchedEffect(state.searchMode) {
+        if (state.searchMode) focusRequester.requestFocus()
     }
 }

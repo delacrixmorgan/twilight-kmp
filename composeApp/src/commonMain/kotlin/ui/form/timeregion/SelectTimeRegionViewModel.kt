@@ -1,28 +1,21 @@
 package ui.form.timeregion
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import data.locationform.LocationFormRepository
 import data.model.TimeRegion
 import data.timescape.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nav.Routes
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.common.Event
-import ui.common.triggerEvent
 
 @OptIn(FlowPreview::class)
 class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
@@ -34,12 +27,14 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     private val store: LocationFormRepository by inject()
     private val timescapeRepository: TimescapeRepository by inject()
 
-    private val _query = MutableStateFlow("")
-    val query = _query.asStateFlow()
+    private var _state = MutableStateFlow(SelectTimeRegionUiState())
+    val state: StateFlow<SelectTimeRegionUiState>
+        get() = _state.asStateFlow()
 
-    private val _searching = MutableStateFlow(false)
-    val searching = _searching.asStateFlow()
-    val searchMode = mutableStateOf(false)
+    private val timeRegions get() = timescapeRepository.timeRegions.sorted()
+    private fun List<TimeRegion>.sorted(): List<TimeRegion> = sortedWith(
+        compareBy { it.zoneIdString !in favouriteTimeRegion }
+    )
 
     private val favouriteTimeRegion = listOf(
         "Asia/Kuala_Lumpur",
@@ -48,58 +43,78 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
         "America/New_York",
     )
 
-    private val _timeRegions = MutableStateFlow(timescapeRepository.timeRegions.sorted())
-    val timeRegions = _query
-        .debounce(DEBOUNCE_IN_MILLISECONDS)
-        .onEach { _searching.update { true } }
-        .combine(_timeRegions) { query, timeRegions ->
-            if (query.isBlank()) {
-                timeRegions.sorted()
-            } else {
-                delay(DEBOUNCE_IN_MILLISECONDS)
-                val trimmedQuery = query.replace("\\s+".toRegex(), "")
-                timeRegions.filter { it.doesMatchSearchQuery(trimmedQuery) }
-            }
-        }
-        .onEach { _searching.update { false } }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(TIMEOUT_IN_MILLISECONDS),
-            _timeRegions.value
-        )
-
-    val isEditMode = mutableStateOf(false)
-    val selectedTimeRegion = mutableStateOf<TimeRegion?>(null)
-    val openSetupNameEvent = MutableSharedFlow<Event<Unit>>()
-    val continueButtonEnabled = mutableStateOf(false)
-
     init {
         viewModelScope.launch {
-            store.observeLocation().first().let {
-                isEditMode.value = it.isEditMode
-                selectedTimeRegion.value = timescapeRepository.search(it.zoneId)
-                continueButtonEnabled.value = selectedTimeRegion.value != null
+            store.observeLocation().first().let { newLocationData ->
+                val selectedTimeRegion = timescapeRepository.search(newLocationData.zoneId)
+                _state.update {
+                    it.copy(
+                        isEditMode = newLocationData.isEditMode,
+                        selectedTimeRegion = selectedTimeRegion,
+                        continueButtonEnabled = selectedTimeRegion != null,
+                        timeRegions = timescapeRepository.timeRegions.sorted()
+                    )
+                }
             }
         }
     }
 
-    fun onSearchQueryChange(query: String) {
-        _query.value = query
-    }
-
-    fun onTimeRegionSelected(timeRegion: TimeRegion) {
-        selectedTimeRegion.value = timeRegion
-        continueButtonEnabled.value = true
-    }
-
-    fun onContinueClicked() {
-        viewModelScope.launch {
-            store.saveZoneId(requireNotNull(selectedTimeRegion.value?.zoneIdString))
-            openSetupNameEvent.triggerEvent()
+    fun onAction(navHostController: NavHostController, action: SelectTimeRegionAction) {
+        when (action) {
+            is SelectTimeRegionAction.OnSearchModeUpdated -> {
+                _state.update { it.copy(searchMode = action.searchMode) }
+            }
+            is SelectTimeRegionAction.OnQueryUpdated -> {
+                _state.update {
+                    it.copy(
+                        query = action.query,
+                        timeRegions = if (action.query.isBlank()) {
+                            timeRegions.sorted()
+                        } else {
+                            val trimmedQuery = action.query.replace("\\s+".toRegex(), "")
+                            timeRegions.filter { region -> region.doesMatchSearchQuery(trimmedQuery) }
+                        }
+                    )
+                }
+            }
+            is SelectTimeRegionAction.OnTimeRegionSelected -> {
+                _state.update {
+                    it.copy(
+                        selectedTimeRegion = action.timeRegion,
+                        continueButtonEnabled = true
+                    )
+                }
+            }
+            SelectTimeRegionAction.OnContinueClicked -> {
+                viewModelScope.launch {
+                    val selectedTimeRegion = state.value.selectedTimeRegion
+                    if (selectedTimeRegion != null) {
+                        store.saveZoneId(selectedTimeRegion.zoneIdString)
+                        onAction(navHostController, SelectTimeRegionAction.OpenSetupName)
+                    }
+                }
+            }
+            SelectTimeRegionAction.OpenSetupName -> navHostController.navigate(Routes.FormSetupName)
+            SelectTimeRegionAction.OnBackClicked -> navHostController.navigateUp()
         }
     }
+}
 
-    private fun List<TimeRegion>.sorted(): List<TimeRegion> = sortedWith(
-        compareBy { it.zoneIdString !in favouriteTimeRegion }
-    )
+data class SelectTimeRegionUiState(
+    val query: String = "",
+    val searching: Boolean = false,
+    val searchMode: Boolean = false,
+    val timeRegions: List<TimeRegion> = listOf(),
+    val isEditMode: Boolean = false,
+    val selectedTimeRegion: TimeRegion? = null,
+    val continueButtonEnabled: Boolean = false
+)
+
+sealed interface SelectTimeRegionAction {
+    data class OnSearchModeUpdated(val searchMode: Boolean) : SelectTimeRegionAction
+    data class OnQueryUpdated(val query: String) : SelectTimeRegionAction
+    data class OnTimeRegionSelected(val timeRegion: TimeRegion) : SelectTimeRegionAction
+    data object OnContinueClicked : SelectTimeRegionAction
+    data object OpenSetupName : SelectTimeRegionAction
+    data object OnBackClicked : SelectTimeRegionAction
 }

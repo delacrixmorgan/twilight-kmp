@@ -40,7 +40,7 @@ fun TwilightNavHost(
 fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
     composable<Routes.FormSelectTimeRegion> {
         val viewModel = koinViewModel<SelectTimeRegionViewModel>()
-        SelectTimeRegionScreen(navHostController, viewModel)
+        SelectTimeRegionScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.FormSetupName> {
         val viewModel = koinViewModel<SetupNameViewModel>()
