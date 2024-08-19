@@ -9,21 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import data.location.model.Location
-import data.timescape.model.localTime
+import data.utils.localTime
 
 @Composable
 internal fun LocationListRow(
     location: Location,
-    onClicked: ((Location) -> Unit?)? = null
+    onClicked: ((Location) -> Unit)? = null
 ) {
-    val modifier = Modifier
-        .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.large)
-        .padding(8.dp)
-
-    onClicked?.let {
-        modifier.clickable { it(location) }
-    }
-    Box(modifier = modifier) {
+    Box(
+        modifier = Modifier
+            .then(if (onClicked != null) Modifier.clickable { onClicked(location) } else Modifier)
+            .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.large)
+            .padding(8.dp)
+    ) {
         ListItem(
             label = {
                 ListItemColumnLabel(

@@ -2,7 +2,6 @@ package nav
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,14 +19,7 @@ import ui.form.timeregion.SelectTimeRegionScreen
 import ui.form.timeregion.SelectTimeRegionViewModel
 
 @Composable
-fun TwilightNavHost(
-    modifier: Modifier,
-    navHostController: NavHostController = rememberNavController()
-) {
-    //    val backStackEntry by navController.currentBackStackEntryAsState()
-//    val currentScreen = BottomNavItem.entries.firstOrNull {
-//        it.route == backStackEntry?.destination?.route
-//    } ?: BottomNavItem.Dashboard
+fun TwilightNavHost(navHostController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navHostController,
         startDestination = Routes.Dashboard

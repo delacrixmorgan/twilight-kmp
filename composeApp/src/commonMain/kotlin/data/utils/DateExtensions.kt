@@ -5,6 +5,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
 import kotlinx.datetime.toLocalDateTime
 
 fun LocalDateTime.Companion.now(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime {
@@ -17,4 +18,8 @@ fun LocalDate.Companion.now(): LocalDate {
 
 fun LocalTime.Companion.now(): LocalTime {
     return LocalDateTime.now().time
+}
+
+fun TimeZone.localTime(): String {
+    return LocalDateTime.now(this).format(DateFormat.twelveHour)
 }

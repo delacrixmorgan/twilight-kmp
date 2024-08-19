@@ -23,13 +23,9 @@ data class TimeRegion(
     fun doesMatchSearchQuery(query: String): Boolean {
         return keywords.any { it.contains(query, ignoreCase = true) }
     }
-}
 
-fun TimeRegion.localTime(): String {
-    val now: LocalDateTime = LocalDateTime.now(timeZone)
-    return now.format(DateFormat.twelveHour)
-}
-
-fun TimeZone.localTime(): String {
-    return LocalDateTime.now(this).format(DateFormat.twelveHour)
+    fun localTime(): String {
+        val now: LocalDateTime = LocalDateTime.now(timeZone)
+        return now.format(DateFormat.twelveHour)
+    }
 }

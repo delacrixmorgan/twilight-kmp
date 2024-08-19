@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RadioGroup(
+internal fun RadioGroup(
     modifier: Modifier = Modifier,
     haptic: HapticFeedback = LocalHapticFeedback.current,
     initialIndex: Int? = null,
@@ -29,9 +29,7 @@ fun RadioGroup(
     onSelected: (Int, String) -> Unit,
 ) {
     var selectedIndex by remember(initialIndex) { mutableStateOf(initialIndex) }
-    Column(
-        modifier = modifier,
-    ) {
+    Column(modifier = modifier) {
         options.forEachIndexed { index, option ->
             val isSelected = index == selectedIndex
             val selected = {
@@ -42,7 +40,7 @@ fun RadioGroup(
             RadioRow(
                 isSelected = isSelected,
                 option = option,
-                selected = selected,
+                onSelected = selected,
             )
         }
     }
@@ -52,15 +50,15 @@ fun RadioGroup(
 private fun RadioRow(
     isSelected: Boolean,
     option: RadioRowData,
-    selected: () -> Unit = {},
+    onSelected: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.clickable { selected() }.padding(vertical = 8.dp, horizontal = 16.dp),
+        modifier = Modifier.clickable { onSelected() }.padding(vertical = 8.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = isSelected,
-            onClick = selected,
+            onClick = onSelected,
         )
 
         Column(

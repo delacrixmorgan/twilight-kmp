@@ -3,6 +3,6 @@ import androidx.compose.ui.Modifier
 import nav.TwilightNavHost
 
 @Composable
-fun TwilightApp(modifier: Modifier) {
-    TwilightNavHost(modifier)
+fun TwilightApp() {
+    TwilightNavHost()
 }

@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import data.timescape.model.TimeRegion
-import data.timescape.model.localTime
 
 @Composable
 internal fun TimeRegionListRow(
