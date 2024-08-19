@@ -3,7 +3,7 @@ package data.location
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
-import data.model.Location
+import data.location.model.Location
 import di.TwilightDatabaseWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

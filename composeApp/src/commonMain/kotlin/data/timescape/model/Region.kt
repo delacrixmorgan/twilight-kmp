@@ -1,4 +1,4 @@
-package data.model
+package data.timescape.model
 
 enum class Region {
     Africa,

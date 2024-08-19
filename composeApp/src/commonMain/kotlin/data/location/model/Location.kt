@@ -1,4 +1,4 @@
-package data.model
+package data.location.model
 
 import kotlinx.datetime.TimeZone
 import randomUUID

@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import data.location.LocationRepository
 import data.locationform.LocationFormRepository
-import data.model.Location
-import data.preferences.DateFormatPreference
-import data.preferences.LocationFormatPreference
+import data.location.model.Location
+import data.preferences.model.DateFormatPreference
+import data.preferences.model.LocationFormatPreference
 import data.preferences.PreferencesRepository
 import data.timescape.TimescapeRepository
 import data.utils.now

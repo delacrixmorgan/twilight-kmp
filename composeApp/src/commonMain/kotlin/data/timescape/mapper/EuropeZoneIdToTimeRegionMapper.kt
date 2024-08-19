@@ -1,7 +1,7 @@
 package data.timescape.mapper
 
-import data.model.Region
-import data.model.TimeRegion
+import data.timescape.model.Region
+import data.timescape.model.TimeRegion
 import data.utils.Mapper
 
 class EuropeZoneIdToTimeRegionMapper : Mapper<List<String>, List<TimeRegion>> {

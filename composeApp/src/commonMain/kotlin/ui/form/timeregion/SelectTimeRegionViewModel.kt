@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import data.locationform.LocationFormRepository
-import data.model.TimeRegion
+import data.timescape.model.TimeRegion
 import data.timescape.TimescapeRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow

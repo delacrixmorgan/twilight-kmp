@@ -1,6 +1,6 @@
 package mapper
 
-import data.model.Region
+import data.timescape.model.Region
 import data.timescape.TimescapeRepository
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin

@@ -1,12 +1,12 @@
 package data.timescape
 
-import data.model.Region
-import data.model.TimeRegion
 import data.timescape.mapper.AmericaZoneIdToTimeRegionMapper
 import data.timescape.mapper.AsiaZoneIdToTimeRegionMapper
 import data.timescape.mapper.AustraliaZoneIdToTimeRegionMapper
 import data.timescape.mapper.EuropeZoneIdToTimeRegionMapper
 import data.timescape.mapper.PacificZoneIdToTimeRegionMapper
+import data.timescape.model.Region
+import data.timescape.model.TimeRegion
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant

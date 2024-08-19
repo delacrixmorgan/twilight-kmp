@@ -3,10 +3,10 @@ package ui.dashboard.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import data.preferences.DateFormatPreference
-import data.preferences.LocationFormatPreference
+import data.preferences.model.DateFormatPreference
+import data.preferences.model.LocationFormatPreference
 import data.preferences.PreferencesRepository
-import data.preferences.ThemePreference
+import data.preferences.model.ThemePreference
 import getVersionCode
 import getVersionName
 import kotlinx.coroutines.flow.MutableStateFlow

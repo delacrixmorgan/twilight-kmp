@@ -1,4 +1,4 @@
-package data.model
+package data.locationform.model
 
 data class NewLocationData(
     val id: String? = null,

@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import data.preferences.DateFormatPreference
-import data.preferences.LocationFormatPreference
-import data.preferences.ThemePreference
+import data.preferences.model.DateFormatPreference
+import data.preferences.model.LocationFormatPreference
+import data.preferences.model.ThemePreference
 import ui.component.ListView
 import ui.component.RadioGroupBottomSheet
 import ui.component.RadioRowData

@@ -1,5 +1,6 @@
-package data.model
+package data.timescape.model
 
+import data.utils.DateFormat
 import data.utils.now
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

@@ -1,6 +1,6 @@
-package data.preferences
+package data.preferences.model
 
-import data.model.DateFormat
+import data.utils.DateFormat
 import data.utils.now
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format

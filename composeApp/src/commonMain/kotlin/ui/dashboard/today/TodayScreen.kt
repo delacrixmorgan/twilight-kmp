@@ -40,10 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
-import data.model.DateFormat
-import data.model.Location
-import data.preferences.DateFormatPreference
-import data.preferences.LocationFormatPreference
+import data.utils.DateFormat
+import data.location.model.Location
+import data.preferences.model.DateFormatPreference
+import data.preferences.model.LocationFormatPreference
 import data.utils.now
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimePeriod

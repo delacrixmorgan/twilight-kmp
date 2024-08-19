@@ -12,8 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import data.model.TimeRegion
-import data.model.localTime
+import data.timescape.model.TimeRegion
+import data.timescape.model.localTime
 
 @Composable
 internal fun TimeRegionListRow(

@@ -1,4 +1,4 @@
-package data.model
+package data.utils
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.DayOfWeekNames

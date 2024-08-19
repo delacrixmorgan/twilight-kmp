@@ -23,7 +23,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import data.preferences.ThemePreference
+import data.preferences.model.ThemePreference
 import data.preferences.PreferencesRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

@@ -1,4 +1,4 @@
-package data.preferences
+package data.preferences.model
 
 enum class LocationFormatPreference {
     Place,
