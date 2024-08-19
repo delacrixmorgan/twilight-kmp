@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import data.locationform.LocationFormRepository
-import data.timescape.TimescapeRepository
+import data.kalika.KairosRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,7 @@ import org.koin.core.component.inject
 
 class SetupNameViewModel : ViewModel(), KoinComponent {
     private val store: LocationFormRepository by inject()
-    private val timescapeRepository: TimescapeRepository by inject()
+    private val kairosRepository: KairosRepository by inject()
 
     private var _state = MutableStateFlow(SetupNameUiState())
     val state: StateFlow<SetupNameUiState>
@@ -39,7 +39,7 @@ class SetupNameViewModel : ViewModel(), KoinComponent {
     }
 
     private suspend fun getFallbackRegionName(): String? {
-        return timescapeRepository.search(requireNotNull(store.getZoneId().first()))?.city
+        return kairosRepository.search(requireNotNull(store.getZoneId().first()))?.city
     }
 
     fun onAction(navHostController: NavHostController, action: SetupNameAction) {

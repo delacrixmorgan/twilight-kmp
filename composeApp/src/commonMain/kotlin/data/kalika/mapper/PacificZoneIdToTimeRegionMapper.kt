@@ -1,7 +1,7 @@
-package data.timescape.mapper
+package data.kalika.mapper
 
-import data.timescape.model.Region
-import data.timescape.model.TimeRegion
+import data.kalika.model.Region
+import data.kalika.model.TimeRegion
 import data.utils.Mapper
 
 class PacificZoneIdToTimeRegionMapper : Mapper<List<String>, List<TimeRegion>> {

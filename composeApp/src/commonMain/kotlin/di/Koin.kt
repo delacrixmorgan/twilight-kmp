@@ -7,7 +7,7 @@ import data.locationform.LocationFormRepository
 import data.locationform.LocationFormRepositoryImpl
 import data.preferences.PreferencesRepository
 import data.preferences.PreferencesRepositoryImpl
-import data.timescape.TimescapeRepository
+import data.kalika.KairosRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.KoinAppDeclaration
@@ -48,7 +48,7 @@ fun serviceModule() = module {
 }
 
 fun repositoryModule() = module {
-    single<TimescapeRepository> { TimescapeRepository() }
+    single<KairosRepository> { KairosRepository() }
     single<PreferencesRepository> { PreferencesRepositoryImpl() }
     single<LocationRepository> { LocationRepositoryImpl() }
     single<LocationFormRepository> { LocationFormRepositoryImpl() }

@@ -1,4 +1,4 @@
-package data.timescape.model
+package data.kalika.model
 
 import data.utils.DateFormat
 import data.utils.now

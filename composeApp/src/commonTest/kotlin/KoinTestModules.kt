@@ -1,4 +1,4 @@
-import data.timescape.TimescapeRepository
+import data.kalika.KairosRepository
 import org.koin.dsl.module
 
-val repositoryModules = module { single { TimescapeRepository() } }
+val repositoryModules = module { single { KairosRepository() } }

@@ -1,4 +1,4 @@
-package data.timescape.model
+package data.kalika.model
 
 enum class Region {
     Africa,

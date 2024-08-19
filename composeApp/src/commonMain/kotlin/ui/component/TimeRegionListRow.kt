@@ -12,7 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import data.timescape.model.TimeRegion
+import data.kalika.model.TimeRegion
 
 @Composable
 internal fun TimeRegionListRow(

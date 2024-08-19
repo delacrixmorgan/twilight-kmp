@@ -9,7 +9,7 @@ import data.location.model.Location
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
 import data.preferences.PreferencesRepository
-import data.timescape.TimescapeRepository
+import data.kalika.KairosRepository
 import data.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +31,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     private val preferences: PreferencesRepository by inject()
     private val repository: LocationRepository by inject()
-    private val timescapeRepository: TimescapeRepository by inject()
+    private val kairosRepository: KairosRepository by inject()
     private val locationFormRepository: LocationFormRepository by inject()
 
     private var _state = MutableStateFlow(TodayUiState())
@@ -60,7 +60,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     private fun loadLocations() {
         val currentTimeZone = TimeZone.currentSystemDefault()
-        val currentTimeRegion = timescapeRepository.search(currentTimeZone.id)
+        val currentTimeRegion = kairosRepository.search(currentTimeZone.id)
         if (currentTimeRegion != null) {
             _state.update {
                 it.copy(

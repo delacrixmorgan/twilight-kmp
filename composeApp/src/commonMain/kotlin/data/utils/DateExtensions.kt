@@ -1,6 +1,6 @@
 package data.utils
 
-import data.timescape.model.TimeRegion
+import data.kalika.model.TimeRegion
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime

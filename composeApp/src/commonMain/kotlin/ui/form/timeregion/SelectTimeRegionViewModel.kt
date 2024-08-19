@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import data.locationform.LocationFormRepository
-import data.timescape.TimescapeRepository
-import data.timescape.model.TimeRegion
+import data.kalika.KairosRepository
+import data.kalika.model.TimeRegion
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,13 +27,13 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     }
 
     private val store: LocationFormRepository by inject()
-    private val timescapeRepository: TimescapeRepository by inject()
+    private val kairosRepository: KairosRepository by inject()
 
     private var _state = MutableStateFlow(SelectTimeRegionUiState())
     val state: StateFlow<SelectTimeRegionUiState>
         get() = _state.asStateFlow()
 
-    private val timeRegions get() = timescapeRepository.timeRegions.sorted()
+    private val timeRegions get() = kairosRepository.timeRegions.sorted()
     private fun List<TimeRegion>.sorted(): List<TimeRegion> = sortedWith(
         compareBy { it.zoneIdString !in favouriteTimeRegion }
     )
@@ -41,13 +41,13 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     init {
         viewModelScope.launch {
             store.observeLocation().first().let { newLocationData ->
-                val selectedTimeRegion = timescapeRepository.search(newLocationData.zoneId)
+                val selectedTimeRegion = kairosRepository.search(newLocationData.zoneId)
                 _state.update {
                     it.copy(
                         isEditMode = newLocationData.isEditMode,
                         selectedTimeRegion = selectedTimeRegion,
                         continueButtonEnabled = selectedTimeRegion != null,
-                        timeRegions = timescapeRepository.timeRegions.sorted()
+                        timeRegions = kairosRepository.timeRegions.sorted()
                     )
                 }
             }

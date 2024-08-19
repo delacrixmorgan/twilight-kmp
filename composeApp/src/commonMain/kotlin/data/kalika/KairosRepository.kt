@@ -1,22 +1,20 @@
-package data.timescape
+package data.kalika
 
-import data.timescape.mapper.AmericaZoneIdToTimeRegionMapper
-import data.timescape.mapper.AsiaZoneIdToTimeRegionMapper
-import data.timescape.mapper.AustraliaZoneIdToTimeRegionMapper
-import data.timescape.mapper.EuropeZoneIdToTimeRegionMapper
-import data.timescape.mapper.PacificZoneIdToTimeRegionMapper
-import data.timescape.model.Region
-import data.timescape.model.TimeRegion
-import kotlinx.datetime.LocalDateTime
+import data.kalika.mapper.AmericaZoneIdToTimeRegionMapper
+import data.kalika.mapper.AsiaZoneIdToTimeRegionMapper
+import data.kalika.mapper.AustraliaZoneIdToTimeRegionMapper
+import data.kalika.mapper.EuropeZoneIdToTimeRegionMapper
+import data.kalika.mapper.PacificZoneIdToTimeRegionMapper
+import data.kalika.model.Region
+import data.kalika.model.TimeRegion
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import org.koin.core.component.KoinComponent
 
 /**
+ * https://en.wikipedia.org/wiki/Kairos
  * https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  */
-class TimescapeRepository : KoinComponent {
+class KairosRepository : KoinComponent {
     val timeRegions: List<TimeRegion>
     private val americaZoneIdToTimeRegionMapper by lazy { AmericaZoneIdToTimeRegionMapper() }
     private val asiaZoneIdToTimeRegionMapper by lazy { AsiaZoneIdToTimeRegionMapper() }

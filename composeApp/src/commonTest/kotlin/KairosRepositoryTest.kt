@@ -1,4 +1,4 @@
-import data.timescape.TimescapeRepository
+import data.kalika.KairosRepository
 import data.utils.convert
 import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.inject
@@ -10,12 +10,12 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TimescapeRepositoryTest : KoinTest {
+class KairosRepositoryTest : KoinTest {
 
-    private val timescapeRepository: TimescapeRepository by inject()
+    private val kairosRepository: KairosRepository by inject()
 
-    private val netherlandsTimeRegion by lazy { timescapeRepository.search("Europe/Amsterdam")!! }
-    private val malaysiaTimeRegion by lazy { timescapeRepository.search("Asia/Kuala_Lumpur")!! }
+    private val netherlandsTimeRegion by lazy { kairosRepository.search("Europe/Amsterdam")!! }
+    private val malaysiaTimeRegion by lazy { kairosRepository.search("Asia/Kuala_Lumpur")!! }
 
     @BeforeTest
     fun setup() {

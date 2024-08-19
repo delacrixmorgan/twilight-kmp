@@ -1,7 +1,7 @@
 package mapper
 
-import data.timescape.model.Region
-import data.timescape.TimescapeRepository
+import data.kalika.model.Region
+import data.kalika.KairosRepository
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -14,10 +14,10 @@ import kotlin.test.assertTrue
 
 class AustraliaZoneIdToTimeRegionMapperTest : KoinTest {
 
-    private val timescapeRepository: TimescapeRepository by inject()
+    private val kairosRepository: KairosRepository by inject()
 
     private val zoneIds by lazy {
-        timescapeRepository.timeRegions
+        kairosRepository.timeRegions
             .filter { it.region == Region.Australia }
             .map { it.timeZone.toString() }
     }
