@@ -76,9 +76,7 @@ fun SummaryScreen(
 
             Spacer(modifier = Modifier.weight(1F))
 
-            state.location?.let {
-                LocationListRow(it)
-            }
+            state.location?.let { LocationListRow(it) }
         }
     }
 }

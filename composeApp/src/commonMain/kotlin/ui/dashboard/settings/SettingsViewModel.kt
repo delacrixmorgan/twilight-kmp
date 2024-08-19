@@ -3,9 +3,9 @@ package ui.dashboard.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import data.preferences.PreferencesRepository
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
-import data.preferences.PreferencesRepository
 import data.preferences.model.ThemePreference
 import getVersionCode
 import getVersionName
@@ -19,7 +19,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class SettingsViewModel : ViewModel(), KoinComponent {
-
     private var _state = MutableStateFlow(SettingsUiState())
     val state: StateFlow<SettingsUiState>
         get() = _state.asStateFlow()
@@ -33,8 +32,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 
     private fun loadPreferences() {
         viewModelScope.launch {
-            launch { preferences.getTheme().collect { theme ->
-                _state.update { it.copy(theme = theme) } } }
+            launch { preferences.getTheme().collect { theme -> _state.update { it.copy(theme = theme) } } }
             launch { preferences.getDateFormat().collect { dateFormat -> _state.update { it.copy(dateFormat = dateFormat) } } }
             launch { preferences.getLocationFormat().collect { locationFormat -> _state.update { it.copy(locationFormat = locationFormat) } } }
         }

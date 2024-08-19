@@ -62,11 +62,3 @@ class TimescapeRepository : KoinComponent {
         return timeRegions.firstOrNull { it.zoneIdString == zoneId }
     }
 }
-
-fun LocalDateTime.convert(
-    from: TimeRegion,
-    to: TimeRegion
-): LocalDateTime {
-    return this.toInstant(from.timeZone)
-        .toLocalDateTime(to.timeZone)
-}

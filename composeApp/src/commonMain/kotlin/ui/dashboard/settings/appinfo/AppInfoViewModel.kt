@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import org.koin.core.component.KoinComponent
 
 class AppInfoViewModel : ViewModel(), KoinComponent {
-
     var state by mutableStateOf(AppInfoUiState())
         private set
 

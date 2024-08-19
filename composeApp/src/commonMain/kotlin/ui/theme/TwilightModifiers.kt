@@ -9,14 +9,4 @@ object TwilightModifiers {
         horizontal = 16.dp,
         vertical = 20.dp,
     )
-    val startIconModifier = Modifier.padding(
-        top = 20.dp,
-        bottom = 20.dp,
-        end = 16.dp,
-    )
-    val endIconModifier = Modifier.padding(
-        top = 20.dp,
-        bottom = 20.dp,
-        start = 16.dp,
-    )
 }

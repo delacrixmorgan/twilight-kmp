@@ -1,5 +1,5 @@
 import data.timescape.TimescapeRepository
-import data.timescape.convert
+import data.utils.convert
 import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin

@@ -76,18 +76,10 @@ fun SetupNameScreen(
         }
     ) { innerPadding ->
         Column(Modifier.fillMaxSize().padding(innerPadding).padding(16.dp)) {
-            Text(
-                "Enter a name and customise your region name if you'd like.",
-                style = MaterialTheme.typography.bodyLarge
-            )
-
+            Text("Enter a name and customise your region name if you'd like.", style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.weight(1F))
 
-            Text(
-                "Name",
-                style = MaterialTheme.typography.labelLarge
-            )
-
+            Text("Name", style = MaterialTheme.typography.labelLarge)
             Spacer(Modifier.height(8.dp))
 
             TextField(
@@ -100,20 +92,12 @@ fun SetupNameScreen(
                 onValueChange = { onAction(SetupNameAction.OnLocationNameUpdated(it)) },
                 placeholder = { Text("Name") },
                 leadingIcon = {
-                    Icon(
-                        Icons.Rounded.Create,
-                        contentDescription = null
-                    )
+                    Icon(Icons.Rounded.Create, contentDescription = null)
                 },
             )
-
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                "Region Name",
-                style = MaterialTheme.typography.labelLarge
-            )
-
+            Text("Region Name", style = MaterialTheme.typography.labelLarge)
             Spacer(Modifier.height(8.dp))
 
             TextField(
@@ -125,12 +109,7 @@ fun SetupNameScreen(
                 value = state.regionName,
                 onValueChange = { onAction(SetupNameAction.OnRegionNameUpdated(it)) },
                 placeholder = { Text("Region Name") },
-                leadingIcon = {
-                    Icon(
-                        Icons.Rounded.TravelExplore,
-                        contentDescription = null
-                    )
-                },
+                leadingIcon = { Icon(Icons.Rounded.TravelExplore, contentDescription = null) },
             )
         }
     }

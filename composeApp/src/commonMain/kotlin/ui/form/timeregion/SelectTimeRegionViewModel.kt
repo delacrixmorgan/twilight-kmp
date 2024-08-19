@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import data.locationform.LocationFormRepository
-import data.timescape.model.TimeRegion
 import data.timescape.TimescapeRepository
-import kotlinx.coroutines.FlowPreview
+import data.timescape.model.TimeRegion
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,11 +16,14 @@ import nav.Routes
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(FlowPreview::class)
 class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     companion object {
-        private const val DEBOUNCE_IN_MILLISECONDS = 500L
-        private const val TIMEOUT_IN_MILLISECONDS = 5_000L
+        private val favouriteTimeRegion = listOf(
+            "Asia/Kuala_Lumpur",
+            "Europe/Amsterdam",
+            "Australia/Melbourne",
+            "America/New_York",
+        )
     }
 
     private val store: LocationFormRepository by inject()
@@ -34,13 +36,6 @@ class SelectTimeRegionViewModel : ViewModel(), KoinComponent {
     private val timeRegions get() = timescapeRepository.timeRegions.sorted()
     private fun List<TimeRegion>.sorted(): List<TimeRegion> = sortedWith(
         compareBy { it.zoneIdString !in favouriteTimeRegion }
-    )
-
-    private val favouriteTimeRegion = listOf(
-        "Asia/Kuala_Lumpur",
-        "Europe/Amsterdam",
-        "Australia/Melbourne",
-        "America/New_York",
     )
 
     init {
