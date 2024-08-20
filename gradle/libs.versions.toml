@@ -1,8 +1,8 @@
 [versions]
 agp = "8.5.2" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
-android-compileSdk = "34"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "34"
+android-targetSdk = "35"
 kotlin = "2.0.10"
 compose-plugin = "1.6.10"
 kotlinx-serialization-json = "1.6.3"
