@@ -11,7 +11,7 @@ import kotlinx.datetime.TimeZone
 import org.koin.core.component.KoinComponent
 
 /**
- * https://en.wikipedia.org/wiki/Kairos
+ * Kairos, ancient Greek word meaning 'the right or critical moment'
  * https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  */
 class KairosRepository : KoinComponent {
