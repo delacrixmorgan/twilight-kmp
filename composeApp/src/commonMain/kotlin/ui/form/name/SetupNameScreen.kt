@@ -43,7 +43,6 @@ fun SetupNameScreen(
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val localFocusManager = LocalFocusManager.current
     if (!keyboardShownState().value) localFocusManager.clearFocus()
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {

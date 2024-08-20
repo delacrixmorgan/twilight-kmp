@@ -43,7 +43,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import ui.component.TimeRegionListRow
+import ui.component.ListItemRow
 import ui.component.navigationIcon.NavigationBackIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +53,6 @@ fun SelectTimeRegionScreen(
     onAction: (SelectTimeRegionAction) -> Unit
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -102,10 +101,14 @@ fun SelectTimeRegionScreen(
                 }
                 items(count = list.size, key = { list[it].id }) { index ->
                     val item = list[index]
-                    TimeRegionListRow(
-                        timeRegion = item,
-                        selected = state.selectedTimeRegion?.zoneIdString == item.zoneIdString
-                    ) { onAction(SelectTimeRegionAction.OnTimeRegionSelected(it)) }
+                    val selected = state.selectedTimeRegion?.zoneIdString == item.zoneIdString
+                    ListItemRow(
+                        label = item.city,
+                        description = item.zone,
+                        endLabel = item.localTime(),
+                        selected = selected,
+                        onClicked = { onAction(SelectTimeRegionAction.OnTimeRegionSelected(item)) }
+                    )
                 }
             }
         }

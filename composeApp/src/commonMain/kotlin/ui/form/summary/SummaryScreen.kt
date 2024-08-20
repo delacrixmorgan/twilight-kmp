@@ -21,7 +21,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import ui.component.LocationListRow
+import data.utils.localTime
+import ui.component.ListItemRow
 import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
 
@@ -34,7 +35,6 @@ fun SummaryScreen(
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val localFocusManager = LocalFocusManager.current
     if (!keyboardShownState().value) localFocusManager.clearFocus()
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -76,7 +76,13 @@ fun SummaryScreen(
 
             Spacer(modifier = Modifier.weight(1F))
 
-            state.location?.let { LocationListRow(it) }
+            state.location?.let {
+                ListItemRow(
+                    label = it.name,
+                    description = it.regionName,
+                    endLabel = it.timeRegion.localTime()
+                )
+            }
         }
     }
 }
