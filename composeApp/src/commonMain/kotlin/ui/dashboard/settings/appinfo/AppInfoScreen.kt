@@ -31,7 +31,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.component.ListItem
-import ui.component.ListItemColumnLabel
 import ui.component.ListView
 import ui.component.navigationIcon.NavigationBackIcon
 import ui.theme.AppTheme
@@ -91,20 +90,16 @@ private fun Developer(onClick: () -> Unit) {
     val description = "Delacrix Morgan"
     ListItem(
         modifier = Modifier.clickable { onClick() },
-        label = {
-            ListItemColumnLabel(
-                label = label,
-                description = description,
-            )
-        },
-        startIcon = {
+        label = label,
+        description = description,
+        startContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Person,
                 contentDescription = label
             )
         },
-        endIcon = {
+        endContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ChevronRight,
@@ -120,20 +115,16 @@ private fun SourceCode(onClick: () -> Unit) {
     val description = "GitHub"
     ListItem(
         modifier = Modifier.clickable { onClick() },
-        label = {
-            ListItemColumnLabel(
-                label = label,
-                description = description,
-            )
-        },
-        startIcon = {
+        label = label,
+        description = description,
+        startContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Code,
                 contentDescription = label
             )
         },
-        endIcon = {
+        endContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ChevronRight,

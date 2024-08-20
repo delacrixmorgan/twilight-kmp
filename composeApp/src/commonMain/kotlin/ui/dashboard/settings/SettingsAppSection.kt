@@ -8,7 +8,6 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ui.component.ListItem
@@ -19,15 +18,15 @@ internal fun AppInfo(onClick: () -> Unit) {
     val label = "App Info"
     ListItem(
         modifier = Modifier.clickable { onClick() },
-        label = { Text(label) },
-        startIcon = {
+        label = label,
+        startContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Info,
                 contentDescription = label
             )
         },
-        endIcon = {
+        endContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ChevronRight,
@@ -42,15 +41,15 @@ internal fun PrivacyPolicy(onClick: () -> Unit) {
     val label = "Privacy Policy"
     ListItem(
         modifier = Modifier.clickable { onClick() },
-        label = { Text(label) },
-        startIcon = {
+        label = label,
+        startContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Policy,
                 contentDescription = label
             )
         },
-        endIcon = {
+        endContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ChevronRight,
@@ -65,15 +64,15 @@ internal fun SendFeedback(onClick: () -> Unit) {
     val label = "Send Feedback"
     ListItem(
         modifier = Modifier.clickable { onClick() },
-        label = { Text(label) },
-        startIcon = {
+        label = label,
+        startContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.Feedback,
                 contentDescription = label
             )
         },
-        endIcon = {
+        endContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ChevronRight,
@@ -89,15 +88,15 @@ internal fun RateUs(onClick: () -> Unit) {
 
     ListItem(
         modifier = Modifier.clickable { onClick() },
-        label = { Text(label) },
-        startIcon = {
+        label = label,
+        startContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ThumbUp,
                 contentDescription = label
             )
         },
-        endIcon = {
+        endContent = {
             Icon(
                 modifier = TwilightModifiers.iconModifier,
                 imageVector = Icons.Rounded.ChevronRight,

@@ -97,6 +97,7 @@ fun SelectTimeRegionScreen(
                             "Choose your time zone from the list below. Use the search bar to quickly find your specific time zone.",
                             style = MaterialTheme.typography.bodyLarge
                         )
+                        Spacer(Modifier.height(16.dp))
                     }
                 }
                 items(count = list.size, key = { list[it].id }) { index ->

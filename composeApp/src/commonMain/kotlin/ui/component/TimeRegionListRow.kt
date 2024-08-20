@@ -3,14 +3,17 @@ package ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.RadioButtonUnchecked
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import data.kalika.model.TimeRegion
 
@@ -22,12 +25,14 @@ internal fun TimeRegionListRow(
 ) {
     Box(
         modifier = Modifier
-            .clickable { onClicked(timeRegion) }
+            .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surfaceContainerLow, shape = MaterialTheme.shapes.small)
+            .clickable { onClicked(timeRegion) }
             .padding(8.dp),
     ) {
         ListItem(
-            startIcon = {
+            modifier = Modifier.padding(vertical = 8.dp),
+            startContent = {
                 if (selected) {
                     Icon(
                         Icons.Rounded.CheckCircle,
@@ -42,15 +47,14 @@ internal fun TimeRegionListRow(
                     )
                 }
             },
-            label = {
-                ListItemColumnLabel(
-                    label = timeRegion.city,
-                    description = timeRegion.zone
-                )
-            },
-            endLabel = {
-                ListItemColumnLabel(
-                    label = timeRegion.localTime()
+            label = timeRegion.city,
+            description = timeRegion.zone,
+            endContent = {
+                Text(
+                    text = timeRegion.localTime(),
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         )
