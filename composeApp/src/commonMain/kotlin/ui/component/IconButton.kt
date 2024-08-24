@@ -1,22 +1,23 @@
-package ui.component.navigationIcon
+package ui.component
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun NavigationBackIcon(
+fun IconButton(
+    imageVector: ImageVector,
+    contentDescription: String,
     tint: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-    onClick: () -> Unit,
+    onClicked: () -> Unit,
 ) {
-    IconButton(onClick = onClick) {
+    IconButton(onClick = { onClicked() }) {
         Icon(
-            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-            contentDescription = "Go back",
+            imageVector = imageVector,
+            contentDescription = contentDescription,
             tint = tint
         )
     }

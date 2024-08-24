@@ -47,10 +47,7 @@ fun SetupNameScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MediumTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
+                colors = DefaultColors.appBarColors(),
                 title = {
                     Text(
                         if (state.isEditMode) "Edit name" else "Pick a name",

@@ -25,6 +25,7 @@ import data.utils.localTime
 import ui.component.ListItemRow
 import ui.component.navigationIcon.NavigationBackIcon
 import ui.keyboardShownState
+import ui.theme.DefaultColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +40,7 @@ fun SummaryScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MediumTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
+                colors = DefaultColors.appBarColors(),
                 title = {
                     Text(
                         if (state.isEditMode) "Edit Summary" else "Summary",

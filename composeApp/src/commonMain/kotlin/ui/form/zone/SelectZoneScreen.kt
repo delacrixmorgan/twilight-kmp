@@ -21,7 +21,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
@@ -43,8 +42,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import ui.component.IconButton
 import ui.component.ListItemRow
 import ui.component.navigationIcon.NavigationBackIcon
+import ui.theme.DefaultColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,25 +137,21 @@ private fun AppBar(
     onAction: (SelectZoneAction) -> Unit
 ) {
     MediumTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
+        colors = DefaultColors.appBarColors(),
         title = {
             Text(
                 if (state.isEditMode) "Edit your time zone" else "Select your time zone",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         },
         navigationIcon = { NavigationBackIcon { onAction(SelectZoneAction.OnBackClicked) } },
         actions = {
-            IconButton(onClick = { onAction(SelectZoneAction.OnSearchModeUpdated(searchMode = true)) }) {
-                Icon(
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = "Search"
-                )
-            }
+            IconButton(
+                imageVector = Icons.Rounded.Search,
+                contentDescription = "Search",
+                onClicked = { onAction(SelectZoneAction.OnSearchModeUpdated(searchMode = true)) }
+            )
         },
         scrollBehavior = scrollBehavior
     )
@@ -191,12 +188,11 @@ private fun SearchAppBar(
             if (state.query.isNotBlank()) {
                 NavigationBackIcon { onAction(SelectZoneAction.OnBackClicked) }
             } else {
-                IconButton(onClick = { onAction(SelectZoneAction.OnSearchModeUpdated(searchMode = false)) }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close"
-                    )
-                }
+                IconButton(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close",
+                    onClicked = { onAction(SelectZoneAction.OnSearchModeUpdated(searchMode = false)) }
+                )
             }
         },
     )
