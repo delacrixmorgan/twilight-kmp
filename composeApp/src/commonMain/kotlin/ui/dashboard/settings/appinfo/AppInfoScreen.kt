@@ -49,7 +49,7 @@ fun AppInfoScreen(
         topBar = {
             TopAppBar(
                 title = { Text("App Info", style = AppTypography.headlineMedium) },
-                navigationIcon = { NavigationBackIcon { onAction(AppInfoAction.GoBack) } },
+                navigationIcon = { NavigationBackIcon(tint = MaterialTheme.colorScheme.onSurface) { onAction(AppInfoAction.GoBack) } },
             )
         },
     ) { innerPadding ->
