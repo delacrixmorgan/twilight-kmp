@@ -86,7 +86,7 @@ fun SetupNameScreen(
                 colors = DefaultColors.textFieldDefaultColors(),
                 shape = CircleShape,
                 maxLines = 1,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Next),
                 value = state.locationName,
                 onValueChange = { onAction(SetupNameAction.OnLocationNameUpdated(it)) },
                 placeholder = { Text("Name") },
