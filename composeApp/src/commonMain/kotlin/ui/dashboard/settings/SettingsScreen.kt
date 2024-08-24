@@ -85,7 +85,8 @@ fun SettingsScreen(
         Text(
             state.version,
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.labelLarge
         )
     }
 
