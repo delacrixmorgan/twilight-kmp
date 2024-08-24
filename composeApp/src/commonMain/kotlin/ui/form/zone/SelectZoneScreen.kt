@@ -1,5 +1,6 @@
 package ui.form.zone
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -113,6 +114,7 @@ private fun LoadedSelectZoneScreen(
         }
         Column(
             Modifier
+                .background(brush = DefaultColors.bottomScaffoldBrush())
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
                 .align(Alignment.BottomStart)

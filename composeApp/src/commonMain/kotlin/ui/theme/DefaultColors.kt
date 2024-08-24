@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 object DefaultColors {
@@ -21,5 +22,13 @@ object DefaultColors {
     fun appBarColors() = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+    )
+
+    @Composable
+    fun bottomScaffoldBrush() = Brush.verticalGradient(
+        colors = listOf(
+            Color.Transparent,
+            MaterialTheme.colorScheme.surfaceDim,
+        ),
     )
 }
