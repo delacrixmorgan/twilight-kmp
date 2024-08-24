@@ -1,23 +1,23 @@
-package data.kalika.mapper
+package data.kairos.mapper
 
-import data.kalika.model.Region
-import data.kalika.model.TimeRegion
+import data.kairos.model.Region
+import data.kairos.model.Zone
 import data.utils.Mapper
 
-class AmericaZoneIdToTimeRegionMapper : Mapper<List<String>, List<TimeRegion>> {
+class AmericaZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
     companion object {
         private val region = Region.America
     }
 
-    override fun invoke(input: List<String>): List<TimeRegion> = input.map { zoneIdString ->
+    override fun invoke(input: List<String>): List<Zone> = input.map { zoneIdString ->
         when (zoneIdString) {
-            "$region/New_York" -> TimeRegion(
+            "$region/New_York" -> Zone(
                 zoneIdString, region,
                 country = listOf("United States", "US", "\uD83C\uDDFA\uD83C\uDDF8"),
                 states = listOf("Ohio"),
                 cities = listOf("Cincinnati")
             )
-            else -> TimeRegion(zoneIdString, region)
+            else -> Zone(zoneIdString, region)
         }
     }
 }

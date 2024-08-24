@@ -218,7 +218,7 @@ private fun NameTimeView(
     onClick: ((Location) -> Unit)? = null,
 ) {
     val offsetMinutes = DateTimePeriod(minutes = offsetInMinutes)
-    val adjustedTime = LocalDateTime.now(location.timeRegion).toInstant(location.timeRegion).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.timeRegion)
+    val adjustedTime = LocalDateTime.now(location.zone).toInstant(location.zone).plus(offsetMinutes, TimeZone.UTC).toLocalDateTime(location.zone)
     val hourMinuteTime = adjustedTime.format(
         when (dateFormatPreference) {
             DateFormatPreference.Twelve -> DateFormat.twelveHour
@@ -248,7 +248,7 @@ private fun NameTimeView(
                 style = MaterialTheme.typography.titleLarge
             )
             if (locationFormatPreference == LocationFormatPreference.PlaceWithGMT || locationFormatPreference == LocationFormatPreference.PersonWithGMT) {
-                val gmtOffset = adjustedTime.toInstant(location.timeRegion).offsetIn(location.timeRegion).toString()
+                val gmtOffset = adjustedTime.toInstant(location.zone).offsetIn(location.zone).toString()
                 Text(
                     modifier = Modifier.background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(8.dp)).padding(6.dp),
                     color = MaterialTheme.colorScheme.onSurface,

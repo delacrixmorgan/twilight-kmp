@@ -1,7 +1,7 @@
 package mapper
 
-import data.kalika.model.Region
-import data.kalika.KairosRepository
+import data.kairos.model.Region
+import data.kairos.KairosRepository
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -12,15 +12,9 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class AustraliaZoneIdToTimeRegionMapperTest : KoinTest {
+class AmericaZoneIdToZoneMapperTest : KoinTest {
 
     private val kairosRepository: KairosRepository by inject()
-
-    private val zoneIds by lazy {
-        kairosRepository.timeRegions
-            .filter { it.region == Region.Australia }
-            .map { it.timeZone.toString() }
-    }
 
     @BeforeTest
     fun setup() {
@@ -32,18 +26,16 @@ class AustraliaZoneIdToTimeRegionMapperTest : KoinTest {
         stopKoin()
     }
 
+    private val zoneIds by lazy {
+        kairosRepository.zones
+            .filter { it.region == Region.America }
+            .map { it.timeZone.toString() }
+    }
+
     @Test
-    fun `Given Australia zoneIdStrings When mapping Then it should contain them`() {
+    fun `Given America zoneIdStrings When mapping Then it should contain them`() {
         val actualZoneIdStrings = listOf(
-            "Australia/Adelaide",
-            "Australia/Brisbane",
-            "Australia/Broken_Hill",
-            "Australia/Darwin",
-            "Australia/Hobart",
-            "Australia/Lord_Howe",
-            "Australia/Melbourne",
-            "Australia/Perth",
-            "Australia/Sydney"
+            "America/New_York",
         )
         assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }

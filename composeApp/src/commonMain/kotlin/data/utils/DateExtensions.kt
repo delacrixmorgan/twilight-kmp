@@ -1,6 +1,6 @@
 package data.utils
 
-import data.kalika.model.TimeRegion
+import data.kairos.model.Zone
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -15,8 +15,8 @@ fun LocalDateTime.Companion.now(timeZone: TimeZone = TimeZone.currentSystemDefau
 }
 
 fun LocalDateTime.convert(
-    from: TimeRegion,
-    to: TimeRegion
+    from: Zone,
+    to: Zone
 ): LocalDateTime {
     return this.toInstant(from.timeZone)
         .toLocalDateTime(to.timeZone)

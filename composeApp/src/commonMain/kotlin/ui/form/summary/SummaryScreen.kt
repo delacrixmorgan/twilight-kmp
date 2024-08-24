@@ -80,7 +80,7 @@ fun SummaryScreen(
                 ListItemRow(
                     label = it.name,
                     description = it.regionName,
-                    endLabel = it.timeRegion.localTime()
+                    endLabel = it.zone.localTime()
                 )
             }
         }

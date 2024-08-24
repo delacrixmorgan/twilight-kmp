@@ -9,7 +9,7 @@ import data.location.model.Location
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
 import data.preferences.PreferencesRepository
-import data.kalika.KairosRepository
+import data.kairos.KairosRepository
 import data.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,14 +60,14 @@ class TodayViewModel : ViewModel(), KoinComponent {
 
     private fun loadLocations() {
         val currentTimeZone = TimeZone.currentSystemDefault()
-        val currentTimeRegion = kairosRepository.search(currentTimeZone.id)
-        if (currentTimeRegion != null) {
+        val zone = kairosRepository.search(currentTimeZone.id)
+        if (zone != null) {
             _state.update {
                 it.copy(
                     localLocation = Location(
-                        name = currentTimeRegion.city,
-                        regionName = currentTimeRegion.city,
-                        zoneId = currentTimeRegion.zoneIdString
+                        name = zone.city,
+                        regionName = zone.city,
+                        zoneId = zone.zoneIdString
                     )
                 )
             }
@@ -77,7 +77,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
                 _state.update {
                     it.copy(
                         locations = locations.sortedBy { location ->
-                            LocalDateTime.now(location.timeRegion).toInstant(TimeZone.UTC).epochSeconds
+                            LocalDateTime.now(location.zone).toInstant(TimeZone.UTC).epochSeconds
                         }
                     )
                 }
@@ -90,7 +90,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
             TodayAction.OpenCreateLocation -> {
                 viewModelScope.launch {
                     locationFormRepository.clear()
-                    navHostController.navigate(Routes.FormSelectTimeRegion)
+                    navHostController.navigate(Routes.FormSelectZone)
                 }
             }
             TodayAction.CloseEditLocationDialog -> {
@@ -111,7 +111,7 @@ class TodayViewModel : ViewModel(), KoinComponent {
                             openEditLocationDialog = false
                         )
                     }
-                    navHostController.navigate(Routes.FormSelectTimeRegion)
+                    navHostController.navigate(Routes.FormSelectZone)
                 }
             }
             TodayAction.OnItemDeleteClicked -> {

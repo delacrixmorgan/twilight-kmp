@@ -16,7 +16,7 @@ sealed class Routes {
     data object FormSetupName : Routes()
 
     @Serializable
-    data object FormSelectTimeRegion : Routes()
+    data object FormSelectZone : Routes()
 
     @Serializable
     data object FormSummary : Routes()

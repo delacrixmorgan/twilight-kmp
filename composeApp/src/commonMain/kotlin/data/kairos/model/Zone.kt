@@ -1,4 +1,4 @@
-package data.kalika.model
+package data.kairos.model
 
 import data.utils.DateFormat
 import data.utils.now
@@ -7,7 +7,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import randomUUID
 
-data class TimeRegion(
+data class Zone(
     val zoneIdString: String,
     val region: Region,
     val id: String = randomUUID(),

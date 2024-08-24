@@ -7,7 +7,7 @@ import data.locationform.LocationFormRepository
 import data.locationform.LocationFormRepositoryImpl
 import data.preferences.PreferencesRepository
 import data.preferences.PreferencesRepositoryImpl
-import data.kalika.KairosRepository
+import data.kairos.KairosRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.KoinAppDeclaration
@@ -18,7 +18,7 @@ import ui.dashboard.settings.appinfo.AppInfoViewModel
 import ui.dashboard.today.TodayViewModel
 import ui.form.name.SetupNameViewModel
 import ui.form.summary.SummaryViewModel
-import ui.form.timeregion.SelectTimeRegionViewModel
+import ui.form.zone.SelectZoneViewModel
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
@@ -39,7 +39,7 @@ fun viewModelModule() = module {
     viewModel { AppInfoViewModel() }
     // Form
     viewModel { SetupNameViewModel() }
-    viewModel { SelectTimeRegionViewModel() }
+    viewModel { SelectZoneViewModel() }
     viewModel { SummaryViewModel() }
 }
 

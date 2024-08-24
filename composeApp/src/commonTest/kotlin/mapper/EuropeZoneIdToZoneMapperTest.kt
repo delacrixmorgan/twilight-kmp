@@ -1,7 +1,7 @@
 package mapper
 
-import data.kalika.model.Region
-import data.kalika.KairosRepository
+import data.kairos.model.Region
+import data.kairos.KairosRepository
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -12,12 +12,12 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class EuropeZoneIdToTimeRegionMapperTest : KoinTest {
+class EuropeZoneIdToZoneMapperTest : KoinTest {
 
     private val kairosRepository: KairosRepository by inject()
 
     private val zoneIds by lazy {
-        kairosRepository.timeRegions
+        kairosRepository.zones
             .filter { it.region == Region.Europe }
             .map { it.timeZone.toString() }
     }

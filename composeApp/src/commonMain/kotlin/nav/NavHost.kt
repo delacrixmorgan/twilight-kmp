@@ -15,8 +15,8 @@ import ui.form.name.SetupNameScreen
 import ui.form.name.SetupNameViewModel
 import ui.form.summary.SummaryScreen
 import ui.form.summary.SummaryViewModel
-import ui.form.timeregion.SelectTimeRegionScreen
-import ui.form.timeregion.SelectTimeRegionViewModel
+import ui.form.zone.SelectZoneScreen
+import ui.form.zone.SelectZoneViewModel
 
 @Composable
 fun TwilightNavHost(navHostController: NavHostController = rememberNavController()) {
@@ -30,9 +30,9 @@ fun TwilightNavHost(navHostController: NavHostController = rememberNavController
 }
 
 fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
-    composable<Routes.FormSelectTimeRegion> {
-        val viewModel = koinViewModel<SelectTimeRegionViewModel>()
-        SelectTimeRegionScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+    composable<Routes.FormSelectZone> {
+        val viewModel = koinViewModel<SelectZoneViewModel>()
+        SelectZoneScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.FormSetupName> {
         val viewModel = koinViewModel<SetupNameViewModel>()

@@ -1,4 +1,4 @@
-import data.kalika.KairosRepository
+import data.kairos.KairosRepository
 import data.utils.convert
 import kotlinx.datetime.LocalDateTime
 import org.koin.core.component.inject
@@ -14,8 +14,8 @@ class KairosRepositoryTest : KoinTest {
 
     private val kairosRepository: KairosRepository by inject()
 
-    private val netherlandsTimeRegion by lazy { kairosRepository.search("Europe/Amsterdam")!! }
-    private val malaysiaTimeRegion by lazy { kairosRepository.search("Asia/Kuala_Lumpur")!! }
+    private val netherlandsZone by lazy { kairosRepository.search("Europe/Amsterdam")!! }
+    private val malaysiaZone by lazy { kairosRepository.search("Asia/Kuala_Lumpur")!! }
 
     @BeforeTest
     fun setup() {
@@ -35,8 +35,8 @@ class KairosRepositoryTest : KoinTest {
         val expected = "2024-01-01T00:00"
         val localDateTime: LocalDateTime = LocalDateTime.parse(expected)
         val actualLocalDateTime: LocalDateTime = localDateTime.convert(
-            from = malaysiaTimeRegion,
-            to = malaysiaTimeRegion
+            from = malaysiaZone,
+            to = malaysiaZone
         )
 
         assertEquals(
@@ -54,8 +54,8 @@ class KairosRepositoryTest : KoinTest {
         val expected = "2024-01-01T07:00"
         val netherlandsDSTLocalDateTime: LocalDateTime = LocalDateTime.parse(netherlandsDST)
         val actualLocalDateTime: LocalDateTime = netherlandsDSTLocalDateTime.convert(
-            from = netherlandsTimeRegion,
-            to = malaysiaTimeRegion
+            from = netherlandsZone,
+            to = malaysiaZone
         )
 
         assertEquals(
@@ -70,8 +70,8 @@ class KairosRepositoryTest : KoinTest {
         val expected = "2024-06-01T06:00"
         val netherlandsDSTLocalDateTime: LocalDateTime = LocalDateTime.parse(netherlandsDST)
         val actualLocalDateTime: LocalDateTime = netherlandsDSTLocalDateTime.convert(
-            from = netherlandsTimeRegion,
-            to = malaysiaTimeRegion,
+            from = netherlandsZone,
+            to = malaysiaZone,
         )
 
         assertEquals(
@@ -89,8 +89,8 @@ class KairosRepositoryTest : KoinTest {
         val expected = "2024-01-01T00:00"
         val malaysiaLocalDateTime: LocalDateTime = LocalDateTime.parse(malaysiaTime)
         val actualLocalDateTime: LocalDateTime = malaysiaLocalDateTime.convert(
-            from = malaysiaTimeRegion,
-            to = netherlandsTimeRegion
+            from = malaysiaZone,
+            to = netherlandsZone
         )
 
         assertEquals(
@@ -105,8 +105,8 @@ class KairosRepositoryTest : KoinTest {
         val expected = "2024-06-01T00:00"
         val malaysiaLocalDateTime: LocalDateTime = LocalDateTime.parse(malaysiaTime)
         val actualLocalDateTime: LocalDateTime = malaysiaLocalDateTime.convert(
-            from = malaysiaTimeRegion,
-            to = netherlandsTimeRegion
+            from = malaysiaZone,
+            to = netherlandsZone
         )
 
         assertEquals(

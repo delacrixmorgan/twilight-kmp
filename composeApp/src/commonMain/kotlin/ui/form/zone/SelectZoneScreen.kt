@@ -1,4 +1,4 @@
-package ui.form.timeregion
+package ui.form.zone
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,9 +48,9 @@ import ui.component.navigationIcon.NavigationBackIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectTimeRegionScreen(
-    state: SelectTimeRegionUiState,
-    onAction: (SelectTimeRegionAction) -> Unit
+fun SelectZoneScreen(
+    state: SelectZoneUiState,
+    onAction: (SelectZoneAction) -> Unit
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     Scaffold(
@@ -66,7 +66,7 @@ fun SelectTimeRegionScreen(
             Column(Modifier.padding(16.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onAction(SelectTimeRegionAction.OnContinueClicked) },
+                    onClick = { onAction(SelectZoneAction.OnContinueClicked) },
                     enabled = state.continueButtonEnabled
                 ) {
                     Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
@@ -75,7 +75,7 @@ fun SelectTimeRegionScreen(
             }
         }
     ) { innerPadding ->
-        val list = state.timeRegions
+        val list = state.zones
         val searching = state.searching
         val lazyListState = rememberLazyListState()
 
@@ -101,13 +101,13 @@ fun SelectTimeRegionScreen(
                 }
                 items(count = list.size, key = { list[it].id }) { index ->
                     val item = list[index]
-                    val selected = state.selectedTimeRegion?.zoneIdString == item.zoneIdString
+                    val selected = state.selectedZone?.zoneIdString == item.zoneIdString
                     ListItemRow(
                         label = item.city,
                         description = item.zone,
                         endLabel = item.localTime(),
                         selected = selected,
-                        onClicked = { onAction(SelectTimeRegionAction.OnTimeRegionSelected(item)) }
+                        onClicked = { onAction(SelectZoneAction.OnZoneSelected(item)) }
                     )
                 }
             }
@@ -119,8 +119,8 @@ fun SelectTimeRegionScreen(
 @Composable
 private fun AppBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    state: SelectTimeRegionUiState,
-    onAction: (SelectTimeRegionAction) -> Unit
+    state: SelectZoneUiState,
+    onAction: (SelectZoneAction) -> Unit
 ) {
     MediumTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -134,9 +134,9 @@ private fun AppBar(
                 overflow = TextOverflow.Ellipsis
             )
         },
-        navigationIcon = { NavigationBackIcon { onAction(SelectTimeRegionAction.OnBackClicked) } },
+        navigationIcon = { NavigationBackIcon { onAction(SelectZoneAction.OnBackClicked) } },
         actions = {
-            IconButton(onClick = { onAction(SelectTimeRegionAction.OnSearchModeUpdated(searchMode = true)) }) {
+            IconButton(onClick = { onAction(SelectZoneAction.OnSearchModeUpdated(searchMode = true)) }) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = "Search"
@@ -150,8 +150,8 @@ private fun AppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchAppBar(
-    state: SelectTimeRegionUiState,
-    onAction: (SelectTimeRegionAction) -> Unit
+    state: SelectZoneUiState,
+    onAction: (SelectZoneAction) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
@@ -161,12 +161,12 @@ private fun SearchAppBar(
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
                 value = state.query,
-                onValueChange = { onAction(SelectTimeRegionAction.OnQueryUpdated(it)) },
+                onValueChange = { onAction(SelectZoneAction.OnQueryUpdated(it)) },
                 placeholder = { Text(text = "Search") },
                 trailingIcon = {
                     if (state.query.isNotEmpty()) {
                         Icon(
-                            modifier = Modifier.clickable { onAction(SelectTimeRegionAction.OnQueryUpdated("")) },
+                            modifier = Modifier.clickable { onAction(SelectZoneAction.OnQueryUpdated("")) },
                             imageVector = Icons.Rounded.Clear,
                             contentDescription = null
                         )
@@ -176,9 +176,9 @@ private fun SearchAppBar(
         },
         navigationIcon = {
             if (state.query.isNotBlank()) {
-                NavigationBackIcon { onAction(SelectTimeRegionAction.OnBackClicked) }
+                NavigationBackIcon { onAction(SelectZoneAction.OnBackClicked) }
             } else {
-                IconButton(onClick = { onAction(SelectTimeRegionAction.OnSearchModeUpdated(searchMode = false)) }) {
+                IconButton(onClick = { onAction(SelectZoneAction.OnSearchModeUpdated(searchMode = false)) }) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
                         contentDescription = "Close"

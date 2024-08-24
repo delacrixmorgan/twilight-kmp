@@ -9,5 +9,5 @@ data class Location(
     val regionName: String,
     val zoneId: String,
 ) {
-    val timeRegion get() = TimeZone.of(zoneId)
+    val zone get() = TimeZone.of(zoneId)
 }

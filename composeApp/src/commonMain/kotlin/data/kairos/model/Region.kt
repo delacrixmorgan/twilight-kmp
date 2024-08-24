@@ -1,4 +1,4 @@
-package data.kalika.model
+package data.kairos.model
 
 enum class Region {
     Africa,
