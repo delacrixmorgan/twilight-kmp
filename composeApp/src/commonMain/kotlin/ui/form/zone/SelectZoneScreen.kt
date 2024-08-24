@@ -167,6 +167,7 @@ private fun SearchAppBar(
 ) {
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
+        colors = DefaultColors.appBarColors(),
         title = {
             TextField(
                 modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),

@@ -21,6 +21,7 @@ object DefaultColors {
     @Composable
     fun appBarColors() = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
+        scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
         titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
     )
 
