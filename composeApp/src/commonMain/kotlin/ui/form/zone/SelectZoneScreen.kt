@@ -62,55 +62,68 @@ fun SelectZoneScreen(
                 AppBar(scrollBehavior, state, onAction)
             }
         },
-        bottomBar = {
-            Column(Modifier.padding(16.dp)) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onAction(SelectZoneAction.OnContinueClicked) },
-                    enabled = state.continueButtonEnabled
-                ) {
-                    Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
-                }
-                Spacer(Modifier.height(16.dp))
-            }
-        }
     ) { innerPadding ->
-        val list = state.zones
         val searching = state.searching
-        val lazyListState = rememberLazyListState()
-
         if (searching) {
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                state = lazyListState
-            ) {
-                if (!state.searchMode) {
-                    item {
-                        Text(
-                            "Choose your time zone from the list below. Use the search bar to quickly find your specific time zone.",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Spacer(Modifier.height(16.dp))
-                    }
-                }
-                items(count = list.size, key = { list[it].id }) { index ->
-                    val item = list[index]
-                    val selected = state.selectedZone?.zoneIdString == item.zoneIdString
-                    ListItemRow(
-                        label = item.city,
-                        description = item.zone,
-                        endLabel = item.localTime(),
-                        selected = selected,
-                        onClicked = { onAction(SelectZoneAction.OnZoneSelected(item)) }
+            LoadedSelectZoneScreen(innerPadding, state, onAction)
+        }
+    }
+}
+
+@Composable
+private fun LoadedSelectZoneScreen(
+    innerPadding: PaddingValues,
+    state: SelectZoneUiState,
+    onAction: (SelectZoneAction) -> Unit
+) {
+    val list = state.zones
+    val lazyListState = rememberLazyListState()
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding()),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = lazyListState
+        ) {
+            if (!state.searchMode) {
+                item {
+                    Text(
+                        "Choose your time zone from the list below. Use the search bar to quickly find your specific time zone.",
+                        style = MaterialTheme.typography.bodyLarge
                     )
+                    Spacer(Modifier.height(16.dp))
                 }
             }
+            items(count = list.size, key = { list[it].id }) { index ->
+                val item = list[index]
+                val selected = state.selectedZone?.zoneIdString == item.zoneIdString
+                ListItemRow(
+                    label = item.city,
+                    description = item.zone,
+                    endLabel = item.localTime(),
+                    selected = selected,
+                    onClicked = { onAction(SelectZoneAction.OnZoneSelected(item)) }
+                )
+            }
+        }
+        Column(
+            Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
+                .align(Alignment.BottomStart)
+        ) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onAction(SelectZoneAction.OnContinueClicked) },
+                enabled = state.continueButtonEnabled
+            ) {
+                Text("Continue", modifier = Modifier.padding(vertical = 8.dp))
+            }
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
