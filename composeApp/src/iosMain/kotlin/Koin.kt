@@ -8,7 +8,7 @@ fun initKoin() {
         modules(
             platformModule(),
             serviceModule(),
-            repositoryModule(enableNetworkLogs = false),
+            repositoryModule(),
             mapperModule()
         )
     }
