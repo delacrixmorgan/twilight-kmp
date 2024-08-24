@@ -3,8 +3,11 @@ package ui.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,12 +31,16 @@ internal fun RadioGroupBottomSheet(
     onDismissed: () -> Unit
 ) {
     if (!isVisible) return
-    val modalBottomSheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
         onDismissRequest = onDismissed,
-        sheetState = modalBottomSheetState,
+        sheetState = sheetState,
+        windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(
+            modifier = Modifier.padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             Text(
                 title,
                 modifier = Modifier.padding(horizontal = 16.dp),
