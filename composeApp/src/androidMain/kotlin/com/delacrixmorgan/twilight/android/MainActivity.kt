@@ -1,4 +1,4 @@
-package com.delacrixmorgan.twilight
+package com.delacrixmorgan.twilight.android
 
 import App
 import android.content.res.Configuration

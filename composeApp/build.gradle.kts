@@ -86,7 +86,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.delacrixmorgan.twilight"
+    namespace = "com.delacrixmorgan.twilight.android"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -94,7 +94,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "com.delacrixmorgan.twilight"
+        applicationId = "com.delacrixmorgan.twilight.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 3

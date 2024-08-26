@@ -8,7 +8,7 @@ import di.TwilightDatabaseWrapper
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.UUID
-import com.delacrixmorgan.twilight.BuildConfig
+import com.delacrixmorgan.twilight.android.BuildConfig
 
 actual fun platformModule() = module {
     single(named(LocalDataStore.Preferences.name)) { dataStore(get(), LocalDataStore.Preferences.path()) }

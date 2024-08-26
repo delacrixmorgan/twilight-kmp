@@ -1,4 +1,4 @@
-package com.delacrixmorgan.twilight
+package com.delacrixmorgan.twilight.android
 
 import android.app.Application
 import di.initKoin
