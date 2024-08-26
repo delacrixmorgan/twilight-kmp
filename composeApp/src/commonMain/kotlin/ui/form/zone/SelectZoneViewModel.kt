@@ -41,7 +41,10 @@ class SelectZoneViewModel : ViewModel(), KoinComponent {
 
     private val zones get() = kairosRepository.zones.sorted()
     private fun List<Zone>.sorted(): List<Zone> = sortedWith(
-        compareBy { it.zoneIdString !in popularZones }
+        compareBy(
+            { it.zoneIdString != state.value.selectedZone?.zoneIdString },
+            { it.zoneIdString !in popularZones },
+        )
     )
 
     init {
@@ -53,8 +56,10 @@ class SelectZoneViewModel : ViewModel(), KoinComponent {
                         isEditMode = newLocationData.isEditMode,
                         selectedZone = selectedZone,
                         continueButtonEnabled = selectedZone != null,
-                        zones = kairosRepository.zones.sorted()
                     )
+                }
+                _state.update {
+                    it.copy(zones = kairosRepository.zones.sorted())
                 }
             }
         }
