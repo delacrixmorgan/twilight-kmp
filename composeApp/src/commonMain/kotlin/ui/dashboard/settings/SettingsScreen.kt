@@ -1,12 +1,12 @@
 package ui.dashboard.settings
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,11 +15,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -28,6 +28,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
 import data.preferences.model.ThemePreference
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import twilight.composeapp.generated.resources.Res
+import twilight.composeapp.generated.resources.app_name
+import twilight.composeapp.generated.resources.ic_logo_foreground
 import ui.component.ListView
 import ui.component.RadioGroupBottomSheet
 import ui.component.RadioRowData
@@ -45,7 +50,8 @@ fun SettingsScreen(
         Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(32.dp))
         Text("Settings", style = AppTypography.headlineMedium)
@@ -80,12 +86,14 @@ fun SettingsScreen(
                 divider = { HorizontalDivider() }
             )
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(32.dp))
+
+        Image(painter = painterResource(Res.drawable.ic_logo_foreground), "Twilight Logo")
+
+        Spacer(Modifier.height(8.dp))
 
         Text(
-            state.version,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
+            stringResource(Res.string.app_name) + " " + state.version,
             style = MaterialTheme.typography.labelLarge
         )
     }
