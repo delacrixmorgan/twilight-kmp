@@ -97,7 +97,7 @@ android {
         applicationId = "com.delacrixmorgan.twilight.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 3
+        versionCode = 4
         versionName = "2024.01"
 
         buildConfigField("int", "VERSION_CODE", versionCode.toString())
@@ -110,7 +110,7 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
         }
     }
     compileOptions {
