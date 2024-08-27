@@ -58,6 +58,10 @@ In the meantime, go time travel!
 
 ## Screenshots
 
+![Today](/screenshots/1_today.png?raw=true "Today")
+
+![Form](/screenshots/2_form.png?raw=true "Form")
+
 ## License
 
 ```
