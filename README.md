@@ -2,52 +2,46 @@
 
 ## Overview
 
-Timezone tracker app that would make you never have to worry about timezones ever again. 🕑
+Personalise your timezones with the ability to time travel! 🕓
 
 ## Description
 
-Twilight is a timezone tracker app that would make you never have to worry about timezones ever
-again. It's super lively and intuitive that allows you to add fun little nicknames to your
-locations.
+Twilight is a timezone tracking app that makes convert time fun like a fidget spinner. You can easily add fun little nicknames to your locations and travel ahead in time to settle on your next
+gaming session!
 
 a) Customisable Names
 
-💬 Do you have friends and relatives that are living in different countries and you always have
-trouble knowing whether it is night time at their local time or not?
+💬 Do you have friends and family that lives in different countries with annoying timezones and you always have trouble knowing whether it is night time at their local time or not?
 
-Fret not! Now, you can attach your friends, family names and even fun little names to the location.
+Fret not! Now, you can have their timezones all in one place with fun little names (optional).
 
 You can just easily add them as:
 
 - “Little Simba 😸”
 - “Eggs and Ham 🥚”
-- “My Little Princess 👸”
+- “My Little Princess
 
-It makes it easy to keep track of all of them around the globe in different timezones in one place.
+💬 Do you work remotely with team members from all around the world and always a pain to setup a meeting time based on everyone's local time?
 
-💬 Do you have a remote work team working from different countries and always have trouble knowing
-what's their current local time?
+Sure, you can just Google their local time. But, think about the amount of letters you have to type everytime!
 
 You can just easily add them as:
 
 - "London's Office 🇬🇧"
-- "Switzerland Team 🇨🇭"
+- "Munich Drinking Buddies 🇩🇪"
 - “Japan Animation Team 🇯️🇵️”
 
-You will never have to crack your head on setting up a meeting again.
+b) Time Travel with the wibbly-wobbly, timey-wimey Spinner
 
-b) Convert Timezones (Coming Soon)
+💬 Yes, you've read that right! You can now travel ahead of time and see what time is it going to be. (Mind blowing, I know).
 
-Always having trouble when the event always gives you a time at their local time, but you've no idea
-what time and date it would be at your side?
+The measuring tape looking slider, give that a spin and it will transport you through time. You can instantly see the local time of your saved timezones and how they fare up. Then, you can finally make a call with that one of friend of yours without accidentally waking them up.
 
-Designed to bring Google Material Design to every aspect of the app. Crafted with a minimalistic
-approach that will provide a great user experience with its lightweight form.
+c) Dark Mode
 
-c) More Features (Coming Soon)
+Although the name of the app is Twilight, but we do support both Light and Dark mode. All spectrum of light deserves the same amount of love and attention.
 
-Handy companion app for your timezone tracking without ever having to worry about timezones ever
-again!
+If you made it this far in the description, thank you for your support! Timezones is always been my arch enemy, next to math and physics. Would love to hear about what you think about the app!
 
 In the meantime, go time travel!
 
@@ -55,9 +49,12 @@ In the meantime, go time travel!
 
 ## Nerdy Stats
 
+- Kotlin Multiplatform
+- Date - Kotlinx Datetime
 - Dependency Injection - Koin
 - Navigation - Compose Navigation
 - Local Storage - Data Store, SQL Delight
+- Logging - Kermit
 
 ## Screenshots
 
