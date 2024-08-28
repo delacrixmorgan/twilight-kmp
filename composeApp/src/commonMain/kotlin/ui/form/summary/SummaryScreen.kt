@@ -2,9 +2,12 @@ package ui.form.summary
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,7 +55,11 @@ fun SummaryScreen(
             )
         },
         bottomBar = {
-            Column(Modifier.padding(16.dp)) {
+            Column(
+                Modifier
+                    .padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+                    .padding(horizontal = 16.dp)
+            ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onAction(SummaryAction.OnSubmitClicked) }
