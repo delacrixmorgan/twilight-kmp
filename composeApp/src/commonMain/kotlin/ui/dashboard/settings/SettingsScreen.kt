@@ -144,7 +144,7 @@ fun SettingsScreen(
                 onAction(SettingsAction.OpenSendFeedback(open = false))
             }
             if (state.openRateUs) {
-                uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight")
+                uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight.android")
                 onAction(SettingsAction.OpenRateUs(open = false))
             }
         }
