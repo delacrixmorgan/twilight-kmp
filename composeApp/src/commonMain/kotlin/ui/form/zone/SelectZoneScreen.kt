@@ -48,6 +48,10 @@ import ui.component.ListItemRow
 import ui.component.navigationIcon.NavigationBackIcon
 import ui.theme.DefaultColors
 
+/**
+ * iOS Lazy Column Fling Issue
+ * https://youtrack.jetbrains.com/issue/CMP-5947/Fling-doesnt-work-in-LazyColumn-on-iOS
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectZoneScreen(
