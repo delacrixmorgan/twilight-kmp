@@ -1,20 +1,19 @@
 [versions]
-agp = "8.6.0" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
+agp = "8.5.2" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
-kotlin = "2.0.10"
-compose-plugin = "1.6.10"
-kotlinx-serialization-json = "1.6.3"
-kotlinx-datetime = "0.6.0"
-androidx-navigation-compose = "2.8.0-alpha08" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
-androidx-lifecycle = "2.8.4"
-androidx-datastore-preference = "1.1.1"
-composeBoM = "2024.08.00"
-koinBoM = "3.5.6"
-koinComposeMultiplatform = "4.0.0-RC1" # https://central.sonatype.com/artifact/io.insert-koin/koin-compose-viewmodel
-sqlDelight = "2.0.2"
-kermit = "2.0.3"
+kotlin = "2.0.20" # https://github.com/JetBrains/kotlin/releases
+compose-plugin = "1.6.10" # https://github.com/JetBrains/compose-multiplatform/releases
+kotlinx-serialization-json = "1.7.2" # https://github.com/Kotlin/kotlinx.serialization
+kotlinx-datetime = "0.6.1" # https://github.com/Kotlin/kotlinx-datetime/releases
+androidx-navigation-compose = "2.8.0-alpha09" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
+androidx-lifecycle = "2.8.4" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
+androidx-datastore-preference = "1.1.1" # https://developer.android.com/jetpack/androidx/releases/datastore
+composeBoM = "2024.08.00" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
+koinBoM = "4.0.0-RC2" # https://insert-koin.io/docs/setup/koin/
+sqlDelight = "2.0.2" # https://github.com/cashapp/sqldelight/releases
+kermit = "2.0.4" # https://github.com/touchlab/Kermit/releases
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
@@ -29,7 +28,7 @@ compose-icons-extended = { module = "org.jetbrains.compose.material:material-ico
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBoM" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
-koin-composeVM = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
+koin-composeVM = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinBoM" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinBoM" }
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }

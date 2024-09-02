@@ -103,6 +103,10 @@ fun SettingsScreen(
         Spacer(Modifier.height(8.dp))
     }
 
+    /**
+     * iOS Dark Mode Issue
+     * https://github.com/JetBrains/compose-multiplatform/issues/3213
+     */
     RadioGroupBottomSheet(
         title = "Theme",
         selectedIndex = state.theme.ordinal,
