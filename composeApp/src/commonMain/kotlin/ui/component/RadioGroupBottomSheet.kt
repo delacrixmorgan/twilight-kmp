@@ -35,7 +35,7 @@ internal fun RadioGroupBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismissed,
         sheetState = sheetState,
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) }
     ) {
         Column(
             modifier = Modifier.padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
