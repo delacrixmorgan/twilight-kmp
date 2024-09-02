@@ -43,7 +43,7 @@ private fun BottomNavigationBar(navHostController: NavHostController) {
                 onClick = {
                     if (selected) return@NavigationBarItem
                     navHostController.navigate(navItem.route) {
-                        popUpTo(navHostController.graph.findStartDestination().id) { saveState = true }
+                        popUpTo(navHostController.graph.findStartDestination().id)
                         launchSingleTop = true
                         restoreState = true
                     }
