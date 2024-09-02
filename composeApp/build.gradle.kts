@@ -97,8 +97,8 @@ android {
         applicationId = "com.delacrixmorgan.twilight.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 5
-        versionName = "2024.02"
+        versionCode = 6
+        versionName = "2024.03"
 
         buildConfigField("int", "VERSION_CODE", versionCode.toString())
         buildConfigField("String", "VERSION_NAME", "\"${versionName}\"")
