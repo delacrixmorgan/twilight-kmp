@@ -11,12 +11,12 @@ import org.jetbrains.compose.resources.Font
 import twilight.composeapp.generated.resources.Res
 import twilight.composeapp.generated.resources.lato_bold
 import twilight.composeapp.generated.resources.lato_regular
-import twilight.composeapp.generated.resources.league_spartan_regular
+import twilight.composeapp.generated.resources.league_spartan_semibold
 
 val displayFontFamily: FontFamily
     @Composable
     get() = FontFamily(
-        Font(Res.font.league_spartan_regular, weight = FontWeight.Normal)
+        Font(Res.font.league_spartan_semibold, weight = FontWeight.SemiBold),
     )
 
 val bodyFontFamily: FontFamily
