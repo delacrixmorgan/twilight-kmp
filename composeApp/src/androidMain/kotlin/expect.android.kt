@@ -3,12 +3,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.delacrixmorgan.twilight.TwilightDatabase
+import com.delacrixmorgan.twilight.android.BuildConfig
 import data.utils.LocalDataStore
 import di.TwilightDatabaseWrapper
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.UUID
-import com.delacrixmorgan.twilight.android.BuildConfig
 
 actual fun platformModule() = module {
     single(named(LocalDataStore.Preferences.name)) { dataStore(get(), LocalDataStore.Preferences.path()) }
