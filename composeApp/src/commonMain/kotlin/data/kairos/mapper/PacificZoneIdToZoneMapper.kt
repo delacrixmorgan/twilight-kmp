@@ -14,8 +14,7 @@ class PacificZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
             "$region/Auckland" -> Zone(
                 zoneIdString, region,
                 country = listOf("New Zealand", "NZ", "\uD83C\uDDF3\uD83C\uDDFF"),
-                states = listOf("Auckland", "Taranaki", "Hawke's Bay", "Wellington", "Nelson", "Marlborough", "Westland", "Canterbury", "Otago"),
-                cities = listOf("Auckland", "Christchurch", "Wellington")
+                keywords = listOf("Auckland", "Taranaki", "Hawke's Bay", "Wellington", "Nelson", "Marlborough", "Westland", "Canterbury", "Otago", "Christchurch"),
             )
             else -> Zone(zoneIdString, region)
         }
