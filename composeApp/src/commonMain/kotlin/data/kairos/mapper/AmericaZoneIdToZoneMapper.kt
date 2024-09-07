@@ -16,6 +16,11 @@ class AmericaZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
                 country = listOf("United States", "US", "\uD83C\uDDFA\uD83C\uDDF8"),
                 keywords = listOf("Ohio", "Cincinnati"),
             )
+            "$region/Los_Angeles" -> Zone(
+                zoneIdString, region,
+                country = listOf("United States", "US", "\uD83C\uDDFA\uD83C\uDDF8"),
+                keywords = listOf("California", "San Francisco", "Cupertino", "Mountain View"),
+            )
             else -> Zone(zoneIdString, region)
         }
     }
