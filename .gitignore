@@ -11,6 +11,7 @@ captures
 .externalNativeBuild
 .cxx
 iosApp/iosApp.xcodeproj/*
+iosApp/Configuration/Config.xcconfig
 iosApp/iosApp.xcodeproj/project.pbxproj
 iosApp/iosApp.xcodeproj/xcshareddata/
 iosApp/iosApp.xcodeproj/project.xcworkspace/
