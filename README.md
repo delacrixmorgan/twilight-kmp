@@ -1,5 +1,7 @@
 # Twilight - Timezone Tracker
 
+![Header](/screenshots/0_header_small.png?raw=true "Header")
+
 ## Overview
 
 Personalise your timezones with the ability to time travel! 🕓
@@ -57,6 +59,9 @@ In the meantime, go time travel!
 - Logging - Kermit
 
 ## Screenshots
+
+| ![Scroll](/screenshots/1_scroll.gif?raw=true "Scroll") | ![Create](/screenshots/2_create.gif?raw=true "Create") |
+|--------------------------------------------------------|--------------------------------------------------------|
 
 ![Today](/screenshots/1_today.png?raw=true "Today")
 
