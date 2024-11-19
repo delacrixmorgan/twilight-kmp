@@ -93,6 +93,15 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("secrets/release.jks")
+            storePassword = System.getenv("RELEASE_KEY_PASS")
+            keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+            keyPassword = System.getenv("RELEASE_KEY_PASS")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.delacrixmorgan.twilight.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -120,6 +129,7 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
