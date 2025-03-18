@@ -66,6 +66,7 @@ kotlin {
             // Compose
             implementation(project.dependencies.platform(libs.compose.bom))
             implementation(libs.compose.icons.extended)
+            implementation(libs.compose.unstyled)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

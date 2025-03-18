@@ -27,6 +27,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import com.composables.core.SheetDetent.Companion.FullyExpanded
+import com.composables.core.SheetDetent.Companion.Hidden
+import com.composables.core.rememberModalBottomSheetState
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
 import data.preferences.model.ThemePreference
@@ -103,33 +106,36 @@ fun SettingsScreen(
         Spacer(Modifier.height(8.dp))
     }
 
+    val themeBottomSheetState = rememberModalBottomSheetState(initialDetent = Hidden)
     RadioGroupBottomSheet(
+        sheetState = themeBottomSheetState,
         title = "Theme",
         selectedIndex = state.theme.ordinal,
         items = ThemePreference.entries.map { RadioRowData(id = it.name, label = it.label) },
-        isVisible = state.showTheme,
         onSelected = { selectedItem ->
             onAction(SettingsAction.OnThemeSelected(ThemePreference.entries.first { it.name == selectedItem.id }))
         },
         onDismissed = { onAction(SettingsAction.ToggleThemeVisibility(show = false)) }
     )
 
+    val dateFormatBottomSheetState = rememberModalBottomSheetState(initialDetent = Hidden)
     RadioGroupBottomSheet(
+        sheetState = dateFormatBottomSheetState,
         title = "Date Format",
         selectedIndex = state.dateFormat.ordinal,
         items = DateFormatPreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
-        isVisible = state.showDateFormat,
         onSelected = { selectedItem ->
             onAction(SettingsAction.OnDateFormatSelected(DateFormatPreference.entries.first { it.name == selectedItem.id }))
         },
         onDismissed = { onAction(SettingsAction.ToggleDateFormatVisibility(show = false)) }
     )
 
+    val locationFormatBottomSheetState = rememberModalBottomSheetState(initialDetent = Hidden)
     RadioGroupBottomSheet(
+        sheetState = locationFormatBottomSheetState,
         title = "Location Format",
         selectedIndex = state.locationFormat.ordinal,
         items = LocationFormatPreference.entries.map { RadioRowData(id = it.name, label = it.label, description = it.description) },
-        isVisible = state.showLocationFormat,
         onSelected = { selectedItem ->
             onAction(SettingsAction.OnLocationFormatSelected(LocationFormatPreference.entries.first { it.name == selectedItem.id }))
         },
@@ -151,6 +157,21 @@ fun SettingsScreen(
             if (state.openRateUs) {
                 uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight.android")
                 onAction(SettingsAction.OpenRateUs(open = false))
+            }
+            if (state.showTheme) {
+                themeBottomSheetState.currentDetent = FullyExpanded
+            } else {
+                themeBottomSheetState.currentDetent = Hidden
+            }
+            if (state.showDateFormat) {
+                dateFormatBottomSheetState.currentDetent = FullyExpanded
+            } else {
+                dateFormatBottomSheetState.currentDetent = Hidden
+            }
+            if (state.showLocationFormat) {
+                locationFormatBottomSheetState.currentDetent = FullyExpanded
+            } else {
+                locationFormatBottomSheetState.currentDetent = Hidden
             }
         }
     }
