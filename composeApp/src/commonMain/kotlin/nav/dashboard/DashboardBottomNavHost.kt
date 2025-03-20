@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,11 +30,11 @@ fun DashboardBottomNavHost(
     ) {
         composable<Routes.Today> {
             val viewModel = koinViewModel<TodayViewModel>()
-            TodayScreen(Modifier.padding(innerPadding), state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+            TodayScreen(Modifier.padding(innerPadding), state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
         }
         composable<Routes.Settings> {
             val viewModel = koinViewModel<SettingsViewModel>()
-            SettingsScreen(innerPadding, state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+            SettingsScreen(innerPadding, state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
         }
     }
 }

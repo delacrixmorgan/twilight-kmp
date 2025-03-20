@@ -2,6 +2,7 @@ package nav
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -32,15 +33,15 @@ fun TwilightNavHost(navHostController: NavHostController = rememberNavController
 fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
     composable<Routes.FormSelectZone> {
         val viewModel = koinViewModel<SelectZoneViewModel>()
-        SelectZoneScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+        SelectZoneScreen(state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.FormSetupName> {
         val viewModel = koinViewModel<SetupNameViewModel>()
-        SetupNameScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+        SetupNameScreen(state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.FormSummary> {
         val viewModel = koinViewModel<SummaryViewModel>()
-        SummaryScreen(state = viewModel.state.collectAsState().value, onAction = { viewModel.onAction(navHostController, it) })
+        SummaryScreen(state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
     }
     composable<Routes.AppInfo> {
         val viewModel = koinViewModel<AppInfoViewModel>()
