@@ -24,12 +24,8 @@ sqldelight {
 
 kotlin {
     androidTarget {
-        compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_20)
-                }
-            }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_20)
         }
     }
 
