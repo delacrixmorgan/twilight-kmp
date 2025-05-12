@@ -16,14 +16,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nav.Routes
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class SettingsViewModel : ViewModel(), KoinComponent {
+class SettingsViewModel(
+    private val preferences: PreferencesRepository
+) : ViewModel(), KoinComponent {
     private var _state = MutableStateFlow(SettingsUiState())
     val state: StateFlow<SettingsUiState>
         get() = _state.asStateFlow()
-
-    private val preferences: PreferencesRepository by inject()
 
     init {
         _state.update { it.copy(version = "${getVersionName()} (${getVersionCode()})") }

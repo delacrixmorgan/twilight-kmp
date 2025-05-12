@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import data.location.LocationRepository
-import data.locationform.LocationFormRepository
 import data.location.model.Location
+import data.locationform.LocationFormRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nav.Routes
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import randomUUID
 
-class SummaryViewModel : ViewModel(), KoinComponent {
-    private val store: LocationFormRepository by inject()
-    private val locationRepository: LocationRepository by inject()
+class SummaryViewModel(
+    private val store: LocationFormRepository,
+    private val locationRepository: LocationRepository
+) : ViewModel(), KoinComponent {
 
     private var _state = MutableStateFlow(SummaryUiState())
     val state: StateFlow<SummaryUiState>

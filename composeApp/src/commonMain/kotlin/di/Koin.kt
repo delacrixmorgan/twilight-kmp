@@ -1,13 +1,13 @@
 package di
 
 import com.delacrixmorgan.twilight.TwilightDatabase
+import data.kairos.KairosRepository
 import data.location.LocationRepository
 import data.location.LocationRepositoryImpl
 import data.locationform.LocationFormRepository
 import data.locationform.LocationFormRepositoryImpl
 import data.preferences.PreferencesRepository
 import data.preferences.PreferencesRepositoryImpl
-import data.kairos.KairosRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.KoinAppDeclaration
@@ -34,13 +34,13 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
 
 fun viewModelModule() = module {
     // Dashboard
-    viewModel { TodayViewModel() }
-    viewModel { SettingsViewModel() }
+    viewModel { TodayViewModel(get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get()) }
     viewModel { AppInfoViewModel() }
     // Form
-    viewModel { SetupNameViewModel() }
-    viewModel { SelectZoneViewModel() }
-    viewModel { SummaryViewModel() }
+    viewModel { SetupNameViewModel(get(), get()) }
+    viewModel { SelectZoneViewModel(get(), get()) }
+    viewModel { SummaryViewModel(get(), get()) }
 }
 
 fun serviceModule() = module {

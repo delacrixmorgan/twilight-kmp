@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nav.Routes
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class SelectZoneViewModel : ViewModel(), KoinComponent {
+class SelectZoneViewModel(
+    private val store: LocationFormRepository,
+    private val kairosRepository: KairosRepository
+) : ViewModel(), KoinComponent {
     companion object {
         private val popularZones = listOf(
             "Asia/Kuala_Lumpur",
@@ -31,9 +33,6 @@ class SelectZoneViewModel : ViewModel(), KoinComponent {
             "Pacific/Auckland",
         )
     }
-
-    private val store: LocationFormRepository by inject()
-    private val kairosRepository: KairosRepository by inject()
 
     private var _state = MutableStateFlow(SelectZoneUiState())
     val state: StateFlow<SelectZoneUiState>

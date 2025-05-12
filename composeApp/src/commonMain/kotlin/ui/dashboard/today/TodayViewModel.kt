@@ -3,13 +3,13 @@ package ui.dashboard.today
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import data.kairos.KairosRepository
 import data.location.LocationRepository
-import data.locationform.LocationFormRepository
 import data.location.model.Location
+import data.locationform.LocationFormRepository
+import data.preferences.PreferencesRepository
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
-import data.preferences.PreferencesRepository
-import data.kairos.KairosRepository
 import data.utils.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,18 +21,17 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import nav.Routes
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class TodayViewModel : ViewModel(), KoinComponent {
+class TodayViewModel(
+    private val preferences: PreferencesRepository,
+    private val repository: LocationRepository,
+    private val kairosRepository: KairosRepository,
+    private val locationFormRepository: LocationFormRepository,
+) : ViewModel(), KoinComponent {
     companion object {
         const val SCROLL_WHEEL_PAGE_SIZE = 300
         const val SMOOTH_SCROLL_IN_MINUTES_THRESHOLD = 5 * 60
     }
-
-    private val preferences: PreferencesRepository by inject()
-    private val repository: LocationRepository by inject()
-    private val kairosRepository: KairosRepository by inject()
-    private val locationFormRepository: LocationFormRepository by inject()
 
     private var _state = MutableStateFlow(TodayUiState())
     val state: StateFlow<TodayUiState>
