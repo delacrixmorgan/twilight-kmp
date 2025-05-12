@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.sqlDelight)
 }
@@ -61,14 +61,14 @@ kotlin {
 
             // Compose
             implementation(project.dependencies.platform(libs.compose.bom))
-            implementation(libs.compose.icons.extended)
-            implementation(libs.compose.unstyled)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.icons.extended)
+            implementation(libs.compose.unstyled)
 
             // AndroidX
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -94,8 +94,8 @@ android {
         applicationId = "com.delacrixmorgan.twilight.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "2025.02"
+        versionCode = 11
+        versionName = "2025.03"
 
         buildConfigField("int", "VERSION_CODE", versionCode.toString())
         buildConfigField("String", "VERSION_NAME", "\"${versionName}\"")
