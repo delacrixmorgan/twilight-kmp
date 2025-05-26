@@ -67,7 +67,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.compose.icons.extended)
+            implementation(compose.materialIconsExtended)
             implementation(libs.compose.unstyled)
 
             // AndroidX

@@ -5,7 +5,6 @@ android-minSdk = "24"
 android-targetSdk = "35"
 kotlin = "2.1.20" # https://github.com/JetBrains/kotlin/releases
 compose-multiplatform = "1.8.0" # https://github.com/JetBrains/compose-multiplatform/releases
-material-icons-extended = "1.7.3" # https://mvnrepository.com/artifact/org.jetbrains.compose.material/material-icons-extended
 compose-unstyled = "1.20.1"
 kotlinx-serialization-json = "1.8.1" # https://github.com/Kotlin/kotlinx.serialization
 kotlinx-datetime = "0.6.2" # https://github.com/Kotlin/kotlinx-datetime/releases
@@ -26,7 +25,6 @@ androidx-datastore-preference = { module = "androidx.datastore:datastore-prefere
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBoM" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
 compose-unstyled = { module = "com.composables:core", version.ref = "compose-unstyled" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBoM" }
 koin-core = { module = "io.insert-koin:koin-core" }
