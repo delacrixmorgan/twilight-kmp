@@ -3,16 +3,16 @@ agp = "8.8.2" # https://mvnrepository.com/artifact/com.android.application/com.a
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
-kotlin = "2.1.20" # https://github.com/JetBrains/kotlin/releases
+kotlin = "2.1.21" # https://github.com/JetBrains/kotlin/releases
 compose-multiplatform = "1.8.0" # https://github.com/JetBrains/compose-multiplatform/releases
-compose-unstyled = "1.20.1"
+composable-core = "1.31.1"
 kotlinx-serialization-json = "1.8.1" # https://github.com/Kotlin/kotlinx.serialization
 kotlinx-datetime = "0.6.2" # https://github.com/Kotlin/kotlinx-datetime/releases
-androidx-navigation-compose = "2.9.0-beta01" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
+androidx-navigation-compose = "2.9.0-beta02" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
 androidx-lifecycle = "2.9.0" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
-androidx-datastore-preference = "1.1.6" # https://developer.android.com/jetpack/androidx/releases/datastore
-composeBoM = "2025.05.00" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
-koinBoM = "4.0.3" # https://insert-koin.io/docs/setup/koin/
+androidx-datastore-preference = "1.1.7" # https://developer.android.com/jetpack/androidx/releases/datastore
+composeBoM = "2025.05.01" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
+koinBoM = "4.0.4" # https://insert-koin.io/docs/setup/koin/
 sqlDelight = "2.0.2" # https://github.com/cashapp/sqldelight/releases
 kermit = "2.0.5" # https://github.com/touchlab/Kermit/releases
 
@@ -25,7 +25,7 @@ androidx-datastore-preference = { module = "androidx.datastore:datastore-prefere
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBoM" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-unstyled = { module = "com.composables:core", version.ref = "compose-unstyled" }
+composable-core = { module = "com.composables:core", version.ref = "composable-core" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBoM" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
