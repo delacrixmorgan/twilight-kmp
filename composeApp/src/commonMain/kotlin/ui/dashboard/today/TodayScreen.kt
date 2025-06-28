@@ -57,6 +57,7 @@ import kotlinx.datetime.toLocalDateTime
 import ui.component.VerticalScrollWheel
 import ui.dashboard.today.TodayViewModel.Companion.SCROLL_WHEEL_PAGE_SIZE
 import ui.dashboard.today.TodayViewModel.Companion.SMOOTH_SCROLL_IN_MINUTES_THRESHOLD
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun TodayScreen(
@@ -209,6 +210,7 @@ private fun EditableNameTimeView(
     )
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun NameTimeView(
     locationFormatPreference: LocationFormatPreference,

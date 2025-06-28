@@ -21,6 +21,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import nav.Routes
 import org.koin.core.component.KoinComponent
+import kotlin.time.ExperimentalTime
 
 class TodayViewModel(
     private val preferences: PreferencesRepository,
@@ -57,6 +58,7 @@ class TodayViewModel(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun loadLocations() {
         val currentTimeZone = TimeZone.currentSystemDefault()
         val zone = kairosRepository.search(currentTimeZone.id)

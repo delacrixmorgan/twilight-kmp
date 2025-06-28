@@ -1,20 +1,20 @@
 [versions]
-agp = "8.8.2" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
-android-compileSdk = "35"
+agp = "8.11.0" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
+android-compileSdk = "36"
 android-minSdk = "24"
-android-targetSdk = "35"
-kotlin = "2.1.21" # https://github.com/JetBrains/kotlin/releases
-compose-multiplatform = "1.8.0" # https://github.com/JetBrains/compose-multiplatform/releases
-composable-core = "1.31.1"
-kotlinx-serialization-json = "1.8.1" # https://github.com/Kotlin/kotlinx.serialization
-kotlinx-datetime = "0.6.2" # https://github.com/Kotlin/kotlinx-datetime/releases
-androidx-navigation-compose = "2.9.0-beta02" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
-androidx-lifecycle = "2.9.0" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
+android-targetSdk = "36"
+kotlin = "2.2.0" # https://github.com/JetBrains/kotlin/releases
+compose-multiplatform = "1.8.2" # https://github.com/JetBrains/compose-multiplatform/releases
+composable-core = "1.36.0"
+kotlinx-serialization-json = "1.9.0" # https://github.com/Kotlin/kotlinx.serialization
+kotlinx-datetime = "0.7.0" # https://github.com/Kotlin/kotlinx-datetime/releases
+androidx-navigation-compose = "2.9.0-beta03" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
+androidx-lifecycle = "2.9.1" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
 androidx-datastore-preference = "1.1.7" # https://developer.android.com/jetpack/androidx/releases/datastore
-composeBoM = "2025.05.01" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
-koinBoM = "4.0.4" # https://insert-koin.io/docs/setup/koin/
-sqlDelight = "2.0.2" # https://github.com/cashapp/sqldelight/releases
-kermit = "2.0.5" # https://github.com/touchlab/Kermit/releases
+composeBoM = "2025.06.01" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
+koinBoM = "4.1.0" # https://insert-koin.io/docs/setup/koin/
+sqlDelight = "2.1.0" # https://github.com/cashapp/sqldelight/releases
+kermit = "2.0.6" # https://github.com/touchlab/Kermit/releases
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
@@ -38,10 +38,10 @@ sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-ex
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+sql-delight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }

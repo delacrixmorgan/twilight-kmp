@@ -35,6 +35,7 @@ import data.preferences.model.LocationFormatPreference
 import data.preferences.model.ThemePreference
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import rateUsStoreLink
 import twilight.composeapp.generated.resources.Res
 import twilight.composeapp.generated.resources.app_name
 import twilight.composeapp.generated.resources.ic_logo_foreground
@@ -144,6 +145,10 @@ fun SettingsScreen(
 
     LaunchedEffect(state, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            themeBottomSheetState.targetDetent = if (state.showTheme) FullyExpanded else Hidden
+            dateFormatBottomSheetState.targetDetent = if (state.showDateFormat) FullyExpanded else Hidden
+            locationFormatBottomSheetState.targetDetent = if (state.showLocationFormat) FullyExpanded else Hidden
+
             if (state.openPrivacyPolicy) {
                 uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp/blob/main/PRIVACY_POLICY.md")
                 onAction(SettingsAction.OpenPrivacyPolicy(open = false))
@@ -155,23 +160,8 @@ fun SettingsScreen(
                 onAction(SettingsAction.OpenSendFeedback(open = false))
             }
             if (state.openRateUs) {
-                uriHandler.openUri("https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight.android")
+                uriHandler.openUri(rateUsStoreLink)
                 onAction(SettingsAction.OpenRateUs(open = false))
-            }
-            if (state.showTheme) {
-                themeBottomSheetState.currentDetent = FullyExpanded
-            } else {
-                themeBottomSheetState.currentDetent = Hidden
-            }
-            if (state.showDateFormat) {
-                dateFormatBottomSheetState.currentDetent = FullyExpanded
-            } else {
-                dateFormatBottomSheetState.currentDetent = Hidden
-            }
-            if (state.showLocationFormat) {
-                locationFormatBottomSheetState.currentDetent = FullyExpanded
-            } else {
-                locationFormatBottomSheetState.currentDetent = Hidden
             }
         }
     }

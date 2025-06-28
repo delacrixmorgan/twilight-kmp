@@ -10,6 +10,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.UUID
 
+actual val rateUsStoreLink: String by lazy { "https://play.google.com/store/apps/details?id=com.delacrixmorgan.twilight.android" }
+
 actual fun platformModule() = module {
     single(named(LocalDataStore.Preferences.name)) { dataStore(get(), LocalDataStore.Preferences.path()) }
     single(named(LocalDataStore.CreateNewLocation.name)) { dataStore(get(), LocalDataStore.CreateNewLocation.path()) }

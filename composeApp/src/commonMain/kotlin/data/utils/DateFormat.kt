@@ -27,7 +27,7 @@ object DateFormat {
         dayOfWeek(DayOfWeekNames.ENGLISH_FULL)
         char(',')
         char(' ')
-        dayOfMonth()
+        day()
         char(' ')
         monthName(MonthNames.ENGLISH_FULL)
     }

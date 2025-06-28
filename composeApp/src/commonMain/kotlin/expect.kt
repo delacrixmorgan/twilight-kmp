@@ -4,6 +4,8 @@ import androidx.datastore.preferences.core.Preferences
 import okio.Path.Companion.toPath
 import org.koin.core.module.Module
 
+expect val rateUsStoreLink: String
+
 fun createDataStore(
     producePath: () -> String,
 ): DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(

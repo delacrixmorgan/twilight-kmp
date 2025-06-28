@@ -14,6 +14,8 @@ import platform.Foundation.NSURL
 import platform.Foundation.NSUUID
 import platform.Foundation.NSUserDomainMask
 
+actual val rateUsStoreLink: String by lazy { "https://github.com/delacrixmorgan/twilight-kmp" }
+
 actual fun platformModule() = module {
     single(named(LocalDataStore.Preferences.name)) { dataStore(LocalDataStore.Preferences.path()) }
     single(named(LocalDataStore.CreateNewLocation.name)) { dataStore(LocalDataStore.CreateNewLocation.path()) }
