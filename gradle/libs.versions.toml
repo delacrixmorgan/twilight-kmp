@@ -1,17 +1,17 @@
 [versions]
-agp = "8.11.1" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
+agp = "8.12.0" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
 kotlin = "2.2.0" # https://github.com/JetBrains/kotlin/releases
 compose-multiplatform = "1.8.2" # https://github.com/JetBrains/compose-multiplatform/releases
-composable-core = "1.36.1"
+composable-core = "1.39.0"
 kotlinx-serialization-json = "1.9.0" # https://github.com/Kotlin/kotlinx.serialization
 kotlinx-datetime = "0.7.1" # https://github.com/Kotlin/kotlinx-datetime/releases
-androidx-navigation-compose = "2.9.0-beta03" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
-androidx-lifecycle = "2.9.1" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
+androidx-navigation-compose = "2.9.0-beta04" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
+androidx-lifecycle = "2.9.2" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
 androidx-datastore-preference = "1.1.7" # https://developer.android.com/jetpack/androidx/releases/datastore
-composeBoM = "2025.06.01" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
+composeBoM = "2025.07.00" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
 koinBoM = "4.1.0" # https://insert-koin.io/docs/setup/koin/
 sqlDelight = "2.1.0" # https://github.com/cashapp/sqldelight/releases
 kermit = "2.0.6" # https://github.com/touchlab/Kermit/releases
