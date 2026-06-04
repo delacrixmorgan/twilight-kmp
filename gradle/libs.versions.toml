@@ -1,20 +1,20 @@
 [versions]
-agp = "8.13.0" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
-android-compileSdk = "36"
+agp = "9.2.1" # https://mvnrepository.com/artifact/com.android.application/com.android.application.gradle.plugin
+android-compileSdk = "37"
 android-minSdk = "24"
-android-targetSdk = "36"
-kotlin = "2.2.20" # https://github.com/JetBrains/kotlin/releases
-compose-multiplatform = "1.8.2" # https://github.com/JetBrains/compose-multiplatform/releases
-composable-core = "1.43.1"
-kotlinx-serialization-json = "1.9.0" # https://github.com/Kotlin/kotlinx.serialization
-kotlinx-datetime = "0.7.1" # https://github.com/Kotlin/kotlinx-datetime/releases
-androidx-navigation-compose = "2.9.0-rc02" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
-androidx-lifecycle = "2.9.3" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
-androidx-datastore-preference = "1.1.7" # https://developer.android.com/jetpack/androidx/releases/datastore
-composeBoM = "2025.09.00" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
-koinBoM = "4.1.1" # https://insert-koin.io/docs/setup/koin/
-sqlDelight = "2.1.0" # https://github.com/cashapp/sqldelight/releases
-kermit = "2.0.8" # https://github.com/touchlab/Kermit/releases
+android-targetSdk = "37"
+kotlin = "2.4.0" # https://github.com/JetBrains/kotlin/releases
+compose-multiplatform = "1.11.1" # https://github.com/JetBrains/compose-multiplatform/releases
+composable-core = "1.49.9"
+kotlinx-serialization-json = "1.11.0" # https://github.com/Kotlin/kotlinx.serialization
+kotlinx-datetime = "0.8.0" # https://github.com/Kotlin/kotlinx-datetime/releases
+androidx-navigation-compose = "2.9.2" # https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose-uikitarm64
+androidx-lifecycle = "2.10.0" # https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime-ktx
+androidx-datastore-preference = "1.2.1" # https://developer.android.com/jetpack/androidx/releases/datastore
+composeBoM = "2026.05.01" # https://developer.android.com/develop/ui/compose/bom/bom-mapping
+koinBoM = "4.2.1" # https://insert-koin.io/docs/setup/koin/
+sqlDelight = "2.3.2" # https://github.com/cashapp/sqldelight/releases
+kermit = "2.1.0" # https://github.com/touchlab/Kermit/releases
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
