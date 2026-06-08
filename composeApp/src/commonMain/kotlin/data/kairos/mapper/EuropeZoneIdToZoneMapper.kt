@@ -218,11 +218,6 @@ class EuropeZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
                 country = listOf("Slovakia", "SK", "\uD83C\uDDF8\uD83C\uDDF0"),
                 keywords = listOf("Bratislava", "Košice", "Prešov", "Žilina", "Nitra", "Banská Bystrica", "Trnava", "Martin", "Trenčín", "Poprad")
             )
-            "$region/Ljubljana" -> Zone(
-                zoneIdString, region,
-                country = listOf("Slovenia", "SI", "\uD83C\uDDF8\uD83C\uDDEE"),
-                keywords = listOf("Ljubljana", "Maribor", "Celje", "Kranj", "Velenje", "Koper", "Novo Mesto", "Ptuj", "Trbovlje", "Kamnik")
-            )
             "$region/Moscow" -> Zone(
                 zoneIdString, region,
                 country = listOf("Russia", "RU", "\uD83C\uDDF7\uD83C\uDDFA"),

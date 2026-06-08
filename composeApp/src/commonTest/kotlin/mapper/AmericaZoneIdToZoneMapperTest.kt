@@ -36,6 +36,11 @@ class AmericaZoneIdToZoneMapperTest : KoinTest {
     fun `Given America zoneIdStrings When mapping Then it should contain them`() {
         val actualZoneIdStrings = listOf(
             "America/New_York",
+            "America/Chicago",
+            "America/Toronto",
+            "America/Mexico_City",
+            "America/Sao_Paulo",
+            "America/Argentina/Buenos_Aires",
         )
         assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }
