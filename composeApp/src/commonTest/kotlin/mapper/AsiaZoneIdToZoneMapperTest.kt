@@ -81,4 +81,44 @@ class AsiaZoneIdToZoneMapperTest : KoinTest {
         )
         assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }
+
+    @Test
+    fun `Given Central Asia and Caucasus zoneIdStrings When mapping Then it should contain them`() {
+        val actualZoneIdStrings = listOf(
+            "Asia/Hong_Kong",
+            "Asia/Macau",
+            "Asia/Almaty",
+            "Asia/Tashkent",
+            "Asia/Samarkand",
+            "Asia/Bishkek",
+            "Asia/Dushanbe",
+            "Asia/Ashgabat",
+            "Asia/Baku",
+            "Asia/Yerevan",
+            "Asia/Tbilisi"
+        )
+        assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
+    }
+
+    @Test
+    fun `Given West Asia zoneIdStrings When mapping Then it should contain them`() {
+        val actualZoneIdStrings = listOf(
+            "Asia/Dubai",
+            "Asia/Riyadh",
+            "Asia/Qatar",
+            "Asia/Bahrain",
+            "Asia/Kuwait",
+            "Asia/Muscat",
+            "Asia/Aden",
+            "Asia/Baghdad",
+            "Asia/Tehran",
+            "Asia/Jerusalem",
+            "Asia/Gaza",
+            "Asia/Hebron",
+            "Asia/Amman",
+            "Asia/Beirut",
+            "Asia/Damascus"
+        )
+        assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
+    }
 }

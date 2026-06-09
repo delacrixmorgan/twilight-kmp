@@ -223,6 +223,26 @@ class EuropeZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
                 country = listOf("Russia", "RU", "\uD83C\uDDF7\uD83C\uDDFA"),
                 keywords = listOf("Moscow", "Saint Petersburg", "Novosibirsk", "Yekaterinburg", "Nizhny Novgorod", "Kazan", "Chelyabinsk", "Omsk", "Samara", "Rostov-on-Don")
             )
+            "$region/Budapest" -> Zone(
+                zoneIdString, region,
+                country = listOf("Hungary", "HU", "\uD83C\uDDED\uD83C\uDDFA"),
+                keywords = listOf("Budapest", "Debrecen", "Szeged", "Miskolc", "P\u00E9cs", "Gy\u0151r", "Ny\u00EDregyh\u00E1za", "Kecskem\u00E9t", "Sz\u00E9kesfeh\u00E9rv\u00E1r", "Szombathely")
+            )
+            "$region/Istanbul" -> Zone(
+                zoneIdString, region,
+                country = listOf("Turkey", "T\u00FCrkiye", "TR", "\uD83C\uDDF9\uD83C\uDDF7"),
+                keywords = listOf("Istanbul", "Ankara", "\u0130zmir", "Bursa", "Adana", "Gaziantep", "Konya", "Antalya", "Kayseri", "Mersin")
+            )
+            "$region/Gibraltar" -> Zone(
+                zoneIdString, region,
+                country = listOf("Gibraltar", "GI", "\uD83C\uDDEC\uD83C\uDDEE"),
+                keywords = listOf("Gibraltar")
+            )
+            "$region/Nicosia" -> Zone(
+                zoneIdString, region,
+                country = listOf("Cyprus", "CY", "\uD83C\uDDE8\uD83C\uDDFE"),
+                keywords = listOf("Nicosia", "Limassol", "Larnaca", "Famagusta", "Paphos", "Kyrenia")
+            )
             else -> Zone(zoneIdString, region)
         }
     }

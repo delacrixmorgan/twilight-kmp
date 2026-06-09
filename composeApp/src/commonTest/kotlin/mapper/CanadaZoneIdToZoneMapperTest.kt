@@ -12,13 +12,13 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class AustraliaZoneIdToZoneMapperTest : KoinTest {
+class CanadaZoneIdToZoneMapperTest : KoinTest {
 
     private val kairosRepository: KairosRepository by inject()
 
     private val zoneIds by lazy {
         kairosRepository.zones
-            .filter { it.region == Region.Australia }
+            .filter { it.region == Region.Canada }
             .map { it.timeZone.toString() }
     }
 
@@ -33,19 +33,16 @@ class AustraliaZoneIdToZoneMapperTest : KoinTest {
     }
 
     @Test
-    fun `Given Australia zoneIdStrings When mapping Then it should contain them`() {
+    fun `Given Canada zoneIdStrings When mapping Then it should contain them`() {
         val actualZoneIdStrings = listOf(
-            "Australia/Adelaide",
-            "Australia/Brisbane",
-            "Australia/Broken_Hill",
-            "Australia/Darwin",
-            "Australia/Eucla",
-            "Australia/Hobart",
-            "Australia/Lindeman",
-            "Australia/Lord_Howe",
-            "Australia/Melbourne",
-            "Australia/Perth",
-            "Australia/Sydney"
+            "Canada/Atlantic",
+            "Canada/Central",
+            "Canada/Eastern",
+            "Canada/Mountain",
+            "Canada/Newfoundland",
+            "Canada/Pacific",
+            "Canada/Saskatchewan",
+            "Canada/Yukon"
         )
         assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }

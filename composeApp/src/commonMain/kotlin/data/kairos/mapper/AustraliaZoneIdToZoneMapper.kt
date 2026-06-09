@@ -31,10 +31,20 @@ class AustraliaZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
                 country = listOf("Australia", "AU", "\uD83C\uDDE6\uD83C\uDDFA"),
                 keywords = listOf("Northern Territory", "Darwin"),
             )
+            "$region/Eucla" -> Zone(
+                zoneIdString, region,
+                country = listOf("Australia", "AU", "\uD83C\uDDE6\uD83C\uDDFA"),
+                keywords = listOf("Western Australia", "Eucla"),
+            )
             "$region/Hobart" -> Zone(
                 zoneIdString, region,
                 country = listOf("Australia", "AU", "\uD83C\uDDE6\uD83C\uDDFA"),
                 keywords = listOf("Tasmania", "Hobart"),
+            )
+            "$region/Lindeman" -> Zone(
+                zoneIdString, region,
+                country = listOf("Australia", "AU", "\uD83C\uDDE6\uD83C\uDDFA"),
+                keywords = listOf("Queensland", "Lindeman Island", "Whitsundays"),
             )
             "$region/Lord_Howe" -> Zone(
                 zoneIdString, region,

@@ -103,6 +103,16 @@ class AsiaZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
                 country = listOf("Taiwan", "TW", "\uD83C\uDDF9\uD83C\uDDFC"),
                 keywords = listOf("Taipei", "New Taipei", "Kaohsiung", "Taichung"),
             )
+            "$region/Hong_Kong" -> Zone(
+                zoneIdString, region,
+                country = listOf("Hong Kong", "HK", "\uD83C\uDDED\uD83C\uDDF0"),
+                keywords = listOf("Hong Kong", "Kowloon", "Victoria", "Tsuen Wan", "Sha Tin", "Tuen Mun", "Yuen Long"),
+            )
+            "$region/Macau" -> Zone(
+                zoneIdString, region,
+                country = listOf("Macau", "Macao", "MO", "\uD83C\uDDF2\uD83C\uDDF4"),
+                keywords = listOf("Macau", "Taipa", "Cotai", "Coloane", "S\u00E9"),
+            )
             // South Asia
             "$region/Kabul" -> Zone(
                 zoneIdString, region,
@@ -138,6 +148,121 @@ class AsiaZoneIdToZoneMapper : Mapper<List<String>, List<Zone>> {
                 zoneIdString, region,
                 country = listOf("Sri Lanka", "LK", "\uD83C\uDDF1\uD83C\uDDF0"),
                 keywords = listOf("Colombo", "Dehiwala-Mount Lavinia", "Moratuwa", "Jaffna", "Negombo", "Pita Kotte", "Kotte", "Kandy", "Trincomalee", "Kalmunai"),
+            )
+            // Central Asia
+            "$region/Almaty" -> Zone(
+                zoneIdString, region,
+                country = listOf("Kazakhstan", "KZ", "\uD83C\uDDF0\uD83C\uDDFF"),
+                keywords = listOf("Almaty", "Astana", "Shymkent", "Karaganda", "Aktobe", "Taraz", "Pavlodar", "Oskemen"),
+            )
+            "$region/Tashkent",
+            "$region/Samarkand" -> Zone(
+                zoneIdString, region,
+                country = listOf("Uzbekistan", "UZ", "\uD83C\uDDFA\uD83C\uDDFF"),
+                keywords = listOf("Tashkent", "Samarkand", "Namangan", "Andijan", "Bukhara", "Nukus", "Fergana", "Qarshi"),
+            )
+            "$region/Bishkek" -> Zone(
+                zoneIdString, region,
+                country = listOf("Kyrgyzstan", "KG", "\uD83C\uDDF0\uD83C\uDDEC"),
+                keywords = listOf("Bishkek", "Osh", "Jalal-Abad", "Karakol", "Tokmok", "Naryn"),
+            )
+            "$region/Dushanbe" -> Zone(
+                zoneIdString, region,
+                country = listOf("Tajikistan", "TJ", "\uD83C\uDDF9\uD83C\uDDEF"),
+                keywords = listOf("Dushanbe", "Khujand", "Bokhtar", "Kulob", "Istaravshan", "Tursunzoda"),
+            )
+            "$region/Ashgabat" -> Zone(
+                zoneIdString, region,
+                country = listOf("Turkmenistan", "TM", "\uD83C\uDDF9\uD83C\uDDF2"),
+                keywords = listOf("Ashgabat", "T\u00FCrkmenabat", "Da\u015Foguz", "Mary", "Balkanabat", "T\u00FCrkmenba\u015Fy"),
+            )
+            // Caucasus
+            "$region/Baku" -> Zone(
+                zoneIdString, region,
+                country = listOf("Azerbaijan", "AZ", "\uD83C\uDDE6\uD83C\uDDFF"),
+                keywords = listOf("Baku", "Ganja", "Sumqayit", "Mingachevir", "Lankaran", "Shaki", "Nakhchivan"),
+            )
+            "$region/Yerevan" -> Zone(
+                zoneIdString, region,
+                country = listOf("Armenia", "AM", "\uD83C\uDDE6\uD83C\uDDF2"),
+                keywords = listOf("Yerevan", "Gyumri", "Vanadzor", "Vagharshapat", "Hrazdan", "Abovyan"),
+            )
+            "$region/Tbilisi" -> Zone(
+                zoneIdString, region,
+                country = listOf("Georgia", "GE", "\uD83C\uDDEC\uD83C\uDDEA"),
+                keywords = listOf("Tbilisi", "Batumi", "Kutaisi", "Rustavi", "Zugdidi", "Gori", "Poti"),
+            )
+            // West Asia / Middle East
+            "$region/Dubai" -> Zone(
+                zoneIdString, region,
+                country = listOf("United Arab Emirates", "UAE", "AE", "\uD83C\uDDE6\uD83C\uDDEA"),
+                keywords = listOf("Dubai", "Abu Dhabi", "Sharjah", "Al Ain", "Ajman", "Ras Al Khaimah", "Fujairah"),
+            )
+            "$region/Riyadh" -> Zone(
+                zoneIdString, region,
+                country = listOf("Saudi Arabia", "SA", "\uD83C\uDDF8\uD83C\uDDE6"),
+                keywords = listOf("Riyadh", "Jeddah", "Mecca", "Medina", "Dammam", "Taif", "Tabuk", "Khobar"),
+            )
+            "$region/Qatar" -> Zone(
+                zoneIdString, region,
+                country = listOf("Qatar", "QA", "\uD83C\uDDF6\uD83C\uDDE6"),
+                keywords = listOf("Doha", "Al Rayyan", "Al Wakrah", "Al Khor", "Lusail", "Umm Salal"),
+            )
+            "$region/Bahrain" -> Zone(
+                zoneIdString, region,
+                country = listOf("Bahrain", "BH", "\uD83C\uDDE7\uD83C\uDDED"),
+                keywords = listOf("Manama", "Riffa", "Muharraq", "Hamad Town", "A'ali", "Isa Town"),
+            )
+            "$region/Kuwait" -> Zone(
+                zoneIdString, region,
+                country = listOf("Kuwait", "KW", "\uD83C\uDDF0\uD83C\uDDFC"),
+                keywords = listOf("Kuwait City", "Al Ahmadi", "Hawalli", "As Salimiyah", "Sabah as Salim", "Al Farwaniyah"),
+            )
+            "$region/Muscat" -> Zone(
+                zoneIdString, region,
+                country = listOf("Oman", "OM", "\uD83C\uDDF4\uD83C\uDDF2"),
+                keywords = listOf("Muscat", "Seeb", "Salalah", "Sohar", "Nizwa", "Sur", "Ibri"),
+            )
+            "$region/Aden" -> Zone(
+                zoneIdString, region,
+                country = listOf("Yemen", "YE", "\uD83C\uDDFE\uD83C\uDDEA"),
+                keywords = listOf("Sana'a", "Aden", "Taiz", "Al Hudaydah", "Mukalla", "Ibb", "Dhamar"),
+            )
+            "$region/Baghdad" -> Zone(
+                zoneIdString, region,
+                country = listOf("Iraq", "IQ", "\uD83C\uDDEE\uD83C\uDDF6"),
+                keywords = listOf("Baghdad", "Basra", "Mosul", "Erbil", "Najaf", "Karbala", "Kirkuk", "Sulaymaniyah"),
+            )
+            "$region/Tehran" -> Zone(
+                zoneIdString, region,
+                country = listOf("Iran", "IR", "\uD83C\uDDEE\uD83C\uDDF7"),
+                keywords = listOf("Tehran", "Mashhad", "Isfahan", "Karaj", "Shiraz", "Tabriz", "Qom", "Ahvaz"),
+            )
+            "$region/Jerusalem" -> Zone(
+                zoneIdString, region,
+                country = listOf("Israel", "IL", "\uD83C\uDDEE\uD83C\uDDF1"),
+                keywords = listOf("Jerusalem", "Tel Aviv", "Haifa", "Rishon LeZion", "Petah Tikva", "Ashdod", "Netanya", "Beersheba"),
+            )
+            "$region/Gaza",
+            "$region/Hebron" -> Zone(
+                zoneIdString, region,
+                country = listOf("Palestine", "PS", "\uD83C\uDDF5\uD83C\uDDF8"),
+                keywords = listOf("Gaza", "Hebron", "Nablus", "Ramallah", "Bethlehem", "Jenin", "Khan Yunis"),
+            )
+            "$region/Amman" -> Zone(
+                zoneIdString, region,
+                country = listOf("Jordan", "JO", "\uD83C\uDDEF\uD83C\uDDF4"),
+                keywords = listOf("Amman", "Zarqa", "Irbid", "Russeifa", "Aqaba", "Madaba", "As-Salt"),
+            )
+            "$region/Beirut" -> Zone(
+                zoneIdString, region,
+                country = listOf("Lebanon", "LB", "\uD83C\uDDF1\uD83C\uDDE7"),
+                keywords = listOf("Beirut", "Tripoli", "Sidon", "Tyre", "Jounieh", "Zahl\u00E9", "Baalbek"),
+            )
+            "$region/Damascus" -> Zone(
+                zoneIdString, region,
+                country = listOf("Syria", "SY", "\uD83C\uDDF8\uD83C\uDDFE"),
+                keywords = listOf("Damascus", "Aleppo", "Homs", "Hama", "Latakia", "Deir ez-Zor", "Raqqa"),
             )
             else -> Zone(zoneIdString, region)
         }

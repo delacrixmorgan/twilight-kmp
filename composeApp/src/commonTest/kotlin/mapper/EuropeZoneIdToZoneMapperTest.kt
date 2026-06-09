@@ -76,7 +76,10 @@ class EuropeZoneIdToZoneMapperTest : KoinTest {
             "Europe/Belgrade",
             "Europe/Bratislava",
             "Europe/Ljubljana",
-            "Europe/Copenhagen"
+            "Europe/Copenhagen",
+            "Europe/Istanbul",
+            "Europe/Gibraltar",
+            "Europe/Nicosia"
         )
         assertTrue(zoneIds.containsAll(actualZoneIdStrings), "Missing: ${actualZoneIdStrings.minus(zoneIds.toSet())}")
     }
