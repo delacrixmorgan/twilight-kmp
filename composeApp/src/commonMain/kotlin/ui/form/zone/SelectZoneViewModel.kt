@@ -35,8 +35,7 @@ class SelectZoneViewModel(
     }
 
     private var _state = MutableStateFlow(SelectZoneUiState())
-    val state: StateFlow<SelectZoneUiState>
-        get() = _state.asStateFlow()
+    val state: StateFlow<SelectZoneUiState> = _state.asStateFlow()
 
     private val zones get() = kairosRepository.zones.sorted()
     private fun List<Zone>.sorted(): List<Zone> = sortedWith(

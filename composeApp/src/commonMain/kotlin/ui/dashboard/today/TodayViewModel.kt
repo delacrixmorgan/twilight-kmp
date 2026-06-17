@@ -35,8 +35,7 @@ class TodayViewModel(
     }
 
     private var _state = MutableStateFlow(TodayUiState())
-    val state: StateFlow<TodayUiState>
-        get() = _state.asStateFlow()
+    val state: StateFlow<TodayUiState> = _state.asStateFlow()
 
     init {
         loadPreferences()

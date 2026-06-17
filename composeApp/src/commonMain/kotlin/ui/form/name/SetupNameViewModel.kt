@@ -20,8 +20,7 @@ class SetupNameViewModel(
 ) : ViewModel(), KoinComponent {
 
     private var _state = MutableStateFlow(SetupNameUiState())
-    val state: StateFlow<SetupNameUiState>
-        get() = _state.asStateFlow()
+    val state: StateFlow<SetupNameUiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch {

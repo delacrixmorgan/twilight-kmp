@@ -22,8 +22,7 @@ class SummaryViewModel(
 ) : ViewModel(), KoinComponent {
 
     private var _state = MutableStateFlow(SummaryUiState())
-    val state: StateFlow<SummaryUiState>
-        get() = _state.asStateFlow()
+    val state: StateFlow<SummaryUiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch {

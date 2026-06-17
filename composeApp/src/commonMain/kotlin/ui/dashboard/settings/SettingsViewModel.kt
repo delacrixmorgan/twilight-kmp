@@ -21,8 +21,7 @@ class SettingsViewModel(
     private val preferences: PreferencesRepository
 ) : ViewModel(), KoinComponent {
     private var _state = MutableStateFlow(SettingsUiState())
-    val state: StateFlow<SettingsUiState>
-        get() = _state.asStateFlow()
+    val state: StateFlow<SettingsUiState> = _state.asStateFlow()
 
     init {
         _state.update { it.copy(version = "${getVersionName()} (${getVersionCode()})") }
