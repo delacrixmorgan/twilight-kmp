@@ -44,6 +44,6 @@ fun NavGraphBuilder.formGraph(navHostController: NavHostController) {
     }
     composable<Routes.AppInfo> {
         val viewModel = koinViewModel<AppInfoViewModel>()
-        AppInfoScreen(state = viewModel.state, onAction = { viewModel.onAction(navHostController, it) })
+        AppInfoScreen(effects = viewModel.effects, onAction = { viewModel.onAction(navHostController, it) })
     }
 }

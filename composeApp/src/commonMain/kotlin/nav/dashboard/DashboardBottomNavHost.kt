@@ -33,7 +33,7 @@ fun DashboardBottomNavHost(
         }
         composable<Routes.Settings> {
             val viewModel = koinViewModel<SettingsViewModel>()
-            SettingsScreen(innerPadding, state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
+            SettingsScreen(innerPadding, effects = viewModel.effects, state = viewModel.state.collectAsStateWithLifecycle().value, onAction = { viewModel.onAction(navHostController, it) })
         }
     }
 }

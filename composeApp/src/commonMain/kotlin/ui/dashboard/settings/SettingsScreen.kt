@@ -20,8 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -33,9 +31,11 @@ import com.composables.core.rememberModalBottomSheetState
 import data.preferences.model.DateFormatPreference
 import data.preferences.model.LocationFormatPreference
 import data.preferences.model.ThemePreference
+import kotlinx.coroutines.flow.Flow
+import nav.NavEffect
+import nav.NavEffectHandler
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import rateUsStoreLink
 import twilight.composeapp.generated.resources.Res
 import twilight.composeapp.generated.resources.app_name
 import twilight.composeapp.generated.resources.ic_logo_foreground
@@ -48,10 +48,12 @@ import ui.theme.AppTypography
 fun SettingsScreen(
     innerPadding: PaddingValues,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    uriHandler: UriHandler = LocalUriHandler.current,
+    effects: Flow<NavEffect>,
     state: SettingsUiState,
     onAction: (SettingsAction) -> Unit,
 ) {
+    NavEffectHandler(effects)
+
     Column(
         Modifier
             .fillMaxSize()
@@ -86,9 +88,9 @@ fun SettingsScreen(
             ListView(
                 data = listOf(
                     { AppInfo { onAction(SettingsAction.OpenAppInfo) } },
-                    { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy(open = true)) } },
-                    { SendFeedback { onAction(SettingsAction.OpenSendFeedback(open = true)) } },
-                    { RateUs { onAction(SettingsAction.OpenRateUs(open = true)) } },
+                    { PrivacyPolicy { onAction(SettingsAction.OpenPrivacyPolicy) } },
+                    { SendFeedback { onAction(SettingsAction.OpenSendFeedback) } },
+                    { RateUs { onAction(SettingsAction.OpenRateUs) } },
                 ),
                 divider = { HorizontalDivider() }
             )
@@ -148,21 +150,6 @@ fun SettingsScreen(
             themeBottomSheetState.targetDetent = if (state.showTheme) FullyExpanded else Hidden
             dateFormatBottomSheetState.targetDetent = if (state.showDateFormat) FullyExpanded else Hidden
             locationFormatBottomSheetState.targetDetent = if (state.showLocationFormat) FullyExpanded else Hidden
-
-            if (state.openPrivacyPolicy) {
-                uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp/blob/main/PRIVACY_POLICY.md")
-                onAction(SettingsAction.OpenPrivacyPolicy(open = false))
-            }
-            if (state.openSendFeedback) {
-                val email = "delacrixmorgan@gmail.com"
-                val subject = "Twilight - App Feedback"
-                uriHandler.openUri("mailto:$email?subject=$subject")
-                onAction(SettingsAction.OpenSendFeedback(open = false))
-            }
-            if (state.openRateUs) {
-                uriHandler.openUri(rateUsStoreLink)
-                onAction(SettingsAction.OpenRateUs(open = false))
-            }
         }
     }
 }

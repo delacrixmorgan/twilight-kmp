@@ -19,16 +19,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import nav.NavEffect
+import nav.NavEffectHandler
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.component.ListItem
 import ui.component.ListView
@@ -40,11 +37,10 @@ import ui.theme.TwilightModifiers
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppInfoScreen(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    uriHandler: UriHandler = LocalUriHandler.current,
-    state: AppInfoUiState,
+    effects: Flow<NavEffect>,
     onAction: (AppInfoAction) -> Unit,
 ) {
+    NavEffectHandler(effects)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,24 +57,11 @@ fun AppInfoScreen(
             ) {
                 ListView(
                     data = listOf(
-                        { Developer { onAction(AppInfoAction.OpenDeveloper(show = true)) } },
-                        { SourceCode { onAction(AppInfoAction.OpenSourceCode(show = true)) } },
+                        { Developer { onAction(AppInfoAction.OpenDeveloper) } },
+                        { SourceCode { onAction(AppInfoAction.OpenSourceCode) } },
                     ),
                     divider = { HorizontalDivider() }
                 )
-            }
-        }
-    }
-
-    LaunchedEffect(state, lifecycleOwner) {
-        lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            if (state.openDeveloper) {
-                uriHandler.openUri("https://github.com/delacrixmorgan")
-                onAction(AppInfoAction.OpenDeveloper(show = false))
-            }
-            if (state.openSourceCode) {
-                uriHandler.openUri("https://github.com/delacrixmorgan/twilight-kmp")
-                onAction(AppInfoAction.OpenSourceCode(show = false))
             }
         }
     }
@@ -138,6 +121,6 @@ private fun SourceCode(onClick: () -> Unit) {
 @Composable
 private fun AppInfoScreenPreview() {
     AppTheme {
-        AppInfoScreen(state = AppInfoUiState(), onAction = {})
+        AppInfoScreen(effects = emptyFlow(), onAction = {})
     }
 }

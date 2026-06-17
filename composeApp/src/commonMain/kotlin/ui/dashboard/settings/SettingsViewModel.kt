@@ -14,14 +14,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nav.EffectEmitter
+import nav.NavEffect
 import nav.Routes
 import org.koin.core.component.KoinComponent
+import rateUsStoreLink
 
 class SettingsViewModel(
     private val preferences: PreferencesRepository
 ) : ViewModel(), KoinComponent {
     private var _state = MutableStateFlow(SettingsUiState())
     val state: StateFlow<SettingsUiState> = _state.asStateFlow()
+
+    private val emitter = EffectEmitter<NavEffect>()
+    val effects = emitter.effects
 
     init {
         _state.update { it.copy(version = "${getVersionName()} (${getVersionCode()})") }
@@ -51,13 +57,15 @@ class SettingsViewModel(
                 navHostController.navigate(Routes.AppInfo)
             }
             is SettingsAction.OpenPrivacyPolicy -> {
-                _state.update { it.copy(openPrivacyPolicy = action.open) }
+                emitter.send(NavEffect.OpenUri("https://github.com/delacrixmorgan/twilight-kmp/blob/main/PRIVACY_POLICY.md"))
             }
             is SettingsAction.OpenRateUs -> {
-                _state.update { it.copy(openRateUs = action.open) }
+                emitter.send(NavEffect.OpenUri(rateUsStoreLink))
             }
             is SettingsAction.OpenSendFeedback -> {
-                _state.update { it.copy(openSendFeedback = action.open) }
+                val email = "delacrixmorgan@gmail.com"
+                val subject = "Twilight - App Feedback"
+                emitter.send(NavEffect.OpenUri("mailto:$email?subject=$subject"))
             }
             is SettingsAction.OnThemeSelected -> {
                 viewModelScope.launch { preferences.saveTheme(action.theme) }
@@ -81,10 +89,6 @@ data class SettingsUiState(
     val showTheme: Boolean = false,
     val showDateFormat: Boolean = false,
     val showLocationFormat: Boolean = false,
-
-    val openPrivacyPolicy: Boolean = false,
-    val openSendFeedback: Boolean = false,
-    val openRateUs: Boolean = false
 )
 
 sealed interface SettingsAction {
@@ -93,9 +97,9 @@ sealed interface SettingsAction {
     data class ToggleLocationFormatVisibility(val show: Boolean) : SettingsAction
 
     data object OpenAppInfo : SettingsAction
-    data class OpenPrivacyPolicy(val open: Boolean) : SettingsAction
-    data class OpenSendFeedback(val open: Boolean) : SettingsAction
-    data class OpenRateUs(val open: Boolean) : SettingsAction
+    data object OpenPrivacyPolicy : SettingsAction
+    data object OpenSendFeedback : SettingsAction
+    data object OpenRateUs : SettingsAction
 
     data class OnThemeSelected(val theme: ThemePreference) : SettingsAction
     data class OnDateFormatSelected(val dateFormat: DateFormatPreference) : SettingsAction
